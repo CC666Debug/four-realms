@@ -24,7 +24,7 @@ The four realms are also their own apps: [Halloween Caster](https://cc666debug.g
 
 - **Search, genre filters and sorting** in each realm; each realm remembers its own.
 - **Shuffle**, next and previous stay in the realm that's playing, even while you browse another.
-- **Song names** for stations marked ♪, on screen and on your lock screen.
+- **Song names** for stations marked ♪, on screen and on your lock screen, with a **time bar** showing how far into the song it is when the station says (tap the time to switch between elapsed, remaining, or both).
 - **Favorites.** Tap ☆ on any station.
 - **Sleep timer.** Long-press play/stop to pick 15, 30, 60 or 90 minutes. The music fades out over the last minute.
 - **Cast to speakers** with the cast button (Chrome on Android or a computer).

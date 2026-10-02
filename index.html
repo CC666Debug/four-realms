@@ -143,6 +143,12 @@
   .now .title { font-weight: 650; font-size: 15px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .now .song { font-size: 13px; color: var(--accent-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .now .song:empty { display: none; }
+  /* How far into the song (stations whose song feed says how long it is). */
+  .prog { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .prog[hidden] { display: none; }
+  .prog .bar { flex: 1; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+  .prog .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 1s linear; }
+  .prog-time { background: none; padding: 4px 0; color: inherit; font: inherit; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   .row { display: flex; align-items: center; gap: 2px; }
   .play {
@@ -367,6 +373,10 @@
       <div class="song" id="nowSong"></div>
     </div>
   </div>
+    <div class="prog" id="prog" hidden>
+      <div class="bar"><i id="progBar"></i></div>
+      <button class="prog-time" id="progTime"></button>
+    </div>
     <div class="row">
       <button class="icon-btn" id="shuffleBtn" aria-label="Shuffle" title="Shuffle">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
@@ -472,7 +482,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.2.1';
+const VERSION = '1.3.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1341,7 +1351,7 @@ if (net) net.addEventListener('change', () => {
 // ── Song names ──────────────────────────────────
 // Many stations say what's playing through a web address the app can read
 // (saved in stations.json as "meta"). Only the playing station is checked.
-let song = '', songArt = '', metaStation = null, metaTimer = null, metaES = null;
+let song = '', songArt = '', songTime = null, metaStation = null, metaTimer = null, metaES = null, metaCheck = null;
 const META_EVERY = 15000;
 const JUNK_SONG = /azuracast|^unknown|^track$|^-+$|^\s*$/i;
 const pair = (a, t) => [a, t].map(x => (x || '').trim()).filter(Boolean).join(' – ');
@@ -1350,11 +1360,20 @@ async function fetchSong(m) {
   const j = async u => (await fetch(u, { cache: 'no-store' })).json();
   switch (m.k) {
     case 'soma': { const x = (await j(`https://somafm.com/songs/${m.id}.json`)).songs[0]; return pair(x.artist, x.title); }
-    case 'laut': { const x = await j(`https://api.laut.fm/station/${m.id}/current_song`); return pair(x.artist && x.artist.name, x.title); }
+    case 'laut': {
+      const x = await j(`https://api.laut.fm/station/${m.id}/current_song`);
+      // Times look like "2026-10-02 02:10:00 +0200".
+      const t = v => Date.parse(String(v || '').replace(' ', 'T').replace(/ ([+-]\d\d)(\d\d)$/, '$1:$2'));
+      const start = t(x.started_at), end = t(x.ends_at);
+      return { text: pair(x.artist && x.artist.name, x.title), start, dur: end > start ? (end - start) / 1000 : 0 };
+    }
     case 'rainwave': { const x = (await j(`https://rainwave.cc/api4/info?sid=${m.id}`)).sched_current.songs[0]; return pair(x.artists.map(a => a.name).join(', '), x.title); }
     case 'live365': { const x = (await j(`https://api.live365.com/station/${m.id}`))['current-track']; return pair(x.artist, x.title); }
     case 'radioco': return (await j(`https://public.radio.co/stations/${m.id}/status`)).current_track.title;
-    case 'azura': { const x = (await j(m.u)).now_playing.song; return { text: pair(x.artist, x.title), art: x.art || '' }; }
+    case 'azura': {
+      const np = (await j(m.u)).now_playing;
+      return { text: pair(np.song.artist, np.song.title), art: np.song.art || '', start: Date.now() - (np.elapsed || 0) * 1000, dur: np.duration || 0 };
+    }
     case 'icecast': {
       const src = [].concat((await j(m.u)).icestats.source || []);
       const x = src.find(z => { try { return new URL(z.listenurl).pathname === m.m; } catch (e) { return false; } });
@@ -1366,7 +1385,9 @@ async function fetchSong(m) {
 
 function setSong(s, text) {
   if (s !== metaStation) return;
-  const art = text && typeof text === 'object' ? text.art : '';
+  const art = text && typeof text === 'object' ? text.art || '' : '';
+  songTime = text && typeof text === 'object' && text.dur > 0 && text.start > 0 ? { start: text.start, dur: text.dur } : null;
+  updateProgress();
   if (text && typeof text === 'object') text = text.text;
   if (art !== songArt) { songArt = art; renderBadge(); updateMediaSession(); }
   text = (text || '').replace(/\s+/g, ' ').trim();
@@ -1383,6 +1404,7 @@ function stopMeta() {
   if (metaES) { metaES.close(); metaES = null; }
   metaStation = null;
   song = ''; els.nowSong.textContent = '';
+  songTime = null; metaCheck = null; updateProgress();
   if (songArt) { songArt = ''; renderBadge(); }
 }
 
@@ -1405,9 +1427,38 @@ function startMeta(s) {
     return;
   }
   const check = () => fetchSong(m).then(t => setSong(s, t), err => diag('song check failed for ' + s.name + ': ' + err));
+  metaCheck = check;
   check();
   metaTimer = setInterval(check, META_EVERY);
 }
+
+// Song progress, ticking every second; when a song runs out, check for the next one right away.
+// Tap the time to switch between these; the choice is remembered on this phone (like Halloween Caster).
+const clock = sec => Math.floor(sec / 60) + ':' + String(Math.floor(sec % 60)).padStart(2, '0');
+const TIME_STYLES = [
+  (e, d) => clock(e) + ' / ' + clock(d),              // 1:26 / 2:23
+  (e, d) => '−' + clock(d - e) + ' / ' + clock(d),    // −0:57 / 2:23
+  (e, d) => clock(e) + ' · −' + clock(d - e),         // 1:26 · −0:57
+];
+let timeStyle = (parseInt(safeGet('fr_time'), 10) || 0) % TIME_STYLES.length;
+let lastRecheck = 0;
+function updateProgress() {
+  const prog = $('prog');
+  prog.hidden = !songTime || !(localStation || castActive());
+  if (prog.hidden) return;
+  const elapsed = (Date.now() - songTime.start) / 1000;
+  const shownSec = Math.min(Math.max(elapsed, 0), songTime.dur);
+  $('progBar').style.width = (shownSec / songTime.dur * 100) + '%';
+  $('progTime').textContent = TIME_STYLES[timeStyle](shownSec, songTime.dur);
+  $('progTime').setAttribute('aria-label', 'Song time ' + $('progTime').textContent + '. Tap to change how it’s shown');
+  if (elapsed > songTime.dur + 3 && metaCheck && Date.now() - lastRecheck > 5000) { lastRecheck = Date.now(); metaCheck(); }
+}
+$('progTime').addEventListener('click', () => {
+  timeStyle = (timeStyle + 1) % TIME_STYLES.length;
+  safeSet('fr_time', String(timeStyle));
+  updateProgress();
+});
+setInterval(updateProgress, 1000);
 
 // Lock screen and headphone controls, including skip to the next station.
 function updateMediaSession() {
