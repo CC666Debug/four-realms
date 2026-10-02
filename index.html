@@ -143,6 +143,24 @@
   .now .title { font-weight: 650; font-size: 15px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .now .song { font-size: 13px; color: var(--accent-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .now .song:empty { display: none; }
+  /* Up next, listeners and LIVE, Save and Share, and the Recently played / Saved songs drawers (from Halloween Caster). */
+  .now .next { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .now .next:empty { display: none; }
+  .now .label .crowd { text-transform: none; letter-spacing: 0; }
+  .now .label .crowd b { color: #ff5a5a; font-weight: 700; }
+  button.pill { cursor: pointer; }
+  .drawer { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0 14px; }
+  .drawer summary { cursor: pointer; padding: 11px 0; font-weight: 650; font-size: 15px; }
+  .drawer summary span { color: var(--muted); font-weight: 400; }
+  .drawer ul { list-style: none; margin: 0 0 8px; padding: 0; }
+  .drawer li { border-top: 1px solid var(--line); padding: 9px 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 10px; }
+  .drawer .f-song { font-weight: 600; overflow-wrap: anywhere; }
+  .drawer .f-meta { font-size: 12px; color: var(--muted); grid-column: 1; }
+  .drawer .f-links { grid-column: 1; display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; }
+  .drawer .f-links a { color: var(--accent-2); text-decoration: none; }
+  .drawer .li-btn { grid-column: 2; grid-row: 1 / span 3; align-self: center; background: none; color: var(--muted); font-size: 18px; padding: 8px; }
+  .drawer .empty { color: var(--muted); font-size: 14px; margin: 0 0 12px; }
+  .drawer .empty[hidden] { display: none; }
   /* How far into the song (stations whose song feed says how long it is). */
   .prog { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
   .prog[hidden] { display: none; }
@@ -387,9 +405,10 @@
   <div class="now" aria-live="polite">
     <div class="badge" id="badge"></div>
     <div style="min-width:0">
-      <div class="label"><span id="where">Ready</span> <span class="state" id="nowState"></span> <span class="sleep-left" id="sleepLeft" hidden></span></div>
+      <div class="label"><span id="where">Ready</span> <span class="state" id="nowState"></span><span class="crowd" id="nowCrowd"></span> <span class="sleep-left" id="sleepLeft" hidden></span></div>
       <div class="title" id="nowName">Pick a station, or tap shuffle</div>
       <div class="song" id="nowSong"></div>
+      <div class="next" id="nowNext"></div>
     </div>
   </div>
     <div class="prog" id="prog" hidden>
@@ -418,7 +437,9 @@
       </button>
       <input type="range" id="vol" min="0" max="100" value="80" aria-label="Volume">
     </div>
-    <div class="links" id="hrLinks" hidden>
+    <div class="links" id="songLinks" hidden>
+      <button class="pill" id="favBtn" hidden>🤍 Save</button>
+      <button class="pill" id="shareBtn" hidden>📤 Share</button>
       <a class="pill" id="bewitchLink" href="https://halloweenradio.net/playlist" target="_blank" rel="noopener">👻 Bewitch on site</a>
       <a class="pill" id="spineLink" href="https://halloweenradio.net/spine-tingler" target="_blank" rel="noopener" title="Rate how spooky this song feels on halloweenradio.net">🦴 Spine-Tingler</a>
     </div>
@@ -443,6 +464,17 @@
     <div class="chips" id="chips" role="tablist" aria-label="Genres"></div>
   </section>
   </div>
+
+  <details class="drawer" id="recent">
+    <summary>🕰️ Recently played <span id="recentOn"></span></summary>
+    <ul id="recentList"></ul>
+    <p class="empty" id="recentEmpty">Play a station marked ♪ and its last few songs show up here.</p>
+  </details>
+  <details class="drawer" id="savedSongs">
+    <summary>❤️ Saved songs <span id="savedCount"></span></summary>
+    <ul id="savedList"></ul>
+    <p class="empty" id="savedEmpty">Tap “🤍 Save” while a song plays to keep it here.</p>
+  </details>
 
   <div class="count" id="count"></div>
 
@@ -502,7 +534,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.4.0';
+const VERSION = '1.5.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1379,20 +1411,38 @@ const pair = (a, t) => [a, t].map(x => (x || '').trim()).filter(Boolean).join(' 
 async function fetchSong(m) {
   const j = async u => (await fetch(u, { cache: 'no-store' })).json();
   switch (m.k) {
-    case 'soma': { const x = (await j(`https://somafm.com/songs/${m.id}.json`)).songs[0]; return pair(x.artist, x.title); }
+    case 'soma': {
+      const xs = (await j(`https://somafm.com/songs/${m.id}.json`)).songs;
+      return { text: pair(xs[0].artist, xs[0].title), history: xs.slice(1, 11).map(y => ({ song: pair(y.artist, y.title), at: +y.date * 1000 })).filter(y => y.song) };
+    }
     case 'laut': {
       const x = await j(`https://api.laut.fm/station/${m.id}/current_song`);
       // Times look like "2026-10-02 02:10:00 +0200".
       const t = v => Date.parse(String(v || '').replace(' ', 'T').replace(/ ([+-]\d\d)(\d\d)$/, '$1:$2'));
       const start = t(x.started_at), end = t(x.ends_at);
-      return { text: pair(x.artist && x.artist.name, x.title), start, dur: end > start ? (end - start) / 1000 : 0 };
+      const r = { text: pair(x.artist && x.artist.name, x.title), start, dur: end > start ? (end - start) / 1000 : 0 };
+      // The last songs and how many are listening, once a minute.
+      if (++m.n % 4 === 1) {
+        const [last, ppl] = await Promise.all([j(`https://api.laut.fm/station/${m.id}/last_songs`).catch(() => null), j(`https://api.laut.fm/station/${m.id}/listeners`).catch(() => null)]);
+        if (Array.isArray(last)) r.history = last.filter(y => t(y.started_at) < start).slice(0, 10)
+          .map(y => ({ song: pair(y.artist && y.artist.name, y.title), at: t(y.started_at) })).filter(y => y.song);
+        if (typeof ppl === 'number') r.listeners = ppl;
+      }
+      return r;
     }
     case 'rainwave': { const x = (await j(`https://rainwave.cc/api4/info?sid=${m.id}`)).sched_current.songs[0]; return pair(x.artists.map(a => a.name).join(', '), x.title); }
     case 'live365': { const x = (await j(`https://api.live365.com/station/${m.id}`))['current-track']; return pair(x.artist, x.title); }
     case 'radioco': return (await j(`https://public.radio.co/stations/${m.id}/status`)).current_track.title;
     case 'azura': {
-      const np = (await j(m.u)).now_playing;
-      return { text: pair(np.song.artist, np.song.title), art: np.song.art || '', start: Date.now() - (np.elapsed || 0) * 1000, dur: np.duration || 0 };
+      const d = await j(m.u), np = d.now_playing;
+      // Real songs only: station jingles and IDs are left out of Up next and the history.
+      const entry = x => x && x.song && x.song.title && !/^(jingle|id|station id|promo|sweeper|liner)$/i.test(x.song.artist || '')
+        ? { song: pair(x.song.artist, x.song.title), at: (x.played_at || 0) * 1000 } : null;
+      return {
+        text: pair(np.song.artist, np.song.title), art: np.song.art || '', start: Date.now() - (np.elapsed || 0) * 1000, dur: np.duration || 0,
+        next: (entry(d.playing_next) || {}).song || '', history: (d.song_history || []).map(entry).filter(Boolean),
+        listeners: d.listeners ? d.listeners.current : null, dj: d.live && d.live.is_live ? (d.live.streamer_name || 'a DJ') : '',
+      };
     }
     case 'icecast': {
       const src = [].concat((await j(m.u)).icestats.source || []);
@@ -1408,7 +1458,7 @@ function setSong(s, text) {
   const art = text && typeof text === 'object' ? text.art || '' : '';
   songTime = text && typeof text === 'object' && text.dur > 0 && text.start > 0 ? { start: text.start, dur: text.dur } : null;
   updateProgress();
-  if (text && typeof text === 'object') text = text.text;
+  if (text && typeof text === 'object') { setSongInfo(text); text = text.text; }
   if (art !== songArt) { songArt = art; renderBadge(); updateMediaSession(); }
   text = (text || '').replace(/\s+/g, ' ').trim();
   if (JUNK_SONG.test(text) || text.toLowerCase() === s.name.toLowerCase()) text = '';
@@ -1417,6 +1467,7 @@ function setSong(s, text) {
   if (song) diag('song: ' + song);
   els.nowSong.textContent = song ? '♪ ' + song : '';
   updateMediaSession();
+  renderSongInfo();
 }
 
 function stopMeta() {
@@ -1425,6 +1476,7 @@ function stopMeta() {
   metaStation = null;
   song = ''; els.nowSong.textContent = '';
   songTime = null; metaCheck = null; updateProgress();
+  songInfo = { next: '', history: [], listeners: null, dj: '' }; renderSongInfo();
   if (songArt) { songArt = ''; renderBadge(); }
 }
 
@@ -1434,6 +1486,7 @@ function startMeta(s) {
   if (!s || !s.meta) return;
   metaStation = s;
   const m = s.meta;
+  m.n = 0;   // counts song checks (some feeds' extras are checked once a minute)
   // Nightride and Zeno push new songs as they start; the rest are checked every 15 seconds.
   if (m.k === 'nightride' || m.k === 'zeno') {
     metaES = new EventSource(m.k === 'nightride' ? 'https://nightride.fm/meta' : `https://api.zeno.fm/mounts/metadata/subscribe/${m.id}`);
@@ -1595,7 +1648,103 @@ $('progTime').addEventListener('click', () => {
   safeSet('fr_time', String(timeStyle));
   updateProgress();
 });
-setInterval(updateProgress, 1000);
+setInterval(() => { updateProgress(); if (waitText) render(); }, 1000);
+
+// ── Up next, recently played, listeners and saved songs ─
+// Many song feeds also say what's coming next, what played before, how many are listening and whether
+// a DJ is live (like Halloween Caster). They're shown for the playing station.
+let songInfo = { next: '', history: [], listeners: null, dj: '' };
+function setSongInfo(t) {
+  ['next', 'history', 'listeners', 'dj'].forEach(k => { if (k in t) songInfo[k] = t[k]; });
+}
+const SAVED_KEY = 'fr_songs';
+let saved = loadJSON(SAVED_KEY, []);
+const savedKey = x => x.song.toLowerCase();
+const isSaved = x => !!x && saved.some(f => savedKey(f) === savedKey(x));
+const currentSong = () => song && metaStation ? { song, station: metaStation.name } : null;
+function toggleSaved(x) {
+  if (isSaved(x)) saved = saved.filter(f => savedKey(f) !== savedKey(x));
+  else saved.unshift({ ...x, at: Date.now() });
+  safeSet(SAVED_KEY, JSON.stringify(saved));
+  renderSongInfo();
+}
+$('favBtn').addEventListener('click', () => { const c = currentSong(); if (c) toggleSaved(c); });
+// Share what's playing: the phone's share sheet, or copy to the clipboard where there isn't one.
+$('shareBtn').addEventListener('click', async () => {
+  const c = currentSong();
+  if (!c) return;
+  const url = location.origin + location.pathname;
+  const text = '🎧 Listening to ' + c.song + ' on ' + c.station + ' · Four Realms';
+  if (navigator.share) {
+    try { await navigator.share({ title: 'Four Realms', text, url }); return; }
+    catch (e) { if (e.name === 'AbortError') return; }   // closed the share sheet; otherwise fall back to copying
+  }
+  try {
+    await navigator.clipboard.writeText(text + '\n' + url);
+    $('shareBtn').textContent = '✅ Copied';
+    setTimeout(() => { $('shareBtn').textContent = '📤 Share'; }, 1800);
+  } catch (e) {}
+});
+function timeAgo(ms) {
+  const min = Math.round((Date.now() - ms) / 60000);
+  return min < 1 ? 'just now' : min < 60 ? min + ' min ago' : Math.floor(min / 60) + ' hr ago';
+}
+// One song in a drawer: name, a heart (or ✕), a note, and for saved songs where to find it.
+function songRow(x, note, btn, links) {
+  const li = document.createElement('li');
+  const name = document.createElement('div'); name.className = 'f-song'; name.textContent = x.song;
+  const meta = document.createElement('div'); meta.className = 'f-meta'; meta.textContent = note;
+  li.append(name, btn, meta);
+  if (links) {
+    const q = encodeURIComponent(x.song.replace(' – ', ' '));
+    const l = document.createElement('div'); l.className = 'f-links';
+    l.innerHTML = `<a href="https://www.youtube.com/results?search_query=${q}" target="_blank" rel="noopener">YouTube</a>`
+      + `<a href="https://music.youtube.com/search?q=${q}" target="_blank" rel="noopener">YouTube Music</a>`
+      + `<a href="https://open.spotify.com/search/${q}" target="_blank" rel="noopener">Spotify</a>`;
+    li.append(l);
+  }
+  return li;
+}
+function heartFor(x) {
+  const b = document.createElement('button'); b.className = 'li-btn';
+  const on = isSaved(x);
+  b.textContent = on ? '❤️' : '🤍';
+  b.setAttribute('aria-label', on ? 'Remove from saved songs' : 'Save this song');
+  b.addEventListener('click', () => toggleSaved(x));
+  return b;
+}
+let lastDrawers = '';
+function renderSongInfo() {
+  const c = currentSong();
+  $('nowNext').textContent = songInfo.next && songInfo.next !== song ? 'Up next: ' + songInfo.next : '';
+  $('nowCrowd').innerHTML = (songInfo.dj ? ' · <b>🔴 LIVE</b> with ' + esc(songInfo.dj) : '') + (songInfo.listeners != null ? ' · 👥 ' + songInfo.listeners : '');
+  const fav = $('favBtn'), on = isSaved(c);
+  fav.hidden = $('shareBtn').hidden = !c;
+  fav.textContent = on ? '❤️ Saved' : '🤍 Save';
+  fav.classList.toggle('on', on);
+  renderLinks();
+  // The drawers only redraw when something in them changed (or a minute passed, for the "min ago" times).
+  const key = [metaStation && metaStation.id, songInfo.history.map(h => h.song).join('|'), saved.length, saved.map(savedKey).join('|'), Math.floor(Date.now() / 60000)].join('#');
+  if (key === lastDrawers) return;
+  lastDrawers = key;
+  $('recentOn').textContent = metaStation && songInfo.history.length ? 'on ' + metaStation.name : '';
+  $('recentEmpty').hidden = songInfo.history.length > 0;
+  $('recentList').replaceChildren(...songInfo.history.map(h => {
+    const x = { song: h.song, station: metaStation ? metaStation.name : '' };
+    return songRow(x, h.at ? timeAgo(h.at) : '', heartFor(x));
+  }));
+  $('savedCount').textContent = saved.length ? '(' + saved.length + ')' : '';
+  $('savedEmpty').hidden = saved.length > 0;
+  $('savedList').replaceChildren(...saved.map(f => {
+    const del = document.createElement('button'); del.className = 'li-btn'; del.textContent = '✕';
+    del.setAttribute('aria-label', 'Remove from saved songs');
+    del.addEventListener('click', () => { saved = saved.filter(x => x !== f); safeSet(SAVED_KEY, JSON.stringify(saved)); renderSongInfo(); });
+    return songRow(f, f.station + ' · ' + new Date(f.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }), del, true);
+  }));
+}
+// The row of song buttons shows when anything in it does.
+function renderLinks() { const row = $('songLinks'); row.hidden = ![...row.children].some(x => !x.hidden); }
+setInterval(renderSongInfo, 60000);   // keeps "min ago" current
 
 // Lock screen and headphone controls, including skip to the next station.
 function updateMediaSession() {
@@ -1728,6 +1877,7 @@ const ICON_VOL = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.
 const ICON_MUTED = '<path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zM19 12c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4 9.91 6.09 12 8.18V4z"/>';
 
 let lastActiveId = null, lastPlayingRealm = null;
+let waitText = '', waitSince = 0;
 function render() {
   const CS = window.cast && cast.framework && cast.framework.CastState;
   const state = ctx ? ctx.getCastState() : null;
@@ -1743,8 +1893,10 @@ function render() {
   const s = playingStation() || selected;
   renderBadge();
   // Halloween Radio channels: links to Bewitch (the station's song page) and Spine-Tingler (rate the song).
-  $('hrLinks').hidden = !(s && s.group === 'Halloween Radio');
-  if (s && s.group === 'Halloween Radio') $('spineLink').href = 'https://halloweenradio.net/spine-tingler' + (s.spine ? '?station=' + s.spine : '');
+  const hr = !!(s && s.group === 'Halloween Radio');
+  $('bewitchLink').hidden = $('spineLink').hidden = !hr;
+  renderLinks();
+  if (hr) $('spineLink').href = 'https://halloweenradio.net/spine-tingler' + (s.spine ? '?station=' + s.spine : '');
   els.nowName.textContent = s ? s.name : 'Pick a station, or tap shuffle';
   let where = 'Ready', st = '', live = false, icon = ICON_PLAY;
   if (session) {
@@ -1770,6 +1922,12 @@ function render() {
   els.where.textContent = where;
   // Listening to one realm while looking around another: say where the music is from.
   if (s && s.realm !== realm.id) els.where.insertAdjacentHTML('beforeend', ` · <span class="from">${realmById(s.realm).short}</span>`);
+  // While something is starting up, count the seconds (like Halloween Caster).
+  if (/…$/.test(st)) {
+    if (st !== waitText) { waitText = st; waitSince = Date.now(); }
+    const secs = Math.floor((Date.now() - waitSince) / 1000);
+    if (secs >= 2) st += ' ' + secs + 's';
+  } else waitText = '';
   els.nowState.textContent = st ? '· ' + st : '';
   els.nowState.classList.toggle('live', live);
   els.playIcon.innerHTML = icon;
