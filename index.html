@@ -1,0 +1,1557 @@
+<!doctype html>
+<html lang="en" data-realm="halloween">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Four Realms</title>
+<meta name="description" content="Halloween, synthwave, pagan and black metal radio in one app. Four realms, one player: search, shuffle, and cast to Nest speakers.">
+<meta name="theme-color" content="#120d17" id="themeColor">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Cinzel:wght@600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+  /* Each realm has its own colors, taken from its sister app. The <html> element carries the
+     realm being shown; doors and tabs carry their own realm so they show its colors too. */
+  :root, [data-realm="halloween"] {
+    --bg: #120d17; --surface: #1d1624; --surface-2: #281f31; --line: #3a2e45;
+    --text: #f3ecf7; --muted: #a898b3; --accent: #ff7a1a; --accent-2: #ffb36b; --accent-ink: #1a0f05;
+    --good: #7ddc6f; --warn: #ffcf5c; --radius: 16px;
+    --glow: rgba(255, 122, 26, .35); --top-bg: rgba(18, 13, 23, .9);
+    --badge: radial-gradient(circle at 50% 40%, #4a2410, #1a0f12);
+  }
+  [data-realm="synth"] {
+    --bg: #0d0a1a; --surface: #17122b; --surface-2: #221a3d; --line: #342a57;
+    --text: #f1ecff; --muted: #a79dc9; --accent: #ff3fa4; --accent-2: #33e1ff; --accent-ink: #1a0514;
+    --good: #6ff0a8; --warn: #ffcf5c; --radius: 16px;
+    --glow: rgba(255, 63, 164, .35); --top-bg: rgba(13, 10, 26, .9);
+    --badge: linear-gradient(135deg, #3a1a5c, #13304a);
+  }
+  [data-realm="pagan"] {
+    --bg: #0b1210; --surface: #13201b; --surface-2: #1b2d26; --line: #2c4439;
+    --text: #eef3ea; --muted: #9fb3a6; --accent: #e0b54f; --accent-2: #c9d6e8; --accent-ink: #1d1505;
+    --good: #9be38a; --warn: #e0b54f; --radius: 16px;
+    --glow: rgba(224, 181, 79, .35); --top-bg: rgba(11, 18, 16, .9);
+    --badge: linear-gradient(135deg, #24463a, #1a2b3d);
+  }
+  [data-realm="kvlt"] {
+    --bg: #070606; --surface: #110f0f; --surface-2: #1b1616; --line: #2f2525;
+    --text: #ebe6df; --muted: #978c86; --accent: #b3121a; --accent-2: #dcd6cc; --accent-ink: #f5efe7;
+    --good: #e24a4a; --warn: #b3121a; --radius: 12px;
+    --glow: rgba(179, 18, 26, .45); --top-bg: rgba(7, 6, 6, .86);
+    --badge: radial-gradient(circle at 50% 40%, #3a0a0d, #0c0808);
+  }
+  :root { color-scheme: dark; --tabbar: 62px; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    min-height: 100dvh;
+    padding: 0 16px calc(var(--tabbar) + max(16px, env(safe-area-inset-bottom)));
+    -webkit-tap-highlight-color: transparent;
+    background-repeat: no-repeat; background-attachment: fixed;
+    transition: background-color .3s;
+  }
+  /* Each realm's backdrop, from its sister app. */
+  html[data-realm="halloween"] body { background-image: radial-gradient(ellipse at 50% -60px, rgba(255, 122, 26, .22), transparent 340px); }
+  html[data-realm="synth"] body { background-image: linear-gradient(180deg, rgba(255, 63, 164, .10), transparent 260px); }
+  html[data-realm="pagan"] body {
+    background-image:
+      radial-gradient(circle at 85% -40px, rgba(201, 214, 232, .16), transparent 240px),
+      radial-gradient(1px 1px at 12% 8%, rgba(255, 255, 255, .5), transparent),
+      radial-gradient(1px 1px at 32% 3%, rgba(255, 255, 255, .35), transparent),
+      radial-gradient(1px 1px at 58% 11%, rgba(255, 255, 255, .45), transparent),
+      radial-gradient(1px 1px at 72% 5%, rgba(255, 255, 255, .3), transparent),
+      radial-gradient(1.5px 1.5px at 44% 15%, rgba(255, 255, 255, .4), transparent),
+      linear-gradient(180deg, #0f1a24 0, var(--bg) 320px);
+  }
+  html[data-realm="kvlt"] body {
+    background-image:
+      radial-gradient(ellipse at 50% -80px, rgba(179, 18, 26, .28), transparent 340px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23b3121a' stroke-opacity='.07' stroke-width='1.2'%3E%3Ccircle cx='50' cy='50' r='44'/%3E%3Ccircle cx='50' cy='50' r='41'/%3E%3Cpath d='M50 90 26.5 17.6 88 62.4H12L73.5 17.6Z'/%3E%3C/g%3E%3C/svg%3E");
+    background-position: center top, center 55vh;
+    background-size: auto, min(560px, 96vw);
+  }
+  main { max-width: 560px; min-width: 0; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; touch-action: pan-y; }
+  main.swiping { transition: none; }
+  main.slide { transition: transform .18s ease-in, opacity .18s ease-in; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  button { font: inherit; color: inherit; border: 0; cursor: pointer; }
+  button:disabled { opacity: .45; cursor: default; }
+  button:focus-visible, a:focus-visible, select:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+
+  /* The realm's name: tap it to open the portal. */
+  .logo {
+    display: flex; align-items: center; gap: 8px; background: none; padding: 4px 8px 4px 0; min-width: 0;
+    font-size: 19px; font-weight: 700; letter-spacing: .2px; white-space: nowrap; line-height: 1.1; user-select: none;
+  }
+  .logo .nm { overflow: hidden; text-overflow: ellipsis; }
+  .logo .caret { font-size: 11px; color: var(--muted); font-weight: 400; transform: translateY(1px); }
+  .logo svg { width: 28px; height: 28px; flex: none; }
+  [data-realm="halloween"] .logo .nm { font-family: "Creepster", system-ui, cursive; font-weight: 400; font-size: 25px; letter-spacing: 1px; color: var(--accent); text-shadow: 0 0 12px rgba(255, 122, 26, .45); }
+  [data-realm="synth"] .logo .nm { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  [data-realm="pagan"] .logo .nm { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent;
+    font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif; letter-spacing: .5px; }
+  [data-realm="kvlt"] .logo .nm { font-family: "UnifrakturMaguntia", "Old English Text MT", serif; font-weight: 400; font-size: 27px; letter-spacing: .5px;
+    color: var(--accent-2); text-shadow: 0 0 10px rgba(179, 18, 26, .9), 0 2px 0 #000; line-height: 1; }
+  .sigil { color: var(--accent); filter: drop-shadow(0 0 5px rgba(179, 18, 26, .8)); }
+  @media (max-width: 380px) { .logo { font-size: 17px; } [data-realm="halloween"] .logo .nm { font-size: 22px; } [data-realm="kvlt"] .logo .nm { font-size: 24px; } .cast-btn { padding: 9px 12px; } }
+
+  .cast-btn {
+    display: inline-flex; align-items: center; gap: 8px; flex: none;
+    background: var(--surface-2); border: 1px solid var(--line);
+    padding: 10px 14px; border-radius: 999px; max-width: 52%;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .cast-btn svg { flex: none; width: 20px; height: 20px; }
+  .cast-btn.connected { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .cast-btn.connecting svg { animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .3; } }
+  .cast-btn.nudge { border-color: var(--accent); animation: glow 1.2s ease-in-out infinite; }
+  @keyframes glow { 50% { box-shadow: 0 0 0 4px var(--glow); } }
+
+  /* The realm's own line: countdowns and the moon. */
+  .sky { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; color: var(--muted); margin-top: -4px; }
+  .sky:empty { display: none; }
+  .sky span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sky b { color: var(--accent-2); font-weight: 600; }
+  [data-realm="kvlt"] .sky .two b { color: var(--good); }
+
+  .notice {
+    background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--warn);
+    padding: 12px 14px; border-radius: 12px; color: var(--muted); font-size: 14px;
+  }
+  .notice[hidden] { display: none; }
+
+  /* Now playing and the controls: one player for all four realms. */
+  .player {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 10px 12px 6px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .now { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 10px; align-items: center; }
+  .badge { width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; font-size: 22px; background: var(--badge); }
+  .badge svg { width: 26px; height: 26px; }
+  .now .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .now .label .state { text-transform: none; letter-spacing: 0; }
+  .now .label .state.live { color: var(--good); }
+  .now .label .from { color: var(--accent-2); }
+  .now .label .sleep-left { text-transform: none; letter-spacing: 0; color: var(--accent-2); }
+  .now .title { font-weight: 650; font-size: 15px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .now .song { font-size: 13px; color: var(--accent-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .now .song:empty { display: none; }
+
+  .row { display: flex; align-items: center; gap: 2px; }
+  .play {
+    width: 46px; height: 46px; border-radius: 50%; flex: none; margin: 0 2px;
+    background: var(--accent); color: var(--accent-ink); display: grid; place-items: center;
+    -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation;
+  }
+  [data-realm="kvlt"] .play { box-shadow: 0 0 14px rgba(179, 18, 26, .6); }
+  .play svg { width: 24px; height: 24px; }
+  .icon-btn { background: none; padding: 9px; display: grid; place-items: center; color: var(--muted); border-radius: 50%; flex: none; }
+  .icon-btn svg { width: 22px; height: 22px; }
+  .icon-btn[hidden] { display: none; }
+  .icon-btn.on { color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 14%, transparent); }
+  input[type=range] { flex: 1; accent-color: var(--accent); height: 28px; min-width: 40px; margin-left: 2px; }
+
+  /* The player, search, genres and sort stay pinned at the top while the station list scrolls under them. */
+  .top {
+    position: sticky; top: 0; z-index: 3; display: flex; flex-direction: column; gap: 8px;
+    background: var(--top-bg); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    padding: max(12px, env(safe-area-inset-top)) 16px 8px; margin: 0 -16px;
+    box-shadow: 0 10px 12px -6px var(--top-bg);
+  }
+  @media (max-height: 560px) { .top { position: static; box-shadow: none; } }
+  .finder { display: flex; flex-direction: column; gap: 8px; }
+  .search-row { display: flex; gap: 8px; }
+  .search-row .search { flex: 1; min-width: 0; }
+  .search { position: relative; }
+  .search input {
+    width: 100%; font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 10px 34px 10px 38px; outline: none;
+  }
+  .search input:focus { border-color: var(--accent-2); }
+  .search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); }
+  .search button { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); background: none; color: var(--muted); padding: 8px 10px; font-size: 18px; line-height: 1; }
+  .search button[hidden] { display: none; }
+  .chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  .chips::-webkit-scrollbar { display: none; }
+  @media (pointer: fine) { .chips { cursor: grab; } .chips.dragging { cursor: grabbing; user-select: none; } }
+  .chip {
+    flex: none; background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+    padding: 7px 12px; font-size: 14px; white-space: nowrap; color: var(--muted);
+  }
+  .chip.on { background: var(--surface-2); border-color: var(--accent); color: var(--text); }
+  .chip b { font-weight: 400; opacity: .7; margin-left: 4px; font-size: 12px; }
+  .sort {
+    flex: none; width: 108px; font: inherit; font-size: 14px; color: var(--text); background: var(--surface);
+    border: 1px solid var(--line); border-radius: 12px; padding: 0 8px;
+  }
+  .count { font-size: 12px; color: var(--muted); margin: -2px 0 -4px; }
+
+  .list { display: flex; flex-direction: column; gap: 6px; }
+  .st {
+    display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 4px 4px 4px 12px; min-height: 52px;
+  }
+  [data-realm="kvlt"] .st { background: rgba(17, 15, 15, .82); }
+  .st.active { border-color: var(--accent); background: var(--surface-2); }
+  .st.failed .nm { opacity: .55; }
+  .st .pick { flex: 1; min-width: 0; text-align: left; background: none; padding: 8px 0; display: flex; flex-direction: column; gap: 2px; }
+  .st .nm { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .st .gr { font-size: 12px; color: var(--muted); }
+  .st .dot { display: none; width: 8px; height: 8px; border-radius: 50%; background: var(--good); margin-right: 6px; vertical-align: middle; }
+  .st.active .dot { display: inline-block; }
+  .star { background: none; font-size: 20px; padding: 10px; color: var(--muted); line-height: 1; }
+  .star.on { color: var(--warn); }
+  .empty { text-align: center; color: var(--muted); padding: 30px 10px; }
+  .more { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; color: var(--muted); }
+
+  .to-top {
+    position: fixed; right: 16px; bottom: calc(var(--tabbar) + max(14px, env(safe-area-inset-bottom))); z-index: 4;
+    width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--surface-2); border: 1px solid var(--accent-2); color: var(--accent-2);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .5); transition: opacity .2s, transform .2s;
+  }
+  .to-top svg { width: 26px; height: 26px; }
+  .to-top.hide { opacity: 0; transform: translateY(12px); pointer-events: none; }
+
+  footer { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; color: var(--muted); font-size: 12px; padding: 14px 0 6px; }
+  footer .foot-tag { color: var(--accent-2); font-size: 13px; }
+  [data-realm="halloween"] footer .foot-tag { font-family: "Creepster", system-ui, cursive; font-size: 19px; letter-spacing: 1.5px; color: var(--accent); }
+  [data-realm="synth"] footer .foot-tag { letter-spacing: 2px; text-transform: uppercase; }
+  [data-realm="pagan"] footer .foot-tag { font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif; font-size: 16px; font-style: italic; letter-spacing: .5px; }
+  [data-realm="kvlt"] footer .foot-tag { font-family: "UnifrakturMaguntia", "Old English Text MT", serif; font-size: 19px; letter-spacing: .5px; }
+  footer .foot-ver { font-size: 11px; letter-spacing: 1.5px; opacity: .8; user-select: none; }
+
+  /* ── Tabs along the bottom ─────────────────── */
+  .tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 6;
+    display: grid; grid-template-columns: repeat(4, 1fr); max-width: 560px; margin: 0 auto;
+    padding: 6px 8px max(8px, env(safe-area-inset-bottom));
+    background: var(--top-bg); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border-top: 1px solid var(--line);
+  }
+  @media (min-width: 561px) { .tabbar { border: 1px solid var(--line); border-bottom: 0; border-radius: 16px 16px 0 0; } }
+  .tab { background: none; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 0; border-radius: 12px; color: var(--muted); font-size: 11px; letter-spacing: .3px; }
+  .tab .e { height: 26px; display: grid; place-items: center; font-size: 21px; filter: grayscale(.85); opacity: .6; transition: transform .2s, opacity .2s, filter .2s; }
+  .tab .e svg { width: 22px; height: 22px; }
+  .tab.on { color: var(--text); }
+  .tab.on .e { filter: none; opacity: 1; transform: translateY(-1px) scale(1.1); }
+  .tab .live { width: 5px; height: 5px; border-radius: 50%; background: transparent; }
+  .tab.playing .live { background: var(--good); }
+
+  /* ── Portal: a ring of four doors ──────────── */
+  .portal {
+    position: fixed; inset: 0; z-index: 20; display: grid; place-items: center;
+    background: rgba(4, 3, 6, .84); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    animation: fadeIn .2s both;
+  }
+  .portal[hidden] { display: none; }
+  .ring { position: relative; width: 300px; height: 300px; }
+  .ring::before { content: ""; position: absolute; inset: 26px; border-radius: 50%; border: 1px dashed rgba(255, 255, 255, .2); animation: spin 40s linear infinite; }
+  .ring .mid { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: #cfc8d8; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; pointer-events: none; font-family: "Cinzel", Georgia, serif; }
+  .door {
+    position: absolute; width: 108px; height: 108px; border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    background: var(--bg); border: 2px solid var(--line); color: var(--text); font-size: 12.5px;
+    animation: pop .3s both;
+  }
+  .door .e { font-size: 32px; line-height: 1; }
+  .door .e svg { width: 32px; height: 32px; }
+  .door.on { border-color: var(--accent); box-shadow: 0 0 24px var(--glow); }
+  .door:nth-of-type(1) { left: 96px; top: 0; }
+  .door:nth-of-type(2) { right: 0; top: 96px; animation-delay: .04s; }
+  .door:nth-of-type(3) { left: 96px; bottom: 0; animation-delay: .08s; }
+  .door:nth-of-type(4) { left: 0; top: 96px; animation-delay: .12s; }
+  @keyframes pop { from { transform: scale(.6); opacity: 0; } }
+  @keyframes fadeIn { from { opacity: 0; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Title screen: shows each time the app opens ─ */
+  .gate {
+    position: fixed; inset: 0; z-index: 30; background: #0c0b0e; color: #e9e5ee;
+    display: flex; flex-direction: column; gap: 16px;
+    padding: max(40px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+    transition: opacity .35s, transform .35s;
+  }
+  .gate.leaving { opacity: 0; transform: scale(1.04); pointer-events: none; }
+  .gate[hidden] { display: none; }
+  .gate h2 { margin: 0; text-align: center; font-family: "Cinzel", Georgia, serif; font-size: 30px; letter-spacing: 5px; font-weight: 600; text-wrap: balance; }
+  .gate .sub { text-align: center; color: #9a93a6; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; margin-top: -10px; }
+  .doors { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: minmax(0, 1fr); gap: 12px; width: 100%; max-width: 560px; margin: 0 auto; max-height: 640px; }
+  .tile {
+    border-radius: 20px; background: var(--bg); border: 1px solid var(--line); color: var(--text);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 12px 8px;
+    position: relative; overflow: hidden; animation: pop .4s both;
+  }
+  .tile:nth-child(2) { animation-delay: .06s; } .tile:nth-child(3) { animation-delay: .12s; } .tile:nth-child(4) { animation-delay: .18s; }
+  .tile::before { content: ""; position: absolute; inset: 0; background: radial-gradient(100% 70% at 50% 0%, var(--glow), transparent 70%); }
+  .tile > * { position: relative; }
+  .tile .e { font-size: 40px; line-height: 1; }
+  .tile .e svg { width: 42px; height: 42px; }
+  .tile .t { font-size: 18px; line-height: 1.1; text-align: center; }
+  [data-realm="halloween"].tile .t { font-family: "Creepster", cursive; font-size: 23px; letter-spacing: 1px; color: var(--accent); }
+  [data-realm="synth"].tile .t { font-weight: 700; background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  [data-realm="pagan"].tile .t { font-family: "Palatino Linotype", Palatino, Georgia, serif; font-weight: 700; color: var(--accent); }
+  [data-realm="kvlt"].tile .t { font-family: "UnifrakturMaguntia", serif; font-size: 25px; color: var(--accent-2); text-shadow: 0 0 10px rgba(179, 18, 26, .9); }
+  .tile .n { font-size: 11.5px; color: var(--muted); }
+  .tile .last { position: absolute; top: 10px; left: 0; right: 0; text-align: center; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-2); }
+  .gate .fine { text-align: center; font-size: 11px; color: #6f6878; }
+
+  .sleep-menu {
+    position: fixed; z-index: 50; display: flex; gap: 4px; padding: 6px; border-radius: 999px;
+    background: var(--surface-2); border: 1px solid var(--line); box-shadow: 0 6px 24px rgba(0, 0, 0, .5);
+  }
+  .sleep-menu[hidden] { display: none; }
+  .sleep-menu button { background: none; color: var(--text); padding: 7px 10px; border-radius: 999px; font-size: 13px; }
+  .sleep-menu button.on { background: var(--accent); color: var(--accent-ink); }
+
+  dialog { background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; width: min(520px, calc(100vw - 32px)); }
+  dialog::backdrop { background: rgba(0, 0, 0, .6); }
+  #diagText { max-height: 55vh; overflow: auto; font-size: 11px; white-space: pre-wrap; background: var(--bg); padding: 8px; border-radius: 8px; }
+  .dlg-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+  .dlg-btns button { background: var(--surface-2); border: 1px solid var(--line); padding: 8px 12px; border-radius: 8px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main id="main">
+  <div class="top">
+  <header>
+    <button class="logo" id="logo" aria-haspopup="dialog" aria-label="Switch realm"><span id="logoIcon"></span><span class="nm" id="logoName"></span><span class="caret" aria-hidden="true">▾</span></button>
+    <button class="cast-btn" id="castBtn" aria-label="Cast to a speaker">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2a9 9 0 0 1 9 9h2c0-6.08-4.93-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+      <span id="castLabel">Speakers</span>
+    </button>
+  </header>
+  <div class="sky" id="sky" aria-live="off"></div>
+
+  <div class="notice" id="notice" hidden></div>
+
+  <section class="player">
+  <div class="now" aria-live="polite">
+    <div class="badge" id="badge"></div>
+    <div style="min-width:0">
+      <div class="label"><span id="where">Ready</span> <span class="state" id="nowState"></span> <span class="sleep-left" id="sleepLeft" hidden></span></div>
+      <div class="title" id="nowName">Pick a station, or tap shuffle</div>
+      <div class="song" id="nowSong"></div>
+    </div>
+  </div>
+    <div class="row">
+      <button class="icon-btn" id="shuffleBtn" aria-label="Shuffle" title="Shuffle">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+      </button>
+      <button class="icon-btn" id="prevBtn" aria-label="Previous station" title="Previous station">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+      </button>
+      <button class="play" id="playBtn" aria-label="Play">
+        <svg viewBox="0 0 24 24" fill="currentColor" id="playIcon"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button class="icon-btn" id="nextBtn" aria-label="Next station" title="Next station">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+      </button>
+      <button class="icon-btn" id="disconnectBtn" aria-label="Disconnect speaker" title="Disconnect speaker" hidden>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+      <button class="icon-btn" id="muteBtn" aria-label="Mute">
+        <svg viewBox="0 0 24 24" fill="currentColor" id="volIcon"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+      </button>
+      <input type="range" id="vol" min="0" max="100" value="80" aria-label="Volume">
+    </div>
+  </section>
+
+  <section class="finder">
+    <div class="search-row">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      <input type="search" id="q" placeholder="Search stations" autocomplete="off" enterkeyhint="search" aria-label="Search stations">
+      <button id="qClear" aria-label="Clear search" hidden>×</button>
+    </div>
+    <select class="sort" id="sort" aria-label="Sort stations">
+      <option value="az">A → Z</option>
+      <option value="za">Z → A</option>
+      <option value="genre">Genre</option>
+      <option value="recent">Recent</option>
+      <option value="favs">Favorites</option>
+      <option value="random">Random</option>
+    </select>
+    </div>
+    <div class="chips" id="chips" role="tablist" aria-label="Genres"></div>
+  </section>
+  </div>
+
+  <div class="count" id="count"></div>
+
+  <section class="list" id="list" aria-label="Stations"></section>
+
+  <footer>
+    <div class="foot-tag" id="footTag"></div>
+    <div>A free fan app; streams belong to their stations.</div>
+    <div class="foot-ver" id="ver"></div>
+  </footer>
+</main>
+
+<button class="to-top hide" id="toTop" aria-label="Back to top and search" title="Back to top">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+</button>
+
+<nav class="tabbar" id="tabbar" aria-label="Realms"></nav>
+
+<div class="portal" id="portal" role="dialog" aria-label="Choose a realm" hidden>
+  <div class="ring" id="ring"><div class="mid">Choose<br>a realm</div></div>
+</div>
+
+<div class="gate" id="gate" role="dialog" aria-label="Four Realms" hidden>
+  <h2>Four Realms</h2>
+  <div class="sub">Choose where to listen</div>
+  <div class="doors" id="doors"></div>
+  <div class="fine">Swipe sideways or use the tabs to move between realms. Tap a realm's name for the portal.</div>
+</div>
+
+<div class="sleep-menu" id="sleepMenu" role="menu" aria-label="Sleep timer" hidden>
+  <button data-min="0">🌙 Off</button><button data-min="15">15</button><button data-min="30">30</button><button data-min="60">60</button><button data-min="90">90</button>
+</div>
+
+<dialog id="diagDlg">
+  <div id="diagText"></div>
+  <div class="dlg-btns">
+    <button id="diagClear">Clear</button>
+    <button id="diagCopy">Copy log</button>
+    <button onclick="this.closest('dialog').close()">Close</button>
+  </div>
+</dialog>
+
+<script>
+const VERSION = '1.0.0';
+const $ = id => document.getElementById(id);
+const els = {
+  castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
+  nowName: $('nowName'), nowSong: $('nowSong'), nowState: $('nowState'), badge: $('badge'), playBtn: $('playBtn'), playIcon: $('playIcon'),
+  prevBtn: $('prevBtn'), nextBtn: $('nextBtn'), shuffleBtn: $('shuffleBtn'), disconnectBtn: $('disconnectBtn'),
+  muteBtn: $('muteBtn'), volIcon: $('volIcon'), vol: $('vol'), q: $('q'), qClear: $('qClear'),
+  chips: $('chips'), sort: $('sort'), count: $('count'), list: $('list'), sky: $('sky'),
+  logo: $('logo'), logoIcon: $('logoIcon'), logoName: $('logoName'), footTag: $('footTag'), main: $('main'),
+};
+$('ver').textContent = 'Four Realms V' + VERSION;
+
+function safeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function safeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function loadJSON(k, fallback) { try { return JSON.parse(safeGet(k)) || fallback; } catch (e) { return fallback; } }
+
+// ── Diagnostic log (tap the version line 5 times) ─
+const DIAG_KEY = 'fr_diag';
+let diagLines = loadJSON(DIAG_KEY, []);
+function diag(msg) {
+  const t = new Date();
+  diagLines.push(t.toLocaleTimeString() + '  ' + msg);
+  if (diagLines.length > 300) diagLines = diagLines.slice(-300);
+  safeSet(DIAG_KEY, JSON.stringify(diagLines));
+}
+// How it was opened: its own app window (installed) or an ordinary browser tab.
+const openedAs = ['standalone', 'minimal-ui', 'fullscreen', 'browser'].find(m => matchMedia('(display-mode: ' + m + ')').matches) || 'unknown';
+diag('── opened · Four Realms v' + VERSION + ' · ' + (openedAs === 'browser' ? 'browser tab' : 'app window (' + openedAs + ')')
+  + (document.referrer ? ' · from ' + document.referrer : '') + ' · ' + navigator.userAgent);
+
+// ── The four realms ─────────────────────────────
+const SIGIL = '<svg class="sigil" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5"><circle cx="50" cy="50" r="45"/><path d="M50 90 26.5 17.6 88 62.4H12L73.5 17.6Z" stroke-linejoin="round"/></g></svg>';
+const REALMS = [
+  { id: 'halloween', name: 'Halloween Caster', short: 'Halloween', icon: '🎃', badge: '🎃', color: '#120d17',
+    tag: 'Happy haunting!',
+    genres: [{ id: 'Halloween Radio', label: '🎃 Halloween Radio', icon: '🎃' }] },
+  { id: 'synth', name: 'Synth Caster', short: 'Synth', icon: '🌆', badge: '🌆', color: '#0d0a1a',
+    tag: 'Neon never dies!',
+    genres: [
+      { id: 'Halloween', label: '🎃 Halloween', icon: '🎃' },
+      { id: 'Synthwave / Retrowave', label: '🌆 Synthwave', icon: '🌆' },
+      { id: 'Darkwave / Goth / Industrial', label: '🦇 Darkwave & Goth', icon: '🦇' },
+      { id: 'Chiptune / Game', label: '👾 Chiptune & Game', icon: '👾' },
+    ] },
+  { id: 'pagan', name: 'Pagan Caster', short: 'Pagan', icon: '🌙', badge: '🌙', color: '#0b1210',
+    tag: 'Merry meet, merry part!',
+    genres: [
+      { id: 'Wiccan & Witchy', label: '🌙 Wiccan & Witchy', icon: '🌙' },
+      { id: 'Pagan & Heathen', label: '🌿 Pagan & Heathen', icon: '🌿' },
+      { id: 'Norse, Viking & Nordic', label: '⚔️ Norse & Viking', icon: '⚔️' },
+      { id: 'Neofolk, Dark Folk & Ritual', label: '🕯️ Neofolk & Ritual', icon: '🕯️' },
+      { id: 'Medieval & Pagan Folk (Mittelalter)', label: '🏰 Medieval Folk', icon: '🏰' },
+      { id: 'Celtic Pagan', label: '☘️ Celtic', icon: '☘️' },
+      { id: 'Pagan, Viking & Folk Metal', label: '🤘 Pagan Metal', icon: '🤘' },
+    ] },
+  { id: 'kvlt', name: 'Kvlt Kaster', short: 'Kvlt', icon: SIGIL, badge: '🐐', color: '#070606',
+    tag: 'Hail the underground!',
+    genres: [
+      { id: 'Pure Black Metal', label: '🐐 Pure Black Metal', icon: '🐐' },
+      { id: 'Extreme Metal Mixes (lots of black metal)', label: '💀 Extreme Metal', icon: '💀' },
+      { id: 'Pagan, Viking & Folk Black Metal', label: '⚔️ Pagan & Viking', icon: '⚔️' },
+      { id: 'Blackened Doom, Funeral & Dark', label: '⚰️ Blackened Doom', icon: '⚰️' },
+      { id: 'Avant-garde & Ambient Black', label: '🌑 Avant-garde & Ambient', icon: '🌑' },
+      { id: 'Death Metal Neighbours', label: '🩸 Death Metal', icon: '🩸' },
+      { id: 'Metal Mix', label: '🤘 Metal Mix', icon: '🤘' },
+    ] },
+];
+const realmById = id => REALMS.find(r => r.id === id) || REALMS[0];
+const genreOf = s => realmById(s.realm).genres.find(g => g.id === s.group) || {};
+const iconFor = s => genreOf(s).icon || '📻';
+const shortGenre = s => (genreOf(s).label || s.group).replace(/^\S+ /, '');
+
+// ── Moon, countdowns and dates for each realm's own line ─
+const MOONS = [
+  [0.0339, '🌑', 'New Moon'], [0.2161, '🌒', 'Waxing Crescent'], [0.2839, '🌓', 'First Quarter'],
+  [0.4661, '🌔', 'Waxing Gibbous'], [0.5339, '🌕', 'Full Moon'], [0.7161, '🌖', 'Waning Gibbous'],
+  [0.7839, '🌗', 'Last Quarter'], [0.9661, '🌘', 'Waning Crescent'], [1.01, '🌑', 'New Moon'],
+];
+const SYNODIC = 29.530588853;
+const moonAge = d => ((((d - Date.UTC(2000, 0, 6, 18, 14)) / 86400000) % SYNODIC) + SYNODIC) % SYNODIC;   // days since new moon
+// Sabbats (northern hemisphere dates; the solstices and equinoxes move by a day some years).
+const SABBATS = [['Imbolc', 1, 1], ['Ostara', 2, 20], ['Beltane', 4, 1], ['Litha', 5, 21],
+                 ['Lughnasadh', 7, 1], ['Mabon', 8, 22], ['Samhain', 9, 31], ['Yule', 11, 21]];
+const todayStart = () => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); };
+const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+function moonLine() {
+  const age = moonAge(Date.now());
+  const [, icon, name] = MOONS.find(([upTo]) => age / SYNODIC < upTo);
+  const toFull = Math.round(((SYNODIC / 2 - age) + SYNODIC) % SYNODIC);
+  return `${icon} <b>${name}</b>` + (name === 'Full Moon' ? '' : ` · full in ${plural(toFull, 'day')}`);
+}
+function nextUnholy(today) {
+  const y = today.getFullYear(), dates = [];
+  for (const yr of [y, y + 1]) {
+    dates.push(['Walpurgisnacht', new Date(yr, 3, 30)], ['6/6', new Date(yr, 5, 6)], ['Samhain', new Date(yr, 9, 31)]);
+    for (let m = 0; m < 12; m++) { const d = new Date(yr, m, 13); if (d.getDay() === 5) dates.push(['Friday the 13th', d]); }
+  }
+  return dates.filter(([, d]) => d >= today).sort((a, b) => a[1] - b[1])[0];
+}
+const SKY = {
+  halloween() {
+    const today = todayStart();
+    let h = new Date(today.getFullYear(), 9, 31);
+    if (today > h) h = new Date(today.getFullYear() + 1, 9, 31);
+    const d = Math.round((h - today) / 86400000);
+    return `<span>${d === 0 ? '🎃 <b>Happy Halloween!</b> 🦇' : d === 1 ? '🎃 <b>Halloween is tomorrow!</b>' : `🎃 <b>${plural(d, 'day')}</b> until Halloween`}</span>`
+      + '<span>Halloween Radio</span>';
+  },
+  synth: () => '',
+  pagan() {
+    const today = todayStart();
+    const next = SABBATS.map(([n, m, d]) => {
+      let at = new Date(today.getFullYear(), m, d);
+      if (at < today) at = new Date(today.getFullYear() + 1, m, d);
+      return [n, Math.round((at - today) / 86400000)];
+    }).sort((a, b) => a[1] - b[1])[0];
+    return `<span>${moonLine()}</span><span class="two">${next[1] === 0 ? `✨ <b>Blessed ${next[0]}!</b>` : `${next[0]} in <b>${plural(next[1], 'day')}</b>`}</span>`;
+  },
+  kvlt() {
+    const today = todayStart();
+    const [what, when] = nextUnholy(today);
+    const days = Math.round((when - today) / 86400000);
+    return `<span>${moonLine()}</span><span class="two">${days === 0 ? `🔥 <b>${what} is tonight</b>` : `${what} in <b>${plural(days, 'day')}</b>`}</span>`;
+  },
+};
+function renderSky() { els.sky.innerHTML = SKY[realm.id](); }
+setInterval(renderSky, 3600000);
+
+// ── State ───────────────────────────────────────
+let STATIONS = [];
+let realm = realmById(safeGet('fr_realm'));
+let favs = new Set(loadJSON('fr_favs', []));
+let recent = loadJSON('fr_recent', {});      // id -> last played time
+let failed = loadJSON('fr_failed', {});      // id -> time it last failed to play
+let shuffle = safeGet('fr_shuffle') === '1';
+// Each realm keeps its own search, genre, sort and place in the list.
+const views = Object.fromEntries(REALMS.map(r => [r.id, {
+  filter: safeGet('fr_' + r.id + '_filter') || 'all', sortBy: safeGet('fr_' + r.id + '_sort') || 'az',
+  query: '', shown: 120, scroll: 0,
+}]));
+const view = () => views[realm.id];
+let selected = null;           // the station shown in Now playing
+let history = [];              // stations played this visit, for the Previous button
+let randomOrder = new Map();   // id -> random number, for the Random sort
+const PAGE = 120;              // stations drawn at a time (the list is long)
+
+// ── Station list: search, genre, sort ───────────
+function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+
+function visible(r = realm) {
+  const v = views[r.id];
+  const words = norm(v.query).split(/\s+/).filter(Boolean);
+  let list = STATIONS.filter(s => {
+    if (s.realm !== r.id) return false;
+    if (v.filter === 'favs' && !favs.has(s.id)) return false;
+    if (v.filter !== 'all' && v.filter !== 'favs' && s.group !== v.filter) return false;
+    return words.every(w => s.search.includes(w));
+  });
+  const byName = (a, b) => a.sortName.localeCompare(b.sortName);
+  const gi = s => r.genres.findIndex(g => g.id === s.group);
+  const cmp = {
+    az: byName,
+    za: (a, b) => byName(b, a),
+    genre: (a, b) => gi(a) - gi(b) || byName(a, b),
+    recent: (a, b) => (recent[b.id] || 0) - (recent[a.id] || 0) || byName(a, b),
+    favs: (a, b) => favs.has(b.id) - favs.has(a.id) || byName(a, b),
+    random: (a, b) => randomOrder.get(a.id) - randomOrder.get(b.id),
+  }[v.sortBy] || byName;
+  return list.sort(cmp);
+}
+
+function renderChips() {
+  const mine = STATIONS.filter(s => s.realm === realm.id);
+  const counts = { all: mine.length, favs: mine.filter(s => favs.has(s.id)).length };
+  realm.genres.forEach(g => { counts[g.id] = mine.filter(s => s.group === g.id).length; });
+  // A realm with only one genre (Halloween) doesn't need a chip for it.
+  const chips = [{ id: 'all', label: 'All' }, { id: 'favs', label: '★ Favorites' }, ...(realm.genres.length > 1 ? realm.genres : [])];
+  const v = view();
+  els.chips.innerHTML = '';
+  chips.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (v.filter === c.id ? ' on' : '');
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', v.filter === c.id);
+    b.innerHTML = `${c.label}<b>${counts[c.id]}</b>`;
+    b.addEventListener('click', () => { v.filter = c.id; safeSet('fr_' + realm.id + '_filter', c.id); v.shown = PAGE; renderChips(); renderList(); listToTop(); });
+    els.chips.appendChild(b);
+  });
+}
+
+function esc(t) { return t.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+function renderList() {
+  const list = visible();
+  const v = view();
+  els.count.textContent = list.length === 1 ? '1 station' : list.length + ' stations';
+  els.list.innerHTML = '';
+  if (!list.length) {
+    els.list.innerHTML = `<div class="empty">${v.filter === 'favs' && !v.query ? 'No favorites yet. Tap ☆ on a station to add it.' : 'No stations match.'}</div>`;
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  list.slice(0, v.shown).forEach(s => {
+    const row = document.createElement('div');
+    row.className = 'st' + (s === playingStation() ? ' active' : '') + (failed[s.id] ? ' failed' : '');
+    row.innerHTML = `<button class="pick"><span class="nm"><span class="dot"></span>${esc(s.name)}</span>`
+      + `<span class="gr">${iconFor(s)} ${esc(s.about || shortGenre(s))}${s.meta ? ' · ♪' : ''}${failed[s.id] ? ' · didn’t play last time' : s.insecure ? ' · older link, may not play on phones' : ''}</span></button>`
+      + `<button class="star${favs.has(s.id) ? ' on' : ''}" aria-label="${favs.has(s.id) ? 'Remove from' : 'Add to'} favorites">${favs.has(s.id) ? '★' : '☆'}</button>`;
+    row.querySelector('.pick').addEventListener('click', () => chooseStation(s));
+    row.querySelector('.star').addEventListener('click', () => toggleFav(s));
+    frag.appendChild(row);
+  });
+  if (list.length > v.shown) {
+    const more = document.createElement('button');
+    more.className = 'more';
+    more.textContent = `Show ${Math.min(PAGE, list.length - v.shown)} more (${list.length - v.shown} left)`;
+    more.addEventListener('click', () => { v.shown += PAGE; renderList(); });
+    frag.appendChild(more);
+  }
+  els.list.appendChild(frag);
+}
+
+function toggleFav(s) {
+  favs.has(s.id) ? favs.delete(s.id) : favs.add(s.id);
+  safeSet('fr_favs', JSON.stringify([...favs]));
+  renderChips(); renderList();
+}
+
+let qTimer = null;
+els.q.addEventListener('input', () => {
+  els.qClear.hidden = !els.q.value;
+  clearTimeout(qTimer);
+  const v = view();
+  qTimer = setTimeout(() => { v.query = els.q.value; v.shown = PAGE; renderList(); listToTop(); }, 120);
+});
+els.qClear.addEventListener('click', () => { const v = view(); els.q.value = ''; v.query = ''; els.qClear.hidden = true; v.shown = PAGE; renderList(); listToTop(); els.q.focus(); });
+els.sort.addEventListener('change', () => {
+  const v = view();
+  v.sortBy = els.sort.value; safeSet('fr_' + realm.id + '_sort', v.sortBy);
+  if (v.sortBy === 'random') reshuffleOrder();
+  v.shown = PAGE; renderList(); listToTop();
+});
+// On a computer, the genre bar scrolls by click-and-drag or the mouse wheel (phones just swipe).
+{
+  const bar = els.chips;
+  let startX = 0, startScroll = 0, dragging = false, moved = false;
+  bar.addEventListener('pointerdown', e => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    dragging = true; moved = false;
+    startX = e.clientX; startScroll = bar.scrollLeft;
+  });
+  addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    if (Math.abs(dx) > 4) { moved = true; bar.classList.add('dragging'); }
+    if (moved) bar.scrollLeft = startScroll - dx;
+  });
+  addEventListener('pointerup', () => { dragging = false; bar.classList.remove('dragging'); });
+  // A drag shouldn't also pick the genre it ended on.
+  bar.addEventListener('click', e => { if (moved) { e.stopPropagation(); e.preventDefault(); moved = false; } }, true);
+  bar.addEventListener('wheel', e => {
+    if (!e.deltaY || bar.scrollWidth <= bar.clientWidth) return;
+    e.preventDefault();
+    bar.scrollLeft += e.deltaY;
+  }, { passive: false });
+}
+// A new search, genre or sort starts the list from its top.
+function listToTop() { if (scrollY > 0) scrollTo({ top: 0 }); }
+const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Back to top: shows once you've scrolled a good way down the list.
+{
+  const btn = $('toTop');
+  const check = () => btn.classList.toggle('hide', scrollY < 400);
+  addEventListener('scroll', check, { passive: true });
+  btn.addEventListener('click', () => scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' }));
+}
+function reshuffleOrder() { randomOrder = new Map(STATIONS.map(s => [s.id, Math.random()])); }
+
+// ── Moving between realms ───────────────────────
+// Tabs, swiping, the portal and the title screen all end up here.
+function showRealm(r, how) {
+  if (typeof r === 'string') r = realmById(r);
+  const from = realm;
+  if (r !== from) views[from.id].scroll = scrollY;
+  realm = r;
+  safeSet('fr_realm', r.id);
+  document.documentElement.dataset.realm = r.id;
+  $('themeColor').setAttribute('content', r.color);
+  els.logoIcon.innerHTML = r.id === 'kvlt' ? SIGIL : r.icon;
+  els.logoName.textContent = r.name;
+  els.footTag.textContent = r.tag;
+  const v = view();
+  els.q.value = v.query; els.qClear.hidden = !v.query;
+  els.q.placeholder = 'Search ' + r.short + ' stations';
+  els.sort.value = v.sortBy;
+  renderSky(); renderChips(); renderList(); renderTabs(); render();
+  scrollTo({ top: r === from ? scrollY : v.scroll });
+  if (r !== from) diag('realm: ' + r.short + (how ? ' (' + how + ')' : ''));
+  // A short slide in from the side it came from (tabs and the portal; swiping animates itself).
+  if (how === 'tab' || how === 'portal') slideIn(REALMS.indexOf(r) > REALMS.indexOf(from) ? 1 : -1);
+}
+function slideIn(dir) {
+  if (reduceMotion() || !dir) return;
+  const m = els.main;
+  m.classList.remove('slide');
+  m.style.transform = `translateX(${dir * 28}px)`; m.style.opacity = '0';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    m.classList.add('slide');
+    m.style.transform = ''; m.style.opacity = '';
+    setTimeout(() => m.classList.remove('slide'), 220);
+  }));
+}
+
+// Tabs along the bottom. A small dot marks the realm that's playing.
+function renderTabs() {
+  const playingRealm = (playingStation() || {}).realm;
+  $('tabbar').innerHTML = REALMS.map(r => `<button class="tab${r === realm ? ' on' : ''}${r.id === playingRealm ? ' playing' : ''}" data-realm="${r.id}" aria-current="${r === realm ? 'page' : 'false'}">`
+    + `<span class="e">${r.icon}</span>${r.short}<span class="live"></span></button>`).join('');
+}
+$('tabbar').addEventListener('click', e => {
+  const t = e.target.closest('.tab');
+  if (!t) return;
+  if (t.dataset.realm === realm.id) { scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' }); return; }
+  showRealm(t.dataset.realm, 'tab');
+});
+
+// Swipe sideways to flip to the next or previous realm.
+{
+  const m = els.main;
+  let x0 = 0, y0 = 0, t0 = 0, dx = 0, mode = null;   // mode: null (deciding), 'x' (swiping realms) or 'y' (scrolling)
+  const ignore = el => el.closest('.chips, input, select, .sleep-menu, dialog, .row');
+  m.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1 || ignore(e.target)) { mode = 'y'; return; }
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); dx = 0; mode = null;
+  }, { passive: true });
+  m.addEventListener('touchmove', e => {
+    if (mode === 'y') return;
+    const ddx = e.touches[0].clientX - x0, ddy = e.touches[0].clientY - y0;
+    if (!mode) {
+      if (Math.abs(ddx) < 12 && Math.abs(ddy) < 12) return;
+      mode = Math.abs(ddx) > Math.abs(ddy) * 1.3 ? 'x' : 'y';
+      if (mode === 'y') return;
+      m.classList.add('swiping');
+    }
+    const i = REALMS.indexOf(realm);
+    const edge = (ddx > 0 && i === 0) || (ddx < 0 && i === REALMS.length - 1);
+    dx = edge ? ddx / 4 : ddx;   // at the first and last realm it only gives a little
+    m.style.transform = `translateX(${dx}px)`;
+    m.style.opacity = String(Math.max(.35, 1 - Math.abs(dx) / innerWidth));
+  }, { passive: true });
+  const end = () => {
+    if (mode !== 'x') { mode = null; return; }
+    mode = null;
+    m.classList.remove('swiping');
+    const i = REALMS.indexOf(realm);
+    const fast = Math.abs(dx) / Math.max(1, Date.now() - t0) > .5;
+    const go = (Math.abs(dx) > innerWidth * .22 || (fast && Math.abs(dx) > 40)) ? (dx < 0 ? 1 : -1) : 0;
+    const to = REALMS[i + go];
+    m.classList.add('slide');
+    if (!go || !to) { m.style.transform = ''; m.style.opacity = ''; setTimeout(() => m.classList.remove('slide'), 200); return; }
+    m.style.transform = `translateX(${-go * innerWidth}px)`; m.style.opacity = '0';
+    setTimeout(() => {
+      m.classList.remove('slide');
+      showRealm(to, 'swipe');
+      m.style.transform = `translateX(${go * innerWidth * .35}px)`;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        m.classList.add('slide'); m.style.transform = ''; m.style.opacity = '';
+        setTimeout(() => m.classList.remove('slide'), 220);
+      }));
+    }, 170);
+  };
+  m.addEventListener('touchend', end);
+  m.addEventListener('touchcancel', end);
+}
+
+// The portal: tap the realm's name for a ring of four doors.
+const portal = $('portal');
+$('ring').insertAdjacentHTML('beforeend', REALMS.map(r =>
+  `<button class="door" data-realm="${r.id}"><span class="e">${r.icon}</span>${r.short}</button>`).join(''));
+els.logo.addEventListener('click', () => {
+  portal.querySelectorAll('.door').forEach(d => d.classList.toggle('on', d.dataset.realm === realm.id));
+  portal.hidden = false;
+  portal.querySelector('.door.on').focus({ preventScroll: true });
+});
+portal.addEventListener('click', e => {
+  const d = e.target.closest('.door');
+  portal.hidden = true;
+  if (d && d.dataset.realm !== realm.id) showRealm(d.dataset.realm, 'portal');
+  else els.logo.focus({ preventScroll: true });
+});
+addEventListener('keydown', e => { if (e.key === 'Escape' && !portal.hidden) { portal.hidden = true; els.logo.focus(); } });
+
+// The title screen: four doors each time the app opens.
+const gate = $('gate');
+function openGate() {
+  const counts = Object.fromEntries(REALMS.map(r => [r.id, STATIONS.filter(s => s.realm === r.id).length]));
+  const last = safeGet('fr_realm');
+  $('doors').innerHTML = REALMS.map(r => `<button class="tile" data-realm="${r.id}">`
+    + (r.id === last ? '<span class="last">Last time</span>' : '')
+    + `<span class="e">${r.icon}</span><span class="t">${r.name}</span><span class="n">${counts[r.id]} stations</span></button>`).join('');
+  gate.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+$('doors').addEventListener('click', e => {
+  const t = e.target.closest('.tile');
+  if (!t) return;
+  showRealm(t.dataset.realm, 'title screen');
+  gate.classList.add('leaving');
+  document.body.style.overflow = '';
+  setTimeout(() => { gate.hidden = true; gate.classList.remove('leaving'); }, reduceMotion() ? 0 : 350);
+});
+
+// ── Choosing stations, shuffle, next and previous ─
+function chooseStation(s, fromSkip = false) {
+  // Tapping the station that's already playing stops it.
+  if (!fromSkip && s === playingStation()) { els.playBtn.click(); return; }
+  if (selected && selected !== s) history.push(selected);
+  if (history.length > 50) history = history.slice(-50);
+  selected = s;
+  safeSet('fr_station', s.id);
+  recent[s.id] = Date.now();
+  safeSet('fr_recent', JSON.stringify(recent));
+  if (castConnected()) loadStation(s);
+  else playHere(s);
+  render();
+}
+
+// Next, previous and shuffle stay in the realm of the station that's playing,
+// using that realm's search and genre, even while you look around another realm.
+const homeRealm = () => selected ? realmById(selected.realm) : realm;
+function nextStation() {
+  const r = homeRealm();
+  let list = visible(r);
+  if (!list.length) list = STATIONS.filter(s => s.realm === r.id);
+  if (shuffle || !selected) {
+    // Avoid the last 20 played and ones that just failed, when there are enough others.
+    const recentIds = new Set(history.slice(-20).map(s => s.id).concat(selected ? [selected.id] : []));
+    // Older http-only links usually can't play on a phone (the app is a secure page), so shuffle skips them there.
+    const playable = s => !failed[s.id] && (castConnected() || !s.insecure);
+    let pool = list.filter(s => !recentIds.has(s.id) && playable(s));
+    if (!pool.length) pool = list.filter(s => s !== selected && playable(s));
+    if (!pool.length) pool = list.filter(s => s !== selected);
+    if (!pool.length) pool = list;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+  const i = list.indexOf(selected);
+  return list[(i + 1) % list.length];
+}
+function goNext() { chooseStation(nextStation(), true); }
+function goPrev() {
+  if (shuffle || !selected) {
+    const s = history.pop();
+    if (s) { selected = null; chooseStation(s, true); }
+    return;
+  }
+  const list = visible(homeRealm());
+  const i = list.indexOf(selected);
+  chooseStation(list[(i - 1 + list.length) % list.length], true);
+}
+els.nextBtn.addEventListener('click', goNext);
+els.prevBtn.addEventListener('click', goPrev);
+els.shuffleBtn.addEventListener('click', () => {
+  shuffle = !shuffle;
+  safeSet('fr_shuffle', shuffle ? '1' : '0');
+  diag('shuffle ' + (shuffle ? 'on' : 'off'));
+  // Nothing playing yet: shuffle starts a random station from the realm on screen.
+  if (shuffle && !playingStation() && !castActive()) { if (!selected || selected.realm !== realm.id) selected = null; goNext(); }
+  render();
+});
+
+// A station that won't play: remember it, and with shuffle on, move to another one.
+let skipsInARow = 0;
+function stationFailed(s, why) {
+  diag('FAILED ' + s.name + ' · ' + why);
+  failed[s.id] = Date.now();
+  safeSet('fr_failed', JSON.stringify(failed));
+  if (shuffle && skipsInARow < 8) {
+    skipsInARow++;
+    showNotice(s.name + ' isn’t playing right now. Shuffling to another station…');
+    setTimeout(goNext, 800);
+  } else {
+    skipsInARow = 0;
+    showNotice(s.name + ' isn’t playing right now. Try another station, or tap ⏭.');
+  }
+  renderList();
+}
+function stationWorked(s) {
+  skipsInARow = 0;
+  if (failed[s.id]) { delete failed[s.id]; safeSet('fr_failed', JSON.stringify(failed)); renderList(); }
+}
+
+// ── Casting (Google Cast, Chrome only) ──────────
+let ctx = null, player = null, ctrl = null;
+let speakerLoading = null, speakerStation = null, speakerRetries = 0, speakerReconnecting = false;
+let carryOver = null;
+
+window.__onGCastApiAvailable = function (available) {
+  diag('cast library ready: ' + (available && window.cast && cast.framework ? 'yes' : 'NO'));
+  if (!available || !window.cast || !cast.framework) {
+    els.castLabel.textContent = 'Unavailable';
+    els.castBtn.title = 'Casting to speakers needs Chrome (Android or computer). Listening on this device works everywhere.';
+    return;
+  }
+  ctx = cast.framework.CastContext.getInstance();
+  ctx.setOptions({
+    receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+    autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
+    resumeSavedSession: true,
+  });
+  afterUnjam();
+  player = new cast.framework.RemotePlayer();
+  ctrl = new cast.framework.RemotePlayerController(player);
+  ctrl.addEventListener(cast.framework.RemotePlayerEventType.ANY_CHANGE, () => { onSpeakerState(); render(); });
+  ctx.addEventListener(cast.framework.CastContextEventType.CAST_STATE_CHANGED, e => {
+    diag('cast state: ' + e.castState);
+    if (castListOpen && e.castState === cast.framework.CastState.NO_DEVICES_AVAILABLE) unjamCasting();
+    render();
+  });
+  ctx.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED, e => {
+    const S = cast.framework.SessionState;
+    diag('session: ' + e.sessionState + (e.errorCode ? ' · error ' + e.errorCode : '')
+      + (e.session ? ' · ' + e.session.getCastDevice().friendlyName : ''));
+    if (e.sessionState === S.SESSION_STARTED) {
+      els.castBtn.classList.remove('nudge'); hideNotice();
+      try { sessionStorage.removeItem(UNJAM_KEY); } catch (err) {}
+      // A speaker was picked: whatever the phone was playing moves over to it.
+      const s = localStation || carryAfterUnjam;
+      carryAfterUnjam = null;
+      if (s) { stopHere(); loadStation(s); }
+    }
+    if (e.sessionState === S.SESSION_START_FAILED) showNotice('The speaker didn’t accept the connection. Try again.');
+    // Disconnecting carries the music back to the phone (unless the speaker was stopped).
+    if (e.sessionState === S.SESSION_ENDING) {
+      const r = remoteStation();
+      carryOver = r && r !== 'other' && castActive() && !speakerPaused() ? r : null;
+    }
+    if (e.sessionState === S.SESSION_ENDED) {
+      speakerLoading = speakerStation = null; speakerReconnecting = false;
+      if (carryOver) { const s = carryOver; carryOver = null; playHere(s); }
+    }
+    render();
+  });
+  render();
+};
+
+function loadStation(s) {
+  const session = ctx.getCurrentSession();
+  if (!session) return;
+  const info = new chrome.cast.media.MediaInfo(s.url, s.type);
+  info.streamType = chrome.cast.media.StreamType.LIVE;
+  const md = new chrome.cast.media.GenericMediaMetadata();
+  md.title = s.name;
+  md.subtitle = realmById(s.realm).name + ' · ' + shortGenre(s);
+  info.metadata = md;
+  const req = new chrome.cast.media.LoadRequest(info);
+  req.autoplay = true;
+  hideNotice();
+  speakerLoading = s;
+  const t = performance.now();
+  loadStartedAt = t;
+  diag('sending ' + s.name + ' to ' + session.getCastDevice().friendlyName + ' · ' + s.url);
+  kickStart();
+  session.loadMedia(req).then(() => {
+    diag('speaker accepted ' + s.name + ' after ' + ((performance.now() - t) / 1000).toFixed(2) + 's');
+    kickStart();
+  }).catch(err => {
+    diag('speaker REFUSED ' + s.name + ' · ' + err);
+    if (speakerLoading !== s) return;
+    speakerLoading = null;
+    stationFailed(s, 'speaker refused: ' + err);
+    render();
+  });
+  render();
+}
+
+// The speaker's standard player often plays for half a second, then sits "buffering" for a
+// long time before the sound starts. A quick pause and play gets it going, so while a station
+// is starting the app watches for that stall and nudges the speaker, up to 4 times.
+const NUDGE_AFTER = 500, NUDGE_WINDOW = 60000;
+let nudgeUntil = 0, nudges = 0, nudgeTimer = null, kicking = false;
+function kickStart() { nudgeUntil = Date.now() + NUDGE_WINDOW; nudges = 0; watchStall(); }
+function watchStall() {
+  clearTimeout(nudgeTimer);
+  const PS = chrome.cast.media.PlayerState;
+  if (Date.now() > nudgeUntil || nudges >= 4 || player.playerState !== PS.BUFFERING) return;
+  nudgeTimer = setTimeout(() => {
+    const session = ctx.getCurrentSession();
+    const media = session && session.getMediaSession();
+    if (!media || player.playerState !== PS.BUFFERING) return;
+    nudges++;
+    kicking = true;
+    diag('nudge ' + nudges + ': speaker stalled buffering, pause + play');
+    const done = () => { kicking = false; render(); };
+    media.pause(new chrome.cast.media.PauseRequest(), () => media.play(new chrome.cast.media.PlayRequest(), done, done), done);
+  }, NUDGE_AFTER);
+}
+
+// Watches the speaker: notes when it's really playing, and restarts the station if its stream drops.
+let lastSpeakerState = null, loadStartedAt = 0;
+function onSpeakerState() {
+  const PS = chrome.cast.media.PlayerState;
+  if (player.playerState === lastSpeakerState) return;
+  const session = ctx.getCurrentSession();
+  const media = session && session.getMediaSession && session.getMediaSession();
+  diag('speaker player: ' + (player.playerState || 'none')
+    + (player.playerState === PS.IDLE && media && media.idleReason ? ' (' + media.idleReason + ')' : '')
+    + (loadStartedAt ? ' · ' + ((performance.now() - loadStartedAt) / 1000).toFixed(2) + 's since sending' : ''));
+  watchStall();
+  lastSpeakerState = player.playerState;
+  if (player.playerState === PS.PLAYING) {
+    const r = remoteStation();
+    speakerLoading = null; speakerRetries = 0; speakerReconnecting = false;
+    speakerStation = r && r !== 'other' ? r : null;
+    if (speakerStation) stationWorked(speakerStation);
+    return;
+  }
+  if (player.playerState !== PS.IDLE) return;
+  const IR = chrome.cast.media.IdleReason;
+  const why = media && media.idleReason;
+  // Never got going: this station doesn't play on the speaker.
+  if (speakerLoading && why === IR.ERROR) {
+    const s = speakerLoading; speakerLoading = null;
+    stationFailed(s, 'speaker error');
+    return;
+  }
+  if (!speakerStation) return;
+  const dropped = IR && (why === IR.ERROR || why === IR.FINISHED);
+  if (!dropped || speakerRetries >= 4) { speakerStation = null; speakerReconnecting = false; return; }
+  // Live radio never "finishes", so this is a dropped stream: try again with growing gaps.
+  speakerRetries++;
+  speakerReconnecting = true;
+  const s = speakerStation;
+  setTimeout(() => {
+    speakerReconnecting = false;
+    if (castConnected() && !castActive()) loadStation(s);
+    render();
+  }, 2000 * speakerRetries);
+}
+
+// The same stream can be in two realms (Synth Caster has Halloween stations too): prefer the one already chosen.
+function remoteStation() {
+  const id = player && player.mediaInfo && player.mediaInfo.contentId;
+  if (!id) return null;
+  if (selected && selected.url === id) return selected;
+  return STATIONS.find(s => s.url === id) || 'other';
+}
+
+els.castBtn.addEventListener('click', () => {
+  if (!ctx) { showNotice('Casting to speakers needs Chrome (Android or computer). Listening on this device works everywhere.'); return; }
+  const t = performance.now();
+  diag('cast button tapped (state ' + ctx.getCastState() + ')');
+  els.castBtn.classList.remove('nudge');
+  castListOpen = true;
+  ctx.requestSession().then(
+    () => { castListOpen = false; diag('speaker picked after ' + ((performance.now() - t) / 1000).toFixed(2) + 's'); },
+    err => {
+      castListOpen = false;
+      diag('connect FAILED · ' + err);
+      if (err === 'invalid_parameter') unjamCasting();
+    });
+});
+
+// On Android Chrome, opening the speaker list right after the app opens can make the phone
+// re-scan and cut the list off. When that happens the app refreshes itself and asks for one
+// more tap (the same fix as Halloween Caster). That refresh skips the title screen.
+const UNJAM_KEY = 'fr_unjam';
+let castListOpen = false, carryAfterUnjam = null;
+function readUnjam() { try { return JSON.parse(sessionStorage.getItem(UNJAM_KEY)) || { at: 0 }; } catch (e) { return { at: 0 }; } }
+function unjamCasting() {
+  if (Date.now() - readUnjam().at < 30000) { showNotice('Couldn’t connect to the speaker. Pull down to refresh and try again.'); return; }
+  try { sessionStorage.setItem(UNJAM_KEY, JSON.stringify({ at: Date.now(), playing: localStation ? localStation.id : null })); }
+  catch (e) { return; }
+  diag('speaker list cut off by the phone re-scanning: refreshing');
+  location.reload();
+}
+function afterUnjam() {
+  const u = readUnjam();
+  if (!u.at || Date.now() - u.at > 30000) return;
+  const s = u.playing && STATIONS.find(x => x.id === u.playing);
+  if (s) {
+    carryAfterUnjam = s;
+    playHere(s);
+    setTimeout(() => { if (carryAfterUnjam === s) carryAfterUnjam = null; }, 60000);
+  }
+  showNotice('Ready. Tap the cast button again to pick your speaker.');
+  els.castBtn.classList.add('nudge');
+}
+
+const RESUME_WITHIN = 3 * 60000;
+let pausedAt = 0;
+const speakerPaused = () => !!player && player.playerState === chrome.cast.media.PlayerState.PAUSED;
+function toggleSpeaker() {
+  if (!speakerPaused()) { pausedAt = Date.now(); ctrl.playOrPause(); return; }
+  if (Date.now() - pausedAt < RESUME_WITHIN) { ctrl.playOrPause(); return; }
+  const s = remoteStation();
+  if (s && s !== 'other') loadStation(s);
+}
+const castConnected = () => !!(ctx && ctx.getCurrentSession());
+function castActive() {
+  return !!ctx && !!player && player.isMediaLoaded && !!player.playerState
+    && player.playerState !== chrome.cast.media.PlayerState.IDLE;
+}
+
+els.playBtn.addEventListener('click', () => {
+  if (castActive()) { remoteStation() && remoteStation() !== 'other' ? toggleSpeaker() : ctrl.stop(); }
+  else if (localStation) stopHere();
+  else if (selected) chooseStation(selected, true);
+  else goNext();
+});
+els.muteBtn.addEventListener('click', () => {
+  if (castConnected()) ctrl.muteOrUnmute();
+  else { audio.muted = !audio.muted; render(); }
+});
+let volTimer = null;
+els.vol.addEventListener('input', () => {
+  safeSet('fr_vol', els.vol.value);
+  if (!castConnected()) { audio.volume = els.vol.value / 100; return; }
+  clearTimeout(volTimer);
+  volTimer = setTimeout(() => { player.volumeLevel = els.vol.value / 100; ctrl.setVolumeLevel(); }, 60);
+});
+els.disconnectBtn.addEventListener('click', () => { if (ctx && ctx.getCurrentSession()) ctx.endCurrentSession(true); });
+
+// ── Listening on this device ────────────────────
+const audio = new Audio();
+audio.preload = 'none';
+let localStation = null, hereLive = false, reconnecting = false;
+let retry = 0, retryTimer = null, stallTimer = null, startTimer = null;
+const RETRY_DELAYS = [1, 2, 4, 8, 15, 30];
+els.vol.value = safeGet('fr_vol') || 80;
+audio.volume = els.vol.value / 100;
+
+function clearRetry() {
+  clearTimeout(retryTimer); clearTimeout(stallTimer); clearTimeout(startTimer);
+  retryTimer = stallTimer = startTimer = null;
+}
+
+function playHere(s) {
+  diag('playing ' + s.name + ' (' + s.realm + ') on this device · ' + s.url);
+  selected = s;
+  localStation = s;
+  hereLive = false; everPlayed = false;
+  clearRetry(); retry = 0; reconnecting = false;
+  audio.src = s.url;
+  audio.volume = els.vol.value / 100;
+  hideNotice();
+  // Not started within 15 seconds: count it as not playing.
+  startTimer = setTimeout(() => { if (localStation === s && !hereLive) { stopHere(true); stationFailed(s, 'no sound after 15s'); } }, 15000);
+  audio.play().catch(err => {
+    if (localStation !== s || err.name !== 'NotAllowedError') return;
+    localStation = null;
+    showNotice('This device couldn’t play ' + s.name + ' (' + err.message + ').');
+    render();
+  });
+  updateMediaSession();
+  render();
+}
+
+function stopHere(keepNotice) {
+  if (!localStation) return;
+  diag('stopped ' + localStation.name + ' on this device');
+  localStation = null;
+  hereLive = false;
+  clearRetry(); retry = 0; reconnecting = false;
+  audio.pause();
+  audio.removeAttribute('src');
+  audio.load();
+  render();
+}
+
+// The stream dropped mid-play: reconnect (at "now", since it's live radio), with growing gaps.
+function reconnectHere() {
+  clearRetry();
+  if (!localStation) return;
+  hereLive = false;
+  if (!navigator.onLine) { reconnecting = 'offline'; render(); return; }
+  const delay = RETRY_DELAYS[Math.min(retry, RETRY_DELAYS.length - 1)] * 1000;
+  retry++;
+  reconnecting = true;
+  render();
+  retryTimer = setTimeout(() => {
+    retryTimer = null;
+    if (!localStation) return;
+    audio.src = localStation.url;
+    audio.play().catch(() => {});
+    stallTimer = setTimeout(reconnectHere, 10000);
+  }, delay);
+}
+
+let everPlayed = false;   // this play got sound at least once (so an error is a drop-out, not a dead station)
+audio.addEventListener('playing', () => {
+  hereLive = true; everPlayed = true;
+  clearRetry(); retry = 0; reconnecting = false;
+  if (localStation) stationWorked(localStation);
+  render();
+});
+const stalled = () => {
+  if (!localStation || !hereLive || stallTimer || retryTimer) return;
+  hereLive = false;
+  stallTimer = setTimeout(reconnectHere, 8000);
+  render();
+};
+audio.addEventListener('waiting', stalled);
+audio.addEventListener('stalled', stalled);
+audio.addEventListener('error', () => {
+  if (!localStation || retryTimer) return;
+  const s = localStation;
+  if (!everPlayed && retry === 0) {
+    // Never started: the station is down, or its link can't play here.
+    const code = audio.error && audio.error.code;
+    stopHere();
+    stationFailed(s, 'wouldn’t start (error ' + code + ')');
+    return;
+  }
+  reconnectHere();
+});
+window.addEventListener('online', () => { if (localStation && reconnecting === 'offline') { retry = 0; reconnectHere(); } });
+
+// ── Song names ──────────────────────────────────
+// Many stations say what's playing through a web address the app can read
+// (saved in stations.json as "meta"). Only the playing station is checked.
+let song = '', metaStation = null, metaTimer = null, metaES = null;
+const META_EVERY = 15000;
+const JUNK_SONG = /azuracast|^unknown|^track$|^-+$|^\s*$/i;
+const pair = (a, t) => [a, t].map(x => (x || '').trim()).filter(Boolean).join(' – ');
+
+async function fetchSong(m) {
+  const j = async u => (await fetch(u, { cache: 'no-store' })).json();
+  switch (m.k) {
+    case 'soma': { const x = (await j(`https://somafm.com/songs/${m.id}.json`)).songs[0]; return pair(x.artist, x.title); }
+    case 'laut': { const x = await j(`https://api.laut.fm/station/${m.id}/current_song`); return pair(x.artist && x.artist.name, x.title); }
+    case 'rainwave': { const x = (await j(`https://rainwave.cc/api4/info?sid=${m.id}`)).sched_current.songs[0]; return pair(x.artists.map(a => a.name).join(', '), x.title); }
+    case 'live365': { const x = (await j(`https://api.live365.com/station/${m.id}`))['current-track']; return pair(x.artist, x.title); }
+    case 'radioco': return (await j(`https://public.radio.co/stations/${m.id}/status`)).current_track.title;
+    case 'azura': { const x = (await j(m.u)).now_playing.song; return pair(x.artist, x.title); }
+    case 'icecast': {
+      const src = [].concat((await j(m.u)).icestats.source || []);
+      const x = src.find(z => { try { return new URL(z.listenurl).pathname === m.m; } catch (e) { return false; } });
+      return x ? pair(x.artist, x.title) : '';
+    }
+  }
+  return '';
+}
+
+function setSong(s, text) {
+  if (s !== metaStation) return;
+  text = (text || '').replace(/\s+/g, ' ').trim();
+  if (JUNK_SONG.test(text) || text.toLowerCase() === s.name.toLowerCase()) text = '';
+  if (text === song) return;
+  song = text;
+  if (song) diag('song: ' + song);
+  els.nowSong.textContent = song ? '♪ ' + song : '';
+  updateMediaSession();
+}
+
+function stopMeta() {
+  clearInterval(metaTimer); metaTimer = null;
+  if (metaES) { metaES.close(); metaES = null; }
+  metaStation = null;
+  song = ''; els.nowSong.textContent = '';
+}
+
+function startMeta(s) {
+  if (s === metaStation) return;
+  stopMeta();
+  if (!s || !s.meta) return;
+  metaStation = s;
+  const m = s.meta;
+  // Nightride and Zeno push new songs as they start; the rest are checked every 15 seconds.
+  if (m.k === 'nightride' || m.k === 'zeno') {
+    metaES = new EventSource(m.k === 'nightride' ? 'https://nightride.fm/meta' : `https://api.zeno.fm/mounts/metadata/subscribe/${m.id}`);
+    metaES.onmessage = e => {
+      try {
+        const d = JSON.parse(e.data);
+        if (m.k === 'zeno') setSong(s, d.streamTitle);
+        else [].concat(d).filter(x => x.station === m.id).forEach(x => setSong(s, pair(x.artist, x.title)));
+      } catch (err) {}
+    };
+    return;
+  }
+  const check = () => fetchSong(m).then(t => setSong(s, t), err => diag('song check failed for ' + s.name + ': ' + err));
+  check();
+  metaTimer = setInterval(check, META_EVERY);
+}
+
+// Lock screen and headphone controls, including skip to the next station.
+function updateMediaSession() {
+  if (!('mediaSession' in navigator)) return;
+  const s = playingStation() || selected;
+  if (!s) return;
+  const sg = s === metaStation ? song : '';
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: sg || s.name, artist: sg ? s.name : shortGenre(s), album: 'Four Realms · ' + realmById(s.realm).short,
+    artwork: [{ src: 'icon-512.png', sizes: '512x512', type: 'image/png' }],
+  });
+}
+if ('mediaSession' in navigator) {
+  const ms = navigator.mediaSession;
+  ms.setActionHandler('play', () => { if (!localStation && selected) chooseStation(selected, true); });
+  ms.setActionHandler('pause', () => stopHere());
+  ms.setActionHandler('stop', () => stopHere());
+  ms.setActionHandler('nexttrack', goNext);
+  ms.setActionHandler('previoustrack', goPrev);
+}
+
+// ── Sleep timer ─────────────────────────────────
+// Long-press play/stop to pick a length; the page has to stay open for the timer to fire.
+const sleepLeft = $('sleepLeft'), sleepMenu = $('sleepMenu');
+let sleepAt = 0, sleepMin = 0;   // time to stop, in ms; 0 = off
+const FADE_MS = 60000;   // the music fades out over the last minute
+let fade = null;         // volumes from before the fade, so they can be put back
+let pressTimer = null, longPressed = false;
+
+els.playBtn.addEventListener('pointerdown', () => {
+  longPressed = false;
+  clearTimeout(pressTimer);
+  pressTimer = setTimeout(() => { longPressed = true; openSleepMenu(); }, 550);
+});
+['pointerup', 'pointerleave', 'pointercancel'].forEach(e => els.playBtn.addEventListener(e, () => clearTimeout(pressTimer)));
+els.playBtn.addEventListener('contextmenu', e => e.preventDefault());
+// A long press must not also count as a tap on play/stop.
+els.playBtn.addEventListener('click', e => { if (longPressed) { longPressed = false; e.stopImmediatePropagation(); } }, true);
+
+function openSleepMenu() {
+  if (navigator.vibrate) navigator.vibrate(15);
+  sleepMenu.querySelectorAll('button').forEach(b => b.classList.toggle('on', +b.dataset.min === sleepMin));
+  sleepMenu.hidden = false;
+  const r = els.playBtn.getBoundingClientRect(), w = sleepMenu.offsetWidth;
+  sleepMenu.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + 'px';
+  sleepMenu.style.top = Math.max(8, r.top - sleepMenu.offsetHeight - 10) + 'px';
+}
+sleepMenu.addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  endFade();
+  sleepMin = +b.dataset.min;
+  sleepAt = sleepMin ? Date.now() + sleepMin * 60000 : 0;
+  diag(sleepMin ? 'sleep timer ' + sleepMin + ' min' : 'sleep timer off');
+  sleepMenu.hidden = true;
+  checkSleep();
+});
+document.addEventListener('pointerdown', e => {
+  if (!sleepMenu.hidden && !sleepMenu.contains(e.target) && e.target !== els.playBtn && !els.playBtn.contains(e.target)) sleepMenu.hidden = true;
+});
+
+// Only touch the speaker if it's playing one of ours, not something else.
+function speakerIsOurs() {
+  const r = remoteStation();
+  return !!(r && r !== 'other' && castActive());
+}
+
+function fadeTo(frac) {
+  if (!fade) fade = { here: els.vol.value / 100, speaker: speakerIsOurs() ? player.volumeLevel : null };
+  audio.volume = fade.here * frac;
+  if (fade.speaker != null && castConnected()) {
+    player.volumeLevel = fade.speaker * frac;
+    ctrl.setVolumeLevel();
+  }
+}
+
+// Put the volume back where it was, so the next listen isn't quiet.
+function endFade() {
+  if (!fade) return;
+  fadeTo(1);
+  fade = null;
+}
+
+function checkSleep() {
+  const left = sleepAt - Date.now();
+  if (sleepAt && left <= 0) {
+    sleepAt = 0; sleepMin = 0;
+    diag('sleep timer ran out');
+    stopHere();
+    if (speakerIsOurs()) ctrl.stop();
+    endFade();
+  } else if (sleepAt && left <= FADE_MS && (localStation || speakerIsOurs() || fade)) {
+    fadeTo(left / FADE_MS);
+  }
+  sleepLeft.hidden = !sleepAt;
+  sleepLeft.textContent = sleepAt ? '· 🌙 ' + Math.ceil((sleepAt - Date.now()) / 60000) + 'm' : '';
+}
+setInterval(checkSleep, 1000);   // every second, so the fade is smooth
+document.addEventListener('visibilitychange', checkSleep);
+
+// ── Drawing the screen ──────────────────────────
+function playingStation() {
+  if (castConnected()) {
+    const r = remoteStation();
+    return speakerLoading || (r && r !== 'other' && castActive() ? r : null);
+  }
+  return localStation;
+}
+function showNotice(msg) { els.notice.textContent = msg; els.notice.hidden = false; }
+function hideNotice() { els.notice.hidden = true; }
+
+const ICON_PLAY = '<path d="M8 5v14l11-7z"/>', ICON_STOP = '<path d="M6 6h12v12H6z"/>', ICON_PAUSE = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+const ICON_VOL = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>';
+const ICON_MUTED = '<path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zM19 12c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4 9.91 6.09 12 8.18V4z"/>';
+
+let lastActiveId = null, lastPlayingRealm = null;
+function render() {
+  const CS = window.cast && cast.framework && cast.framework.CastState;
+  const state = ctx ? ctx.getCastState() : null;
+  const session = ctx && ctx.getCurrentSession();
+  const device = session && session.getCastDevice().friendlyName;
+  els.castBtn.classList.toggle('connected', !!session);
+  els.castBtn.classList.toggle('connecting', !!CS && state === CS.CONNECTING);
+  if (ctx) els.castLabel.textContent = device || (state === CS.CONNECTING ? 'Connecting…' : 'Speakers');
+  els.disconnectBtn.hidden = !session;
+  els.shuffleBtn.classList.toggle('on', shuffle);
+  els.shuffleBtn.setAttribute('aria-pressed', shuffle);
+
+  const s = playingStation() || selected;
+  if (s) els.badge.textContent = iconFor(s);
+  else els.badge.innerHTML = realm.id === 'kvlt' ? realm.badge : realm.icon;
+  els.nowName.textContent = s ? s.name : 'Pick a station, or tap shuffle';
+  let where = 'Ready', st = '', live = false, icon = ICON_PLAY;
+  if (session) {
+    where = 'On ' + device;
+    const PS = chrome.cast.media.PlayerState;
+    if (speakerLoading) { st = 'Starting on the speaker…'; icon = ICON_STOP; }
+    else if (speakerReconnecting) { st = 'Reconnecting…'; icon = ICON_STOP; }
+    else if (castActive() && player.playerState === PS.PAUSED && !kicking) { st = 'Paused'; icon = ICON_PLAY; }
+    else if (castActive() && player.playerState === PS.BUFFERING) { st = 'Buffering…'; icon = ICON_PAUSE; }
+    else if (castActive()) { st = 'Playing'; live = true; icon = remoteStation() === 'other' ? ICON_STOP : ICON_PAUSE; }
+    else st = s ? 'Stopped' : '';
+    if (castConnected() && player && player.isMuted) st += ' · muted';
+  } else if (localStation) {
+    where = 'On this device';
+    icon = ICON_STOP;
+    if (reconnecting === 'offline') st = 'No signal. Waiting to reconnect…';
+    else if (reconnecting) st = 'Reconnecting…';
+    else if (hereLive) { st = 'Playing'; live = true; }
+    else st = 'Tuning in…';
+    if (audio.muted) st += ' · muted';
+  }
+  if (s && shuffle) where += ' · shuffle';
+  els.where.textContent = where;
+  // Listening to one realm while looking around another: say where the music is from.
+  if (s && s.realm !== realm.id) els.where.insertAdjacentHTML('beforeend', ` · <span class="from">${realmById(s.realm).short}</span>`);
+  els.nowState.textContent = st ? '· ' + st : '';
+  els.nowState.classList.toggle('live', live);
+  els.playIcon.innerHTML = icon;
+  els.playBtn.setAttribute('aria-label', icon === ICON_PLAY ? 'Play' : icon === ICON_PAUSE ? 'Pause' : 'Stop');
+  const muted = castConnected() ? player && player.isMuted : audio.muted;
+  els.volIcon.innerHTML = muted ? ICON_MUTED : ICON_VOL;
+  if (castConnected() && player && !volTimer) els.vol.value = Math.round((player.volumeLevel || 0) * 100);
+  document.title = s && (live || localStation) ? s.name + ' · Four Realms' : 'Four Realms';
+
+  const ps = playingStation();
+  const activeId = (ps || {}).id || null;
+  if (activeId !== lastActiveId) { lastActiveId = activeId; startMeta(ps); renderList(); updateMediaSession(); }
+  const pr = (ps || {}).realm || null;
+  if (pr !== lastPlayingRealm) { lastPlayingRealm = pr; renderTabs(); }
+}
+
+// Tap the version line 5 times within 3 seconds to open the diagnostic log.
+{
+  const dlg = $('diagDlg'), text = $('diagText');
+  let taps = [];
+  $('ver').addEventListener('click', () => {
+    const now = Date.now();
+    taps = taps.filter(x => now - x < 3000).concat(now);
+    if (taps.length < 5) return;
+    taps = [];
+    text.textContent = diagLines.join('\n') || '(empty)';
+    dlg.showModal();
+    text.scrollTop = text.scrollHeight;
+  });
+  $('diagCopy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(diagLines.join('\n')); $('diagCopy').textContent = 'Copied ✓'; }
+    catch (e) { getSelection().selectAllChildren(text); $('diagCopy').textContent = 'Selected: copy it'; }
+    setTimeout(() => { $('diagCopy').textContent = 'Copy log'; }, 2500);
+  });
+  $('diagClear').addEventListener('click', () => {
+    diagLines = [];
+    try { localStorage.removeItem(DIAG_KEY); } catch (e) {}
+    text.textContent = '(empty)';
+  });
+}
+
+// ── Start up ────────────────────────────────────
+async function start() {
+  // The title screen greets each fresh open, but not the quick refresh that fixes the speaker list.
+  const unjamming = readUnjam().at && Date.now() - readUnjam().at < 30000;
+  showRealm(realm);
+  if (!unjamming) openGate();
+  try {
+    const res = await fetch('stations.json', { cache: 'no-cache' });
+    STATIONS = await res.json();
+  } catch (e) {
+    showNotice('Couldn’t load the station list. Check your connection and refresh.');
+    diag('station list failed: ' + e);
+    return;
+  }
+  // Halloween Radio Premium, for supporters who added their link in Halloween Caster (same web address, same phone).
+  const premium = safeGet('hc_premium_url');
+  if (premium) STATIONS.splice(7, 0, { realm: 'halloween', id: 'halloween/premium', name: 'Premium ⭐', group: 'Halloween Radio',
+    about: 'For supporters, from your Halloween Caster', url: premium, type: /mp3/i.test(premium) ? 'audio/mpeg' : 'audio/aac',
+    meta: { k: 'azura', u: 'https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_premium.json' } });
+  STATIONS.forEach((s, i) => {
+    // Halloween Radio's channels keep the station's own order (Main first), like in Halloween Caster.
+    s.sortName = s.realm === 'halloween' ? String(i).padStart(3, '0') : norm(s.name).replace(/^[^\p{L}\p{N}]+/u, '');
+    s.search = norm(s.name + ' ' + s.group + ' ' + (s.tags || '') + ' ' + (s.about || ''));
+  });
+  REALMS.forEach(r => {
+    const v = views[r.id];
+    if (v.filter !== 'all' && v.filter !== 'favs' && !r.genres.some(g => g.id === v.filter)) v.filter = 'all';
+  });
+  reshuffleOrder();
+  selected = STATIONS.find(s => s.id === safeGet('fr_station')) || null;
+  diag('stations loaded: ' + STATIONS.length);
+  showRealm(realm);
+  if (!gate.hidden) openGate();   // again, now with station counts
+  // The cast library loads after the station list, so a rejoined speaker can be matched to its station.
+  const cs = document.createElement('script');
+  cs.src = 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1';
+  cs.onerror = () => { diag('cast library failed to load'); els.castLabel.textContent = 'Unavailable'; };
+  document.head.appendChild(cs);
+}
+start();
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>
