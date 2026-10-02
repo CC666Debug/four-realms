@@ -697,7 +697,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.10.0';
+const VERSION = '1.10.1';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1172,8 +1172,10 @@ portal.addEventListener('click', e => {
 });
 addEventListener('keydown', e => { if (e.key === 'Escape' && !portal.hidden) { portal.hidden = true; els.logo.focus(); } });
 
-// The title screen: four doors each time the app opens.
+// The title screen: four doors when you come back after a long break.
 const gate = $('gate');
+const GATE_AFTER = 6 * 60 * 60 * 1000;
+function markSeen() { safeSet('fr_seen', String(Date.now())); }
 function openGate() {
   const counts = Object.fromEntries(REALMS.map(r => [r.id, STATIONS.filter(s => s.realm === r.id).length]));
   const last = safeGet('fr_realm');
@@ -2393,10 +2395,15 @@ const premiumStation = url => ({ realm: 'halloween', id: 'halloween/premium', na
 
 // ── Start up ────────────────────────────────────
 async function start() {
-  // The title screen greets each fresh open, but not the quick refresh that fixes the speaker list.
+  // The title screen greets you after a long break (6+ hours away), not every open, and never on the quick
+  // refresh that fixes the speaker list. Otherwise the app opens straight to the last realm.
   const unjamming = readUnjam().at && Date.now() - readUnjam().at < 30000;
+  const lastSeen = +safeGet('fr_seen') || 0;
   showRealm(realm);
-  if (!unjamming) openGate();
+  if (!unjamming && Date.now() - lastSeen > GATE_AFTER) openGate();
+  markSeen();
+  setInterval(markSeen, 60000);
+  document.addEventListener('visibilitychange', markSeen);
   try {
     const res = await fetch('stations.json', { cache: 'no-cache' });
     STATIONS = await res.json();
