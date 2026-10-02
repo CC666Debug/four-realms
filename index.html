@@ -550,7 +550,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.5.1';
+const VERSION = '1.5.2';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1455,7 +1455,9 @@ async function fetchSong(m) {
       const entry = x => x && x.song && x.song.title && !/^(jingle|id|station id|promo|sweeper|liner)$/i.test(x.song.artist || '')
         ? { song: pair(x.song.artist, x.song.title), at: (x.played_at || 0) * 1000 } : null;
       return {
-        text: pair(np.song.artist, np.song.title), art: np.song.art || '', start: Date.now() - (np.elapsed || 0) * 1000, dur: np.duration || 0,
+        // The feed is a file saved every so often, so its "elapsed" can be well behind; the time the song
+        // started (played_at) doesn't go stale. That keeps long tracks (like Atmosphere's) in step.
+        text: pair(np.song.artist, np.song.title), art: np.song.art || '', start: np.played_at ? np.played_at * 1000 : Date.now() - (np.elapsed || 0) * 1000, dur: np.duration || 0,
         next: (entry(d.playing_next) || {}).song || '', history: (d.song_history || []).map(entry).filter(Boolean),
         listeners: d.listeners ? d.listeners.current : null, dj: d.live && d.live.is_live ? (d.live.streamer_name || 'a DJ') : '',
       };
