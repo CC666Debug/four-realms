@@ -240,18 +240,47 @@
     box-shadow: 0 10px 12px -6px var(--top-bg);
   }
   @media (max-height: 560px) { .top { position: static; box-shadow: none; } }
-  /* The header area slides away as you scroll down the list, and snaps back on any scroll up. */
-  .topbar { display: flex; flex-direction: column; gap: 8px; transition: opacity .2s ease; }
-  .top { transition: transform .26s ease; }   /* a transform doesn't change page height, so no scroll feedback */
-  .top.collapsed { transform: translateY(calc(-1 * var(--barh, 110px))); }
-  .top.collapsed .topbar { opacity: 0; pointer-events: none; }
-  @media (prefers-reduced-motion: reduce) { .topbar, .top { transition: none; } }
-  /* A neon volume meter beside the speaker icon: 5 bars, lit to the current level. */
-  .vmeter { display: inline-flex; align-items: flex-end; gap: 2px; height: 18px; margin-left: 1px; flex: none; }
-  .vmeter i { width: 3px; border-radius: 1.5px; background: var(--line); transition: background .12s, box-shadow .12s; }
-  .vmeter i:nth-child(1) { height: 5px; } .vmeter i:nth-child(2) { height: 8px; } .vmeter i:nth-child(3) { height: 11px; } .vmeter i:nth-child(4) { height: 14px; } .vmeter i:nth-child(5) { height: 17px; }
-  .vmeter i.on { background: var(--neon); box-shadow: 0 0 5px var(--neon); }
-  @media (max-width: 380px) { .row .icon-btn { padding: 6px; } .vmeter { height: 16px; margin-left: 0; } .volnum { min-width: 30px; margin-left: 0; font-size: 13px; } }
+  /* Mini mode: once you scroll down the list, the whole top shrinks to one slim player bar and a slim search.
+     Any scroll up (or a tap on the bar) brings the full player back. */
+  .topbar { display: flex; flex-direction: column; gap: 8px; }
+  .icon-btn.mini-cast { display: none; }
+  html { overflow-anchor: none; }   /* stop the browser's scroll anchoring from yanking the page while the top shrinks */
+  .top.mini { gap: 6px; padding-top: max(6px, env(safe-area-inset-top)); padding-bottom: 6px; }
+  .top.mini .topbar, .top.mini .notice, .top.mini .now .label, .top.mini .now .next, .top.mini .links,
+  .top.mini #shuffleBtn, .top.mini #prevBtn, .top.mini #muteBtn, .top.mini .volnum, .top.mini #disconnectBtn,
+  .top.mini .prog .omen, .top.mini .prog-time, .top.mini .chips, .top.mini .sort { display: none !important; }
+  .top.mini .player { position: relative; flex-direction: row; align-items: center; gap: 6px; padding: 5px 4px 5px 5px; border-radius: 12px; overflow: hidden; animation: miniIn .22s ease; }
+  .top.mini .now { flex: 1; min-width: 0; grid-template-columns: 34px minmax(0, 1fr); gap: 9px; cursor: pointer; }
+  .top.mini .badge { width: 34px; height: 34px; border-radius: 8px; font-size: 17px; }
+  .top.mini .badge svg { width: 20px; height: 20px; }
+  .top.mini .now .title { font-size: 13.5px; line-height: 1.2; }
+  .top.mini .now .song { font-size: 11.5px; }
+  .top.mini .row { flex: none; gap: 0; justify-content: flex-end; }
+  .top.mini .play { width: 36px; height: 36px; margin: 0 2px; }
+  .top.mini .play svg { width: 20px; height: 20px; }
+  .top.mini .row .icon-btn { padding: 7px; }
+  .top.mini .row .icon-btn svg { width: 20px; height: 20px; }
+  .top.mini:has(.cast-btn.connected) .icon-btn.mini-cast { display: grid; color: var(--neon); filter: drop-shadow(0 0 3px var(--neon)); }
+  .top.mini .prog { position: absolute; left: 0; right: 0; bottom: 0; gap: 0; }
+  .top.mini .prog .bar { height: 2px; border-radius: 0; background: transparent; }
+  .top.mini .prog .bar i { background: var(--neon); box-shadow: 0 0 4px var(--neon); }
+  .top.mini .finder { gap: 0; animation: miniIn .22s ease; }
+  .top.mini .search input { padding: 6px 30px 6px 32px; font-size: 14px; border-radius: 10px; }
+  .top.mini .search svg { left: 10px; width: 16px; height: 16px; }
+  .top.mini .search button { padding: 4px 8px; font-size: 16px; }
+  @keyframes miniIn { from { opacity: .3; transform: translateY(-4px); } }
+  /* The speaker icon blares: up to three neon sound waves (more as it gets louder), pulsing while music plays. */
+  #muteBtn { color: var(--neon); }
+  #muteBtn svg { width: 26px; height: 24px; }
+  #muteBtn.muted { color: var(--muted); }
+  #volIcon .wave { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; opacity: .16; }
+  #volIcon .wave.on { stroke: var(--neon); opacity: 1; filter: drop-shadow(0 0 2px var(--neon)); }
+  #muteBtn.blaring #volIcon .wave.on { animation: blare 1.1s ease-out infinite; }
+  #muteBtn.blaring #volIcon .w2.on { animation-delay: .15s; }
+  #muteBtn.blaring #volIcon .w3.on { animation-delay: .3s; }
+  @keyframes blare { 0% { opacity: .35; } 30% { opacity: 1; } 100% { opacity: .5; } }
+  @media (prefers-reduced-motion: reduce) { .top.mini .player, .top.mini .finder, #muteBtn.blaring #volIcon .wave.on { animation: none; } }
+  @media (max-width: 380px) { .row .icon-btn { padding: 6px; } .volnum { min-width: 30px; margin-left: 0; font-size: 13px; } }
   .finder { display: flex; flex-direction: column; gap: 8px; }
   .search-row { display: flex; gap: 8px; }
   .search-row .search { flex: 1; min-width: 0; }
@@ -530,13 +559,15 @@
       <button class="icon-btn" id="nextBtn" aria-label="Next station" title="Next station">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
       </button>
+      <button class="icon-btn mini-cast" id="miniCast" aria-label="Casting to a speaker" title="Casting to a speaker">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2a9 9 0 0 1 9 9h2c0-6.08-4.93-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+      </button>
       <button class="icon-btn" id="disconnectBtn" aria-label="Disconnect speaker" title="Disconnect speaker" hidden>
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
       </button>
       <button class="icon-btn" id="muteBtn" aria-label="Mute">
         <svg viewBox="0 0 24 24" fill="currentColor" id="volIcon"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
       </button>
-      <span class="vmeter" id="vMeter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
       <span class="volnum" id="volNum" aria-hidden="true"></span>
       <input type="range" id="vol" min="0" max="100" value="80" aria-label="Volume">
     </div>
@@ -650,7 +681,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.8.2';
+const VERSION = '1.9.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2154,12 +2185,17 @@ const ICON_MUTED = '<path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.
 
 let lastActiveId = null, lastPlayingRealm = null;
 let waitText = '', waitSince = 0;
-function paintVMeter() {
-  const m = $('vMeter'); if (!m) return;
+const WAVES = ['M15.5 8.8a4.5 4.5 0 0 1 0 6.4', 'M18 6.3a8 8 0 0 1 0 11.4', 'M20.5 3.8a11.5 11.5 0 0 1 0 16.4'];
+let volIconKey = '';
+function paintVMeter() {   // the speaker icon: 0-3 neon sound waves for the volume, or the crossed-out speaker when muted
   const muted = castConnected() ? (player && player.isMuted) : audio.muted;
-  const lit = muted ? 0 : Math.round((+els.vol.value) / 20);
-  const bars = m.children;
-  for (let i = 0; i < bars.length; i++) bars[i].classList.toggle('on', i < lit);
+  const v = +els.vol.value, n = muted ? -1 : v <= 0 ? 0 : v < 34 ? 1 : v < 67 ? 2 : 3;
+  els.muteBtn.classList.toggle('muted', !!muted);
+  if (String(n) === volIconKey) return;   // leave the icon alone so the pulsing doesn't restart
+  volIconKey = String(n);
+  els.volIcon.setAttribute('viewBox', muted ? '0 0 24 24' : '0 0 26 24');
+  els.volIcon.innerHTML = muted ? ICON_MUTED : '<path d="M3 9v6h4l5 5V4L7 9H3z"/>' +
+    WAVES.map((d, i) => `<path class="wave w${i + 1}${i < n ? ' on' : ''}" d="${d}"/>`).join('');
 }
 function render() {
   const CS = window.cast && cast.framework && cast.framework.CastState;
@@ -2216,7 +2252,7 @@ function render() {
   els.playIcon.innerHTML = icon;
   els.playBtn.setAttribute('aria-label', icon === ICON_PLAY ? 'Play' : icon === ICON_PAUSE ? 'Pause' : 'Stop');
   const muted = castConnected() ? player && player.isMuted : audio.muted;
-  els.volIcon.innerHTML = muted ? ICON_MUTED : ICON_VOL;
+  els.muteBtn.classList.toggle('blaring', icon !== ICON_PLAY && !muted);
   $('volNum').textContent = muted ? 'off' : els.vol.value + '%';
   paintVMeter();
   els.muteBtn.setAttribute('aria-label', (muted ? 'Unmute' : 'Mute') + '. Volume ' + els.vol.value + '%. Hold and slide to change');
@@ -2382,24 +2418,27 @@ async function start() {
 }
 start();
 
-// Hide the header on scroll down, bring it back on any scroll up (keeps the player and search in reach).
+// Mini mode: scroll down the list and the top shrinks to one slim bar; any scroll up (or a tap on the bar) brings it back.
+// The lost height is given back as bottom margin, so the page length never changes and scrolling can't feed back.
 {
-  const topEl = document.querySelector('.top'), barEl = document.querySelector('.topbar');
-  if (topEl && barEl) {
-    const measure = () => { if (!topEl.classList.contains('collapsed')) topEl.style.setProperty('--barh', (barEl.offsetHeight + 8) + 'px'); };
-    measure();
-    addEventListener('load', measure);
-    addEventListener('resize', measure);
-    if (window.ResizeObserver) new ResizeObserver(measure).observe(barEl);
+  const topEl = document.querySelector('.top'), nowEl = document.querySelector('.player .now');
+  if (topEl) {
+    const setMini = on => {
+      if (on === topEl.classList.contains('mini')) return;
+      if (on) { const h = topEl.offsetHeight; topEl.classList.add('mini'); topEl.style.marginBottom = Math.max(0, h - topEl.offsetHeight) + 'px'; }
+      else { topEl.classList.remove('mini'); topEl.style.marginBottom = ''; }
+    };
     let lastY = scrollY;
     addEventListener('scroll', () => {
       const y = scrollY;
-      if (y < 70) { topEl.classList.remove('collapsed'); lastY = y; return; }
+      if (y < 70) { setMini(false); lastY = y; return; }
       const dy = y - lastY;
-      if (dy > 6) { topEl.classList.add('collapsed'); lastY = y; }           // scrolled down a bit: hide
-      else if (dy < -6) { topEl.classList.remove('collapsed'); lastY = y; }  // scrolled up a bit: show
-      // small jitters leave the reference point alone, so movement accumulates
+      if (dy > 6) { setMini(true); lastY = y; }          // scrolled down a bit: shrink
+      else if (dy < -6) { setMini(false); lastY = y; }   // scrolled up a bit: full player
     }, { passive: true });
+    if (nowEl) nowEl.addEventListener('click', () => { if (topEl.classList.contains('mini')) { setMini(false); lastY = scrollY; } });
+    const mc = document.getElementById('miniCast');
+    if (mc) mc.addEventListener('click', () => els.castBtn.click());   // the speaker picker, like the big cast button
   }
 }
 
