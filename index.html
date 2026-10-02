@@ -16,6 +16,7 @@
   /* Each realm has its own colors, taken from its sister app. The <html> element carries the
      realm being shown; doors and tabs carry their own realm so they show its colors too. */
   :root, [data-realm="halloween"] {
+    --neon: #ff9a2e;
     --bg: #120d17; --surface: #1d1624; --surface-2: #281f31; --line: #3a2e45;
     --text: #f3ecf7; --muted: #a898b3; --accent: #ff7a1a; --accent-2: #ffb36b; --accent-ink: #1a0f05;
     --good: #7ddc6f; --warn: #ffcf5c; --radius: 16px;
@@ -23,6 +24,7 @@
     --badge: radial-gradient(circle at 50% 40%, #4a2410, #1a0f12);
   }
   [data-realm="synth"] {
+    --neon: #ff4fb8;
     --bg: #0d0a1a; --surface: #17122b; --surface-2: #221a3d; --line: #342a57;
     --text: #f1ecff; --muted: #a79dc9; --accent: #ff3fa4; --accent-2: #33e1ff; --accent-ink: #1a0514;
     --good: #6ff0a8; --warn: #ffcf5c; --radius: 16px;
@@ -30,6 +32,7 @@
     --badge: linear-gradient(135deg, #3a1a5c, #13304a);
   }
   [data-realm="pagan"] {
+    --neon: #ffd36b;
     --bg: #0b1210; --surface: #13201b; --surface-2: #1b2d26; --line: #2c4439;
     --text: #eef3ea; --muted: #9fb3a6; --accent: #e0b54f; --accent-2: #c9d6e8; --accent-ink: #1d1505;
     --good: #9be38a; --warn: #e0b54f; --radius: 16px;
@@ -37,6 +40,7 @@
     --badge: linear-gradient(135deg, #24463a, #1a2b3d);
   }
   [data-realm="kvlt"] {
+    --neon: #ff2b35;
     --bg: #070606; --surface: #110f0f; --surface-2: #1b1616; --line: #2f2525;
     --text: #ebe6df; --muted: #978c86; --accent: #b3121a; --accent-2: #dcd6cc; --accent-ink: #f5efe7;
     --good: #e24a4a; --warn: #b3121a; --radius: 12px;
@@ -212,7 +216,7 @@
   .icon-btn.on { color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 14%, transparent); }
   /* The volume lives in a pop-up now (hold 🔊), so the row of controls spreads out. */
   #vol { display: none; }
-  @media (max-width: 370px) { .row .icon-btn { padding: 7px; } .volnum { min-width: 30px; margin-left: -4px; } }   /* narrow phones, with the ✕ while casting */
+  @media (max-width: 370px) { .row .icon-btn { padding: 7px; } .volnum { min-width: 40px; margin-left: -2px; font-size: 14px; } }   /* narrow phones, with the ✕ while casting */
   .row { justify-content: space-between; }
   #muteBtn { touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
   .volpop {
@@ -221,8 +225,9 @@
     display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none;
   }
   .volpop[hidden] { display: none; }
-  .volnum { min-width: 34px; margin-left: -6px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .volpop .pct { font-size: 15px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  /* The volume number in the realm's own neon, big enough to read across the room. */
+  .volnum { min-width: 44px; margin-left: -4px; font-size: 15px; font-weight: 800; color: var(--neon); text-shadow: 0 0 4px var(--neon), 0 0 12px var(--neon); font-variant-numeric: tabular-nums; }
+  .volpop .pct { font-size: 18px; font-weight: 800; color: var(--neon); text-shadow: 0 0 4px var(--neon), 0 0 12px var(--neon); font-variant-numeric: tabular-nums; }
   .volpop .track { position: relative; flex: 1; width: 12px; border-radius: 6px; background: var(--line); overflow: hidden; }
   .volpop .fill { position: absolute; left: 0; right: 0; bottom: 0; background: var(--accent); }
   .volpop .who { font-size: 10px; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); }
@@ -404,6 +409,38 @@
   .dlg-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
   .dlg-btns button { background: var(--surface-2); border: 1px solid var(--line); padding: 8px 12px; border-radius: 8px; }
 
+  /* A quick flourish when entering a realm, in its own style. */
+  .realmfx { position: fixed; inset: 0; z-index: 25; pointer-events: none; overflow: hidden; }
+  .realmfx[hidden] { display: none; }
+  .realmfx > * { position: absolute; }
+  /* Halloween: candlelight flicker with fog rolling across. */
+  .realmfx.halloween .glow { inset: 0; background: radial-gradient(circle at 50% 55%, rgba(255, 122, 26, .45), rgba(120, 40, 120, .15) 45%, transparent 70%); animation: fx-flicker .75s ease-out both; }
+  .realmfx.halloween .fog { left: -60%; width: 220%; height: 40%; border-radius: 50%; background: radial-gradient(ellipse, rgba(214, 200, 230, .28), transparent 65%); filter: blur(8px); animation: fx-fog .8s ease-out both; }
+  .realmfx.halloween .fog.f1 { top: 18%; } .realmfx.halloween .fog.f2 { top: 52%; animation-delay: .08s; animation-direction: reverse; }
+  @keyframes fx-flicker { 0% { opacity: 0; } 15% { opacity: 1; } 30% { opacity: .45; } 45% { opacity: .9; } 60% { opacity: .55; } 100% { opacity: 0; } }
+  @keyframes fx-fog { from { transform: translateX(-25%); opacity: 0; } 30% { opacity: 1; } to { transform: translateX(20%); opacity: 0; } }
+  /* Synth: a VHS glitch, with neon scanlines, colour split and jitter. */
+  .realmfx.synth .scan { inset: 0; background: repeating-linear-gradient(0deg, rgba(51, 225, 255, .14) 0 2px, transparent 2px 5px); mix-blend-mode: screen; animation: fx-scan .5s steps(6) both; }
+  .realmfx.synth .bar { left: 0; right: 0; height: 9%; background: linear-gradient(90deg, rgba(255, 63, 164, .55), rgba(51, 225, 255, .55)); mix-blend-mode: screen; animation: fx-bar .45s steps(5) both; }
+  .realmfx.synth .bar.b1 { top: 22%; } .realmfx.synth .bar.b2 { top: 61%; height: 4%; animation-delay: .07s; }
+  main.fx-glitch { animation: fx-split .45s steps(5) both; }
+  @keyframes fx-scan { 0% { opacity: 0; } 20% { opacity: 1; transform: translateY(-3px); } 60% { opacity: .8; transform: translateY(2px); } 100% { opacity: 0; } }
+  @keyframes fx-bar { 0% { opacity: 0; transform: translateX(-40%); } 30% { opacity: 1; transform: translateX(10%); } 60% { opacity: .6; transform: translateX(-8%); } 100% { opacity: 0; transform: translateX(30%); } }
+  @keyframes fx-split { 0% { filter: drop-shadow(-4px 0 #ff3fa4) drop-shadow(4px 0 #33e1ff); transform: translateX(3px); } 40% { filter: drop-shadow(3px 0 #ff3fa4) drop-shadow(-3px 0 #33e1ff); transform: translateX(-2px) skewX(-2deg); } 100% { filter: none; transform: none; } }
+  /* Pagan: moonrise, a silver glow blooming out with twinkling stars. */
+  .realmfx.pagan .moon { left: 50%; top: 42%; width: 70vmin; height: 70vmin; margin: -35vmin 0 0 -35vmin; border-radius: 50%; background: radial-gradient(circle, rgba(238, 240, 226, .55), rgba(201, 214, 232, .18) 40%, transparent 70%); animation: fx-moon .8s ease-out both; }
+  .realmfx.pagan .star { width: 4px; height: 4px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px 2px rgba(255, 255, 255, .8); animation: fx-twinkle .8s ease-out both; }
+  @keyframes fx-moon { from { transform: scale(.4); opacity: 0; } 35% { opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+  @keyframes fx-twinkle { 0% { transform: scale(0); opacity: 0; } 40% { transform: scale(1.4); opacity: 1; } 100% { transform: scale(.2); opacity: 0; } }
+  /* Kvlt: a blood-red flash, the inverted pentagram burning in and fading, and a shudder. */
+  .realmfx.kvlt .blood { inset: 0; background: radial-gradient(circle at 50% 45%, rgba(179, 18, 26, .15), rgba(120, 0, 8, .55) 75%); animation: fx-blood .7s ease-out both; }
+  .realmfx.kvlt .sigil-fx { left: 50%; top: 42%; width: 60vmin; height: 60vmin; margin: -30vmin 0 0 -30vmin; color: #ff2b35; filter: drop-shadow(0 0 12px rgba(255, 30, 40, .9)); animation: fx-sigil .75s ease-out both; }
+  .realmfx.kvlt .sigil-fx svg { width: 100%; height: 100%; }
+  main.fx-shake { animation: fx-shake .35s linear both; }
+  @keyframes fx-blood { 0% { opacity: 0; } 20% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes fx-sigil { from { transform: scale(.6) rotate(-12deg); opacity: 0; } 30% { opacity: .9; } to { transform: scale(1.25) rotate(0); opacity: 0; } }
+  @keyframes fx-shake { 0%, 100% { transform: none; } 20% { transform: translate(-3px, 1px); } 40% { transform: translate(3px, -1px); } 60% { transform: translate(-2px, 0); } 80% { transform: translate(2px, 1px); } }
+  @media (prefers-reduced-motion: reduce) { .realmfx { display: none; } main.fx-glitch, main.fx-shake { animation: none; } }
   @media (prefers-reduced-motion: reduce) {
     *, *::before { animation: none !important; transition: none !important; }
   }
@@ -522,6 +559,8 @@
   <div class="fine">Swipe sideways or use the tabs to move between realms. Tap a realm's name for the portal.</div>
 </div>
 
+<div class="realmfx" id="realmFx" aria-hidden="true" hidden></div>
+
 <div class="volpop" id="volPop" aria-hidden="true" hidden>
   <div class="pct">80%</div>
   <div class="track"><div class="fill"></div></div>
@@ -572,7 +611,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.6.0';
+const VERSION = '1.7.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -875,6 +914,7 @@ function showRealm(r, how) {
   if (r !== from) diag('realm: ' + r.short + (how ? ' (' + how + ')' : ''));
   // A short slide in from the side it came from (tabs and the portal; swiping animates itself).
   if (how === 'tab' || how === 'portal') slideIn(REALMS.indexOf(r) > REALMS.indexOf(from) ? 1 : -1);
+  if (r !== from || how === 'title screen') realmFx(r);
 }
 function slideIn(dir) {
   if (reduceMotion() || !dir) return;
@@ -886,6 +926,27 @@ function slideIn(dir) {
     m.style.transform = ''; m.style.opacity = '';
     setTimeout(() => m.classList.remove('slide'), 220);
   }));
+}
+
+// A quick flourish in each realm's own style when you enter it (tabs, swiping, the portal or the title screen).
+const FX = {
+  halloween: '<div class="glow"></div><div class="fog f1"></div><div class="fog f2"></div>',
+  synth: '<div class="scan"></div><div class="bar b1"></div><div class="bar b2"></div>',
+  pagan: '<div class="moon"></div>' + [[18, 22], [78, 15], [30, 70], [70, 62], [50, 12], [12, 50], [88, 40], [40, 85]]
+    .map(([x, y], i) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${(i * .05).toFixed(2)}s"></div>`).join(''),
+  kvlt: '<div class="blood"></div><div class="sigil-fx">' + SIGIL + '</div>',
+};
+function realmFx(r) {
+  if (reduceMotion()) return;
+  const fx = $('realmFx');
+  fx.className = 'realmfx ' + r.id;
+  fx.innerHTML = FX[r.id];
+  fx.hidden = false;
+  const shake = { synth: 'fx-glitch', kvlt: 'fx-shake' }[r.id];
+  els.main.classList.remove('fx-glitch', 'fx-shake');
+  if (shake) { void els.main.offsetWidth; els.main.classList.add(shake); }
+  clearTimeout(realmFx.t);
+  realmFx.t = setTimeout(() => { fx.hidden = true; fx.innerHTML = ''; els.main.classList.remove('fx-glitch', 'fx-shake'); }, 900);
 }
 
 // Tabs along the bottom. A small dot marks the realm that's playing.
