@@ -143,15 +143,12 @@
   .now .title { font-weight: 650; font-size: 15px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .now .song { font-size: 13px; color: var(--accent-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .now .song:empty { display: none; }
-  /* Up next, listeners and LIVE, Save and Share, and the Recently played / Saved songs drawers (from Halloween Caster). */
+  /* Up next, listeners and LIVE, Save and Share, and the Recently played / Saved songs panel (from Halloween Caster). */
   .now .next { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .now .next:empty { display: none; }
   .now .label .crowd { text-transform: none; letter-spacing: 0; }
   .now .label .crowd b { color: #ff5a5a; font-weight: 700; }
   button.pill { cursor: pointer; }
-  .drawer { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 0 14px; }
-  .drawer summary { cursor: pointer; padding: 11px 0; font-weight: 650; font-size: 15px; }
-  .drawer summary span { color: var(--muted); font-weight: 400; }
   .drawer ul { list-style: none; margin: 0 0 8px; padding: 0; }
   .drawer li { border-top: 1px solid var(--line); padding: 9px 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 10px; }
   .drawer .f-song { font-weight: 600; overflow-wrap: anywhere; }
@@ -161,6 +158,20 @@
   .drawer .li-btn { grid-column: 2; grid-row: 1 / span 3; align-self: center; background: none; color: var(--muted); font-size: 18px; padding: 8px; }
   .drawer .empty { color: var(--muted); font-size: 14px; margin: 0 0 12px; }
   .drawer .empty[hidden] { display: none; }
+  /* Recently played and Saved songs slide up from the bottom, over the page. */
+  dialog.sheet {
+    inset: auto 0 0 0; margin: 0 auto; width: min(560px, 100%); max-width: 100%; max-height: 78vh; overflow: auto;
+    padding: 0 16px max(14px, env(safe-area-inset-bottom)); border-radius: 18px 18px 0 0; border-bottom: 0;
+    animation: sheet-up .22s ease-out;
+  }
+  .sheet header { position: sticky; top: 0; z-index: 1; background: var(--surface); display: flex; align-items: center; gap: 10px; padding: 14px 0 8px; }
+  .sheet h2 { margin: 0; font-size: 17px; flex: 1; }
+  .sheet .close { background: none; color: var(--muted); font-size: 20px; padding: 4px 8px; }
+  .sheet .sub { color: var(--muted); font-size: 13px; margin: 0 0 6px; }
+  .sheet .sub:empty { display: none; }
+  .sheet section[hidden] { display: none; }
+  @keyframes sheet-up { from { transform: translateY(40px); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { dialog.sheet { animation: none; } }
   /* How far into the song (stations whose song feed says how long it is). */
   .prog { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
   .prog[hidden] { display: none; }
@@ -440,6 +451,8 @@
     <div class="links" id="songLinks" hidden>
       <button class="pill" id="favBtn" hidden>🤍 Save</button>
       <button class="pill" id="shareBtn" hidden>📤 Share</button>
+      <button class="pill" id="recentBtn" hidden>🕰️ Recent</button>
+      <button class="pill" id="savedBtn" hidden>📜 Saved songs</button>
       <a class="pill" id="bewitchLink" href="https://halloweenradio.net/playlist" target="_blank" rel="noopener">👻 Bewitch on site</a>
       <a class="pill" id="spineLink" href="https://halloweenradio.net/spine-tingler" target="_blank" rel="noopener" title="Rate how spooky this song feels on halloweenradio.net">🦴 Spine-Tingler</a>
     </div>
@@ -464,17 +477,6 @@
     <div class="chips" id="chips" role="tablist" aria-label="Genres"></div>
   </section>
   </div>
-
-  <details class="drawer" id="recent">
-    <summary>🕰️ Recently played <span id="recentOn"></span></summary>
-    <ul id="recentList"></ul>
-    <p class="empty" id="recentEmpty">Play a station marked ♪ and its last few songs show up here.</p>
-  </details>
-  <details class="drawer" id="savedSongs">
-    <summary>❤️ Saved songs <span id="savedCount"></span></summary>
-    <ul id="savedList"></ul>
-    <p class="empty" id="savedEmpty">Tap “🤍 Save” while a song plays to keep it here.</p>
-  </details>
 
   <div class="count" id="count"></div>
 
@@ -524,6 +526,20 @@
   </form>
 </dialog>
 
+<dialog class="drawer sheet" id="songsSheet" aria-labelledby="sheetTitle">
+  <header><h2 id="sheetTitle">Songs</h2><button class="close" id="sheetClose" aria-label="Close">✕</button></header>
+  <section id="sheetRecent">
+    <p class="sub" id="recentOn"></p>
+    <ul id="recentList"></ul>
+    <p class="empty" id="recentEmpty">Play a station marked ♪ and its last few songs show up here.</p>
+  </section>
+  <section id="sheetSaved" hidden>
+    <p class="sub" id="savedCount"></p>
+    <ul id="savedList"></ul>
+    <p class="empty" id="savedEmpty">Tap “🤍 Save” while a song plays to keep it here.</p>
+  </section>
+</dialog>
+
 <dialog id="diagDlg">
   <div id="diagText"></div>
   <div class="dlg-btns">
@@ -534,7 +550,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.5.0';
+const VERSION = '1.5.1';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1535,6 +1551,11 @@ const ramp = (stops, t) => {
   for (let i = 1; i < stops.length; i++) if (t <= stops[i][0]) return mixHex(stops[i - 1][1], stops[i][1], (t - stops[i - 1][0]) / (stops[i][0] - stops[i - 1][0]));
   return stops[stops.length - 1][1];
 };
+// The same for plain numbers: where a value is at point t along a list of [point, value] stops.
+const curve = (stops, t) => {
+  for (let i = 1; i < stops.length; i++) if (t <= stops[i][0]) return stops[i - 1][1] + (stops[i][1] - stops[i - 1][1]) * (t - stops[i - 1][0]) / (stops[i][0] - stops[i - 1][0]);
+  return stops[stops.length - 1][1];
+};
 const OMENS = {
   // A jack-o'-lantern that sags, browns, grows mold and slumps into mush.
   halloween: {
@@ -1556,21 +1577,23 @@ const OMENS = {
       </g>
     </svg>`,
     draw(el, f) {
-      const skin = ramp([[0, '#ff7a1a'], [.45, '#b8621f'], [.8, '#7a5a26'], [1, '#5a5a2c']], f);
-      const shade = ramp([[0, '#e0610c'], [.45, '#94491a'], [.8, '#5f4520'], [1, '#474823']], f);
+      // Stays a proper jack-o'-lantern for most of the song: dulls by half way, molds and wilts by three
+      // quarters, sags hard and goes dark by 90%, and only collapses into mush at the very end.
+      const skin = ramp([[0, '#ff7a1a'], [.5, '#d9701d'], [.75, '#a8601f'], [.9, '#7a5a26'], [1, '#5a5a2c']], f);
+      const shade = ramp([[0, '#e0610c'], [.5, '#bd5a14'], [.75, '#8a4a1a'], [.9, '#5f4520'], [1, '#474823']], f);
       el.querySelector('.mid').style.fill = skin;
       el.querySelectorAll('.side').forEach(x => { x.style.fill = shade; });
-      const sag = f * f;   // holds its shape at first, then slumps faster
+      const sag = curve([[0, 0], [.5, .05], [.75, .18], [.9, .4], [1, 1]], f);
       el.querySelector('.rot').style.transform = `scale(${1 + .35 * sag}, ${1 - .55 * sag})`;
-      el.querySelector('.face').style.fill = ramp([[0, '#ffd34d'], [.6, '#c98a2a'], [1, '#2e2410']], f);
-      el.querySelector('.glow').style.opacity = 1 - .7 * f;
+      el.querySelector('.face').style.fill = ramp([[0, '#ffd34d'], [.5, '#f0b640'], [.75, '#c98a2a'], [.9, '#3a2a12'], [1, '#2e2410']], f);
+      el.querySelector('.glow').style.opacity = curve([[0, 1], [.5, .9], [.75, .7], [.9, .25], [1, .15]], f);
       const stem = el.querySelector('.stem');
-      stem.style.transform = `rotate(${45 * f}deg)`;
-      stem.style.fill = ramp([[0, '#4f7a2a'], [1, '#4a3a20']], f);
-      el.querySelector('.mold').style.opacity = clamp01((f - .3) / .45);
+      stem.style.transform = `rotate(${curve([[0, 0], [.5, 5], [.75, 25], [1, 45]], f)}deg)`;
+      stem.style.fill = ramp([[0, '#4f7a2a'], [.5, '#4f7a2a'], [.75, '#6b6a2a'], [1, '#4a3a20']], f);
+      el.querySelector('.mold').style.opacity = clamp01((f - .5) / .3);
       const puddle = el.querySelector('.puddle');
-      puddle.style.opacity = clamp01((f - .55) / .35);
-      puddle.setAttribute('rx', (7 + 7 * clamp01((f - .55) / .45)).toFixed(2));
+      puddle.style.opacity = clamp01((f - .85) / .12);
+      puddle.setAttribute('rx', (7 + 7 * clamp01((f - .88) / .12)).toFixed(2));
     },
   },
   // An 80s cassette: the tape winds from the left reel to the right one.
@@ -1722,6 +1745,9 @@ function renderSongInfo() {
   fav.hidden = $('shareBtn').hidden = !c;
   fav.textContent = on ? '❤️ Saved' : '🤍 Save';
   fav.classList.toggle('on', on);
+  $('recentBtn').hidden = !songInfo.history.length;
+  $('savedBtn').hidden = !saved.length;
+  $('savedBtn').textContent = '📜 Saved songs (' + saved.length + ')';
   renderLinks();
   // The drawers only redraw when something in them changed (or a minute passed, for the "min ago" times).
   const key = [metaStation && metaStation.id, songInfo.history.map(h => h.song).join('|'), saved.length, saved.map(savedKey).join('|'), Math.floor(Date.now() / 60000)].join('#');
@@ -1733,7 +1759,7 @@ function renderSongInfo() {
     const x = { song: h.song, station: metaStation ? metaStation.name : '' };
     return songRow(x, h.at ? timeAgo(h.at) : '', heartFor(x));
   }));
-  $('savedCount').textContent = saved.length ? '(' + saved.length + ')' : '';
+  $('savedCount').textContent = saved.length === 1 ? '1 song' : saved.length + ' songs';
   $('savedEmpty').hidden = saved.length > 0;
   $('savedList').replaceChildren(...saved.map(f => {
     const del = document.createElement('button'); del.className = 'li-btn'; del.textContent = '✕';
@@ -1741,6 +1767,22 @@ function renderSongInfo() {
     del.addEventListener('click', () => { saved = saved.filter(x => x !== f); safeSet(SAVED_KEY, JSON.stringify(saved)); renderSongInfo(); });
     return songRow(f, f.station + ' · ' + new Date(f.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }), del, true);
   }));
+}
+// The Recent and Saved songs buttons open the panel at the bottom.
+{
+  const sheet = $('songsSheet');
+  const open = which => {
+    $('sheetRecent').hidden = which !== 'recent';
+    $('sheetSaved').hidden = which !== 'saved';
+    $('sheetTitle').textContent = which === 'recent' ? '🕰️ Recently played' : '📜 Saved songs';
+    lastDrawers = ''; renderSongInfo();
+    sheet.showModal();
+    sheet.scrollTop = 0;
+  };
+  $('recentBtn').addEventListener('click', () => open('recent'));
+  $('savedBtn').addEventListener('click', () => open('saved'));
+  $('sheetClose').addEventListener('click', () => sheet.close());
+  sheet.addEventListener('click', e => { if (e.target === sheet) sheet.close(); });   // a tap outside the panel closes it
 }
 // The row of song buttons shows when anything in it does.
 function renderLinks() { const row = $('songLinks'); row.hidden = ![...row.children].some(x => !x.hidden); }
