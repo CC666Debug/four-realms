@@ -697,7 +697,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.10.1';
+const VERSION = '1.10.2';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2442,17 +2442,27 @@ async function start() {
 start();
 
 // Mini mode: scroll down the list and the top shrinks to one slim bar; any scroll up (or a tap on the bar) brings it back.
-// The list slides up into the freed space. The same amount is added below the footer, so the page length (and the
-// scroll position) never changes and scrolling can't feed back. Where the browser can, the change is a smooth morph.
+// The list never moves: the space the player gives up stays as a margin under the bar, so the panel just shrinks
+// away and uncovers the stations that were already scrolled underneath it. That's why it only shrinks once you've
+// scrolled at least that far (otherwise there'd be nothing to uncover but an empty gap). Where the browser can,
+// the change is a smooth morph.
 {
-  const topEl = document.querySelector('.top'), nowEl = document.querySelector('.player .now'), mainEl = document.getElementById('main');
-  if (topEl && mainEl) {
+  const topEl = document.querySelector('.top'), nowEl = document.querySelector('.player .now');
+  if (topEl) {
     let mini = false, vt = null;
+    // How much shorter the mini bar is. Measured without a single painted frame, and with the margin set first so
+    // the page never gets shorter, even for a moment (that would snap the scroll back on short lists).
+    const shrinkBy = () => {
+      if (mini) return parseFloat(topEl.style.marginBottom) || 0;
+      const h = topEl.offsetHeight;
+      topEl.style.marginBottom = h + 'px'; topEl.classList.add('mini');
+      const d = Math.max(0, h - topEl.offsetHeight);
+      topEl.classList.remove('mini'); topEl.style.marginBottom = '';
+      return d;
+    };
     const apply = on => {
-      // Pad the bottom first, so the page never gets shorter than the screen mid-swap (on short lists that
-      // would snap the scroll back to the top and bounce between mini and full).
-      if (on) { const h = topEl.offsetHeight; mainEl.style.paddingBottom = h + 'px'; topEl.classList.add('mini'); mainEl.style.paddingBottom = Math.max(0, h - topEl.offsetHeight) + 'px'; }
-      else { topEl.classList.remove('mini'); mainEl.style.paddingBottom = ''; }
+      if (on) { const h = topEl.offsetHeight; topEl.style.marginBottom = h + 'px'; topEl.classList.add('mini'); topEl.style.marginBottom = Math.max(0, h - topEl.offsetHeight) + 'px'; }
+      else { topEl.classList.remove('mini'); topEl.style.marginBottom = ''; }
     };
     const setMini = on => {
       if (on === mini) return;
@@ -2465,11 +2475,10 @@ start();
     };
     let lastY = scrollY;
     addEventListener('scroll', () => {
-      const y = scrollY;
-      if (y < 70) { setMini(false); lastY = y; return; }
-      const dy = y - lastY;
-      if (dy > 6) { setMini(true); lastY = y; }          // scrolled down a bit: shrink
-      else if (dy < -6) { setMini(false); lastY = y; }   // scrolled up a bit: full player
+      const y = scrollY, dy = y - lastY;
+      if (mini && y < shrinkBy()) { setMini(false); lastY = y; return; }   // back near the top: full player
+      if (dy > 6) { if (!mini && y > shrinkBy() + 8) setMini(true); lastY = y; }   // scrolled down a bit: shrink
+      else if (dy < -6) { setMini(false); lastY = y; }                            // scrolled up a bit: full player
     }, { passive: true });
     if (nowEl) nowEl.addEventListener('click', () => { if (mini) { setMini(false); lastY = scrollY; } });
     const mc = document.getElementById('miniCast');
