@@ -148,6 +148,25 @@
   .prog[hidden] { display: none; }
   .prog .bar { flex: 1; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
   .prog .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 1s linear; }
+  /* Each realm's song clock beside the time bar: a rotting pumpkin, a winding cassette, a waning moon, a black candle. */
+  .omen { flex: none; display: grid; place-items: center; min-width: 30px; height: 34px; }
+  .omen svg { display: block; overflow: visible; }
+  .omen svg * { transition: transform 1s linear, opacity 1s linear, fill 1s linear; }
+  .omen.reset svg * { transition: none !important; }
+  .omen .rot, .omen .sink, .omen .wax, .omen .top { transform-box: view-box; }
+  .omen .flame { transform-box: view-box; transform-origin: 10px -4px; animation: omen-flicker .9s ease-in-out infinite alternate; filter: drop-shadow(0 0 3px #ff2a1a); }
+  .omen .glow { animation: omen-glow 1.6s ease-in-out infinite alternate; }
+  .omen .moonlit { filter: drop-shadow(0 0 3px rgba(201, 214, 232, .7)); }
+  @keyframes omen-flicker {
+    0%   { transform: scale(1, 1) skewX(0deg); }
+    30%  { transform: scale(.92, 1.08) skewX(3deg); }
+    60%  { transform: scale(1.05, .95) skewX(-2deg); }
+    100% { transform: scale(.97, 1.04) skewX(1deg); }
+  }
+  @keyframes omen-glow { from { filter: brightness(1); } to { filter: brightness(1.25); } }
+  .omen .spin { transform-box: view-box; animation: omen-spin 2.4s linear infinite; }
+  @keyframes omen-spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .omen .flame, .omen .glow, .omen .spin { animation: none; } }
   .prog-time { background: none; padding: 4px 0; color: inherit; font: inherit; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   .row { display: flex; align-items: center; gap: 2px; }
@@ -374,6 +393,7 @@
     </div>
   </div>
     <div class="prog" id="prog" hidden>
+      <div class="omen" id="omen" aria-hidden="true"></div>
       <div class="bar"><i id="progBar"></i></div>
       <button class="prog-time" id="progTime"></button>
     </div>
@@ -482,7 +502,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.3.0';
+const VERSION = '1.4.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1449,10 +1469,127 @@ function updateProgress() {
   const elapsed = (Date.now() - songTime.start) / 1000;
   const shownSec = Math.min(Math.max(elapsed, 0), songTime.dur);
   $('progBar').style.width = (shownSec / songTime.dur * 100) + '%';
+  if (metaStation) drawOmen(metaStation.realm, shownSec / songTime.dur);
   $('progTime').textContent = TIME_STYLES[timeStyle](shownSec, songTime.dur);
   $('progTime').setAttribute('aria-label', 'Song time ' + $('progTime').textContent + '. Tap to change how it’s shown');
   if (elapsed > songTime.dur + 3 && metaCheck && Date.now() - lastRecheck > 5000) { lastRecheck = Date.now(); metaCheck(); }
 }
+// ── Song omens ──────────────────────────────────
+// Beside the time bar, each realm shows the song running out in its own way. f goes from 0 (song starts) to 1 (song ends).
+const clamp01 = x => Math.min(1, Math.max(0, x));
+const mixHex = (a, b, t) => '#' + [1, 3, 5].map(i => Math.round(parseInt(a.substr(i, 2), 16) * (1 - t) + parseInt(b.substr(i, 2), 16) * t).toString(16).padStart(2, '0')).join('');
+const ramp = (stops, t) => {
+  for (let i = 1; i < stops.length; i++) if (t <= stops[i][0]) return mixHex(stops[i - 1][1], stops[i][1], (t - stops[i - 1][0]) / (stops[i][0] - stops[i - 1][0]));
+  return stops[stops.length - 1][1];
+};
+const OMENS = {
+  // A jack-o'-lantern that sags, browns, grows mold and slumps into mush.
+  halloween: {
+    svg: `<svg width="30" height="30" viewBox="0 0 36 36">
+      <ellipse class="puddle" cx="18" cy="33.5" rx="7" ry="1.6" fill="#4d4a1e" opacity="0"/>
+      <g class="rot" style="transform-origin: 18px 33px">
+        <path class="stem" d="M17 11c0-4 2-7 5-8l1.2 1.6c-2.4 1.2-3.6 3.6-3.6 6.4z" fill="#4f7a2a" style="transform-origin: 18px 11px"/>
+        <ellipse class="side" cx="11" cy="22" rx="7.5" ry="10.5" fill="#e0610c"/>
+        <ellipse class="side" cx="25" cy="22" rx="7.5" ry="10.5" fill="#e0610c"/>
+        <ellipse class="mid" cx="18" cy="22" rx="9.5" ry="11.5" fill="#ff7a1a"/>
+        <g class="glow"><g class="face" fill="#ffd34d">
+          <path d="M11 19h5l-2.5-4.5zM20 19h5l-2.5-4.5zM16.6 23h2.8l-1.4-2.6z"/>
+          <path d="M10 25.5q8 7 16 0l-2.6.7-1.6 2-2-1.4-2 1.8-2-1.8-2 1.4-1.6-2z"/>
+        </g></g>
+        <g class="mold" fill="#a3b84f" opacity="0">
+          <circle cx="9" cy="16" r="1.7"/><circle cx="26.5" cy="27" r="2.1"/><circle cx="22" cy="12.5" r="1.3"/>
+          <circle cx="13" cy="29" r="1.5"/><circle cx="28" cy="18" r="1.1"/><circle cx="7.5" cy="24" r="1.2"/>
+        </g>
+      </g>
+    </svg>`,
+    draw(el, f) {
+      const skin = ramp([[0, '#ff7a1a'], [.45, '#b8621f'], [.8, '#7a5a26'], [1, '#5a5a2c']], f);
+      const shade = ramp([[0, '#e0610c'], [.45, '#94491a'], [.8, '#5f4520'], [1, '#474823']], f);
+      el.querySelector('.mid').style.fill = skin;
+      el.querySelectorAll('.side').forEach(x => { x.style.fill = shade; });
+      const sag = f * f;   // holds its shape at first, then slumps faster
+      el.querySelector('.rot').style.transform = `scale(${1 + .35 * sag}, ${1 - .55 * sag})`;
+      el.querySelector('.face').style.fill = ramp([[0, '#ffd34d'], [.6, '#c98a2a'], [1, '#2e2410']], f);
+      el.querySelector('.glow').style.opacity = 1 - .7 * f;
+      const stem = el.querySelector('.stem');
+      stem.style.transform = `rotate(${45 * f}deg)`;
+      stem.style.fill = ramp([[0, '#4f7a2a'], [1, '#4a3a20']], f);
+      el.querySelector('.mold').style.opacity = clamp01((f - .3) / .45);
+      const puddle = el.querySelector('.puddle');
+      puddle.style.opacity = clamp01((f - .55) / .35);
+      puddle.setAttribute('rx', (7 + 7 * clamp01((f - .55) / .45)).toFixed(2));
+    },
+  },
+  // An 80s cassette: the tape winds from the left reel to the right one.
+  synth: {
+    svg: `<svg width="38" height="26" viewBox="0 0 40 27">
+      <defs>
+        <linearGradient id="omenLabel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff3fa4"/><stop offset=".5" stop-color="#ff7a5c"/><stop offset="1" stop-color="#ffd23f"/></linearGradient>
+      </defs>
+      <rect x="1" y="1" width="38" height="25" rx="3" fill="#221a3d" stroke="#ff3fa4" stroke-width="1"/>
+      <rect x="4" y="3.5" width="32" height="4" rx="1" fill="url(#omenLabel)"/>
+      <rect x="4" y="8.4" width="32" height="1" fill="#33e1ff"/>
+      <rect x="8" y="11" width="24" height="10" rx="5" fill="#0d0a1a" stroke="#342a57" stroke-width=".7"/>
+      <circle class="packL" cx="13" cy="16" r="4.6" fill="#3a2418"/>
+      <circle class="packR" cx="27" cy="16" r="2.2" fill="#3a2418"/>
+      <g class="reel spin" style="transform-origin: 13px 16px"><circle cx="13" cy="16" r="2.1" fill="#f1ecff"/><path d="M13 14v4M11 16h4" stroke="#221a3d" stroke-width=".8"/></g>
+      <g class="reel spin" style="transform-origin: 27px 16px"><circle cx="27" cy="16" r="2.1" fill="#f1ecff"/><path d="M27 14v4M25 16h4" stroke="#221a3d" stroke-width=".8"/></g>
+      <path d="M7 26l2.5-3h21l2.5 3" fill="#2d2350" stroke="#342a57" stroke-width=".6"/>
+      <circle cx="4" cy="23.5" r=".9" fill="#342a57"/><circle cx="36" cy="23.5" r=".9" fill="#342a57"/>
+    </svg>`,
+    draw(el, f) {
+      // Tape leaves the left reel and builds up on the right one.
+      el.querySelector('.packL').setAttribute('r', (2.2 + 2.4 * Math.sqrt(1 - f)).toFixed(2));
+      el.querySelector('.packR').setAttribute('r', (2.2 + 2.4 * Math.sqrt(f)).toFixed(2));
+    },
+  },
+  // The moon waning from full to dark.
+  pagan: {
+    svg: `<svg width="30" height="30" viewBox="0 0 36 36">
+      <circle cx="18" cy="18" r="12" fill="#13201b" stroke="#2c4439" stroke-width=".8"/>
+      <path class="moonlit" fill="#eef0e2"/>
+    </svg>`,
+    draw(el, f) {
+      // The lit side keeps the left edge; the shadow sweeps in from the right (a waning moon).
+      const a = f * Math.PI, rx = Math.abs(Math.cos(a)) * 12;
+      const lit = el.querySelector('.moonlit');
+      lit.setAttribute('d', f >= .995 ? '' : `M18 6A12 12 0 0 0 18 30A${rx.toFixed(3)} 12 0 0 ${a < Math.PI / 2 ? 0 : 1} 18 6Z`);
+    },
+  },
+  // A black candle with a blood-red flame, burning down.
+  kvlt: {
+    svg: `<svg width="16" height="35" viewBox="0 0 20 44">
+      <defs><linearGradient id="omenWax" x1="0" x2="1"><stop offset="0" stop-color="#3a3233"/><stop offset=".35" stop-color="#141011"/><stop offset="1" stop-color="#000"/></linearGradient></defs>
+      <ellipse cx="10" cy="41" rx="9" ry="2.4" fill="#2f2525"/>
+      <g class="wax" style="transform-origin: 10px 40px"><rect x="5" y="14" width="10" height="26" rx="1.2" fill="url(#omenWax)"/></g>
+      <g class="top" style="transform: translateY(14px)">
+        <ellipse cx="10" cy="0" rx="5" ry="1.4" fill="#1b1616"/>
+        <path fill="#0d0a0a" d="M13.4 0v5a1 1 0 0 0 2 0V0zM5.3 0v2.6a.9.9 0 0 1-1.8 0V0z"/>
+        <line x1="10" y1="0" x2="10" y2="-3.8" stroke="#000" stroke-width=".9" stroke-linecap="round"/>
+        <g class="flame">
+          <path fill="#b3121a" d="M10-14C13-9 13.5-6.5 10-4 6.5-6.5 7-9 10-14z"/>
+          <path fill="#ff6a3c" d="M10-10.5c1.5 2.5 1.6 4 0 5.3-1.6-1.3-1.5-2.8 0-5.3z"/>
+        </g>
+      </g>
+    </svg>`,
+    draw(el, f) {
+      el.querySelector('.wax').style.transform = `scaleY(${(1 - f * .85).toFixed(4)})`;
+      el.querySelector('.top').style.transform = `translateY(${(14 + f * 22).toFixed(2)}px)`;
+    },
+  },
+};
+let omenRealm = null, omenFrac = 0;
+function drawOmen(r, f) {
+  const box = $('omen');
+  if (!OMENS[r]) return;
+  // A new realm, or a new song: put up a fresh one at once instead of animating back.
+  if (r !== omenRealm) { omenRealm = r; box.innerHTML = OMENS[r].svg; box.classList.add('reset'); }
+  if (f < omenFrac - .05) box.classList.add('reset');
+  OMENS[r].draw(box, f);
+  omenFrac = f;
+  if (box.classList.contains('reset')) { box.getBoundingClientRect(); requestAnimationFrame(() => box.classList.remove('reset')); }
+}
+
 $('progTime').addEventListener('click', () => {
   timeStyle = (timeStyle + 1) % TIME_STYLES.length;
   safeSet('fr_time', String(timeStyle));
