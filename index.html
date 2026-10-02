@@ -635,7 +635,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.8.0';
+const VERSION = '1.8.1';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -938,7 +938,7 @@ function showRealm(r, how) {
   if (r !== from) diag('realm: ' + r.short + (how ? ' (' + how + ')' : ''));
   // A short slide in from the side it came from (tabs and the portal; swiping animates itself).
   if (how === 'tab' || how === 'portal') slideIn(REALMS.indexOf(r) > REALMS.indexOf(from) ? 1 : -1);
-  if (r !== from || how === 'title screen') realmFx(r);
+  // (themed realm transitions removed for now — just the quiet slide)
 }
 function slideIn(dir) {
   if (reduceMotion() || !dir) return;

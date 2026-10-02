@@ -1,7 +1,7 @@
 // Keeps the app's own files on the phone so it opens instantly, even with no signal.
 // The page and the station list are fetched fresh when online (so updates show up right away);
 // the saved copies are only used when the network fails. Streams are never cached.
-const CACHE = 'fr-v12';   // bump when cached files change (keep the 'fr-' start)
+const CACHE = 'fr-v13';   // bump when cached files change (keep the 'fr-' start)
 const FILES = ['./', 'index.html', 'stations.json', 'manifest.webmanifest', 'favicon.png', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
