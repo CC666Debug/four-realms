@@ -240,6 +240,18 @@
     box-shadow: 0 10px 12px -6px var(--top-bg);
   }
   @media (max-height: 560px) { .top { position: static; box-shadow: none; } }
+  /* The header area slides away as you scroll down the list, and snaps back on any scroll up. */
+  .topbar { display: flex; flex-direction: column; gap: 8px; transition: opacity .2s ease; }
+  .top { transition: transform .26s ease; }   /* a transform doesn't change page height, so no scroll feedback */
+  .top.collapsed { transform: translateY(calc(-1 * var(--barh, 110px))); }
+  .top.collapsed .topbar { opacity: 0; pointer-events: none; }
+  @media (prefers-reduced-motion: reduce) { .topbar, .top { transition: none; } }
+  /* A neon volume meter beside the speaker icon: 5 bars, lit to the current level. */
+  .vmeter { display: inline-flex; align-items: flex-end; gap: 2px; height: 18px; margin-left: 1px; flex: none; }
+  .vmeter i { width: 3px; border-radius: 1.5px; background: var(--line); transition: background .12s, box-shadow .12s; }
+  .vmeter i:nth-child(1) { height: 5px; } .vmeter i:nth-child(2) { height: 8px; } .vmeter i:nth-child(3) { height: 11px; } .vmeter i:nth-child(4) { height: 14px; } .vmeter i:nth-child(5) { height: 17px; }
+  .vmeter i.on { background: var(--neon); box-shadow: 0 0 5px var(--neon); }
+  @media (max-width: 380px) { .row .icon-btn { padding: 6px; } .vmeter { height: 16px; margin-left: 0; } .volnum { min-width: 30px; margin-left: 0; font-size: 13px; } }
   .finder { display: flex; flex-direction: column; gap: 8px; }
   .search-row { display: flex; gap: 8px; }
   .search-row .search { flex: 1; min-width: 0; }
@@ -473,6 +485,7 @@
 <body>
 <main id="main">
   <div class="top">
+  <div class="topbar">
   <header>
     <button class="logo" id="logo" aria-haspopup="dialog" aria-label="Switch realm"><span id="logoIcon"></span><span class="nm" id="logoName"></span><span class="caret" aria-hidden="true">▾</span></button>
     <button class="cast-btn" id="castBtn" aria-label="Cast to a speaker">
@@ -486,6 +499,7 @@
     <button class="pill" id="premiumBtn">⭐ Add Premium</button>
   </div>
 
+  </div>
   <div class="notice" id="notice" hidden></div>
 
   <section class="player">
@@ -522,6 +536,7 @@
       <button class="icon-btn" id="muteBtn" aria-label="Mute">
         <svg viewBox="0 0 24 24" fill="currentColor" id="volIcon"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
       </button>
+      <span class="vmeter" id="vMeter" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
       <span class="volnum" id="volNum" aria-hidden="true"></span>
       <input type="range" id="vol" min="0" max="100" value="80" aria-label="Volume">
     </div>
@@ -635,7 +650,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.8.1';
+const VERSION = '1.8.2';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1456,6 +1471,7 @@ els.disconnectBtn.addEventListener('click', () => { if (ctx && ctx.getCurrentSes
     fill.style.height = els.vol.value + '%';
     pct.textContent = els.vol.value + '%';
     $('volNum').textContent = els.vol.value + '%';
+    paintVMeter();
     who.textContent = castConnected() ? 'Speaker' : 'Phone';
     clearTimeout(hideTimer);
     hideTimer = setTimeout(() => { if (!pressing) pop.hidden = true; }, 900);
@@ -2138,6 +2154,13 @@ const ICON_MUTED = '<path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.
 
 let lastActiveId = null, lastPlayingRealm = null;
 let waitText = '', waitSince = 0;
+function paintVMeter() {
+  const m = $('vMeter'); if (!m) return;
+  const muted = castConnected() ? (player && player.isMuted) : audio.muted;
+  const lit = muted ? 0 : Math.round((+els.vol.value) / 20);
+  const bars = m.children;
+  for (let i = 0; i < bars.length; i++) bars[i].classList.toggle('on', i < lit);
+}
 function render() {
   const CS = window.cast && cast.framework && cast.framework.CastState;
   const state = ctx ? ctx.getCastState() : null;
@@ -2195,6 +2218,7 @@ function render() {
   const muted = castConnected() ? player && player.isMuted : audio.muted;
   els.volIcon.innerHTML = muted ? ICON_MUTED : ICON_VOL;
   $('volNum').textContent = muted ? 'off' : els.vol.value + '%';
+  paintVMeter();
   els.muteBtn.setAttribute('aria-label', (muted ? 'Unmute' : 'Mute') + '. Volume ' + els.vol.value + '%. Hold and slide to change');
   if (castConnected() && player && !volTimer) els.vol.value = Math.round((player.volumeLevel || 0) * 100);
   document.title = s && (live || localStation) ? s.name + ' · Four Realms' : 'Four Realms';
@@ -2357,6 +2381,27 @@ async function start() {
   document.head.appendChild(cs);
 }
 start();
+
+// Hide the header on scroll down, bring it back on any scroll up (keeps the player and search in reach).
+{
+  const topEl = document.querySelector('.top'), barEl = document.querySelector('.topbar');
+  if (topEl && barEl) {
+    const measure = () => { if (!topEl.classList.contains('collapsed')) topEl.style.setProperty('--barh', (barEl.offsetHeight + 8) + 'px'); };
+    measure();
+    addEventListener('load', measure);
+    addEventListener('resize', measure);
+    if (window.ResizeObserver) new ResizeObserver(measure).observe(barEl);
+    let lastY = scrollY;
+    addEventListener('scroll', () => {
+      const y = scrollY;
+      if (y < 70) { topEl.classList.remove('collapsed'); lastY = y; return; }
+      const dy = y - lastY;
+      if (dy > 6) { topEl.classList.add('collapsed'); lastY = y; }           // scrolled down a bit: hide
+      else if (dy < -6) { topEl.classList.remove('collapsed'); lastY = y; }  // scrolled up a bit: show
+      // small jitters leave the reference point alone, so movement accumulates
+    }, { passive: true });
+  }
+}
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 </script>
