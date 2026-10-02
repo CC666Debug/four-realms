@@ -91,9 +91,9 @@
 }
 },
 {
-"id": "synth/1cc7fcc8",
-"name": "Halloween - Dark Hollow Radio (Gothic Americana)",
-"group": "Halloween",
+"id": "halloween/1cc7fcc8",
+"name": "Dark Hollow Radio (Gothic Americana)",
+"group": "More Halloween",
 "url": "https://ec3.yesstreaming.net:1970/stream",
 "type": "audio/mpeg",
 "meta": {
@@ -101,32 +101,32 @@
 "u": "https://ec3.yesstreaming.net:1970/status-json.xsl",
 "m": "/stream"
 },
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/56643f73",
-"name": "Halloween - DeadAir - The Sound of Halloween",
-"group": "Halloween",
+"id": "halloween/56643f73",
+"name": "DeadAir - The Sound of Halloween",
+"group": "More Halloween",
 "url": "https://streaming.live365.com/a43471",
 "type": "audio/mpeg",
 "meta": {
 "k": "live365",
 "id": "a43471"
 },
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/8717733a",
-"name": "Halloween - Ghost Wire (Haunted Ambient)",
-"group": "Halloween",
+"id": "halloween/8717733a",
+"name": "Ghost Wire (Haunted Ambient)",
+"group": "More Halloween",
 "url": "https://signalcity.tv/ghost_wire.mp3",
 "type": "audio/mpeg",
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/8c1bf0c7",
-"name": "Halloween - Halloween Graveyard Radio",
-"group": "Halloween",
+"id": "halloween/8c1bf0c7",
+"name": "Halloween Graveyard Radio",
+"group": "More Halloween",
 "url": "https://puma.streemlion.com:4500/stream",
 "type": "audio/mpeg",
 "meta": {
@@ -134,12 +134,12 @@
 "u": "https://puma.streemlion.com:4500/status-json.xsl",
 "m": "/stream"
 },
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/5a923e9f",
-"name": "Halloween - Holidaze Halloween Radio",
-"group": "Halloween",
+"id": "halloween/5a923e9f",
+"name": "Holidaze Halloween Radio",
+"group": "More Halloween",
 "url": "https://ec3.yesstreaming.net:4355/stream",
 "type": "audio/mpeg",
 "meta": {
@@ -147,12 +147,12 @@
 "u": "https://ec3.yesstreaming.net:4355/status-json.xsl",
 "m": "/stream"
 },
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/326038d4",
-"name": "Halloween - Horror Theatre (Old Time Radio)",
-"group": "Halloween",
+"id": "halloween/326038d4",
+"name": "Horror Theatre (Old Time Radio)",
+"group": "More Halloween",
 "url": "https://ec4.yesstreaming.net:1230/stream",
 "type": "audio/mpeg",
 "meta": {
@@ -160,73 +160,73 @@
 "u": "https://ec4.yesstreaming.net:1230/status-json.xsl",
 "m": "/stream"
 },
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/e2e8056a",
-"name": "Halloween - HorrorAndHalloweenRadio.com",
-"group": "Halloween",
+"id": "halloween/e2e8056a",
+"name": "HorrorAndHalloweenRadio.com",
+"group": "More Halloween",
 "url": "http://s2.voscast.com:11034/;stream1741147157014/1",
 "type": "audio/mpeg",
 "insecure": true,
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/24fe07fe",
-"name": "Halloween - iHeart Halloween Radio",
-"group": "Halloween",
+"id": "halloween/24fe07fe",
+"name": "iHeart Halloween Radio",
+"group": "More Halloween",
 "url": "https://stream.revma.ihrhls.com/zc7001/hls.m3u8?streamid=7001",
 "type": "application/x-mpegURL",
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/ab14974c",
-"name": "Halloween - melyh Halloween",
-"group": "Halloween",
+"id": "halloween/ab14974c",
+"name": "melyh Halloween",
+"group": "More Halloween",
 "url": "https://stream.zeno.fm/ignqlnschasuv",
 "type": "audio/mpeg",
 "meta": {
 "k": "zeno",
 "id": "ignqlnschasuv"
 },
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/43380b3d",
-"name": "Halloween - Monstromental",
-"group": "Halloween",
+"id": "halloween/43380b3d",
+"name": "Monstromental",
+"group": "More Halloween",
 "url": "https://radio.dripfeed.net/listen/monstromental/radio.mp3",
 "type": "audio/mpeg",
 "meta": {
 "k": "azura",
 "u": "https://radio.dripfeed.net/api/nowplaying_static/monstromental.json"
 },
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/4de8469c",
-"name": "Halloween - myHolidaysEtc (Halloween season)",
-"group": "Halloween",
+"id": "halloween/4de8469c",
+"name": "myHolidaysEtc (Halloween season)",
+"group": "More Halloween",
 "url": "https://ec4.yesstreaming.net/myHolidaysEtc1",
 "type": "audio/mpeg",
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/02c0ce73",
-"name": "Halloween - Nightride FM Horrorsynth",
-"group": "Halloween",
+"id": "halloween/02c0ce73",
+"name": "Nightride FM Horrorsynth",
+"group": "More Halloween",
 "url": "https://stream.nightride.fm/horrorsynth.mp3",
 "type": "audio/mpeg",
 "meta": {
 "k": "nightride",
 "id": "horrorsynth"
 },
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/de38af30",
-"name": "Halloween - Old Time Radio Horror & Sci-Fi (ADRN Ch 4)",
-"group": "Halloween",
+"id": "halloween/de38af30",
+"name": "Old Time Radio Horror & Sci-Fi (ADRN Ch 4)",
+"group": "More Halloween",
 "url": "http://abm21.com.au:8000/CONTAINER5",
 "type": "audio/mpeg",
 "insecure": true,
@@ -235,70 +235,70 @@
 "u": "http://abm21.com.au:8000/status-json.xsl",
 "m": "/CONTAINER5"
 },
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/b841c57d",
-"name": "Halloween - RadCap Horror Punk",
-"group": "Halloween",
+"id": "halloween/b841c57d",
+"name": "RadCap Horror Punk",
+"group": "More Halloween",
 "url": "http://79.120.77.11:8002/horrorpunk",
 "type": "audio/aac",
 "insecure": true,
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/18e75026",
-"name": "Halloween - Radio Caprice Psychobilly",
-"group": "Halloween",
+"id": "halloween/18e75026",
+"name": "Radio Caprice Psychobilly",
+"group": "More Halloween",
 "url": "http://79.111.119.111:8002/psychobilly",
 "type": "audio/aac",
 "insecure": true,
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/72d2a650",
-"name": "Halloween - Radio Psychobilly",
-"group": "Halloween",
+"id": "halloween/72d2a650",
+"name": "Radio Psychobilly",
+"group": "More Halloween",
 "url": "https://radio-psychobilly.stream.laut.fm/radio-psychobilly",
 "type": "audio/mpeg",
 "meta": {
 "k": "laut",
 "id": "radio-psychobilly"
 },
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/4787dc2c",
-"name": "Halloween - SomaFM Doomed (MP3 256)",
-"group": "Halloween",
+"id": "halloween/4787dc2c",
+"name": "SomaFM Doomed (MP3 256)",
+"group": "More Halloween",
 "url": "https://ice5.somafm.com/doomed-256-mp3",
 "type": "audio/mpeg",
 "meta": {
 "k": "soma",
 "id": "doomed"
 },
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/d5f134e3",
-"name": "Halloween - Strange Radio (Pumpkin FM)",
-"group": "Halloween",
+"id": "halloween/d5f134e3",
+"name": "Strange Radio (Pumpkin FM)",
+"group": "More Halloween",
 "url": "https://cast2.asurahosting.com/proxy/strangeradio/stream",
 "type": "audio/mpeg",
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/3a870d4d",
-"name": "Halloween - The Current Halloween",
-"group": "Halloween",
+"id": "halloween/3a870d4d",
+"name": "The Current Halloween",
+"group": "More Halloween",
 "url": "https://currenthalloween.stream.publicradio.org/currenthalloween.mp3",
 "type": "audio/mpeg",
-"realm": "synth"
+"realm": "halloween"
 },
 {
-"id": "synth/c614660c",
-"name": "Halloween - Zombie Dog Radio (Psychobilly)",
-"group": "Halloween",
+"id": "halloween/c614660c",
+"name": "Zombie Dog Radio (Psychobilly)",
+"group": "More Halloween",
 "url": "https://fast.citrus3.com:8556/stream",
 "type": "audio/aac",
 "meta": {
@@ -306,91 +306,7 @@
 "u": "https://fast.citrus3.com:8556/status-json.xsl",
 "m": "/stream"
 },
-"realm": "synth"
-},
-{
-"id": "synth/faabe534",
-"name": "Halloween Radio - Atmosphere (MP3 128)",
-"group": "Halloween",
-"url": "https://radio1.streamserver.link/radio/8040/hra-mp3",
-"type": "audio/mpeg",
-"meta": {
-"k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_atmosphere.json"
-},
-"realm": "synth"
-},
-{
-"id": "synth/e22f620f",
-"name": "Halloween Radio - Classics (MP3 128)",
-"group": "Halloween",
-"url": "https://radio1.streamserver.link/radio/8180/radio.mp3",
-"type": "audio/mpeg",
-"meta": {
-"k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_classics.json"
-},
-"realm": "synth"
-},
-{
-"id": "synth/d8472744",
-"name": "Halloween Radio - Instrumental (AAC 64)",
-"group": "Halloween",
-"url": "https://radio1.streamserver.link/radio/8100/hri-aac",
-"type": "audio/aac",
-"meta": {
-"k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_instrumental.json"
-},
-"realm": "synth"
-},
-{
-"id": "synth/6e13a4a2",
-"name": "Halloween Radio - Kids (MP3 128)",
-"group": "Halloween",
-"url": "https://radio1.streamserver.link/radio/8030/hrk-mp3",
-"type": "audio/mpeg",
-"meta": {
-"k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_kids.json"
-},
-"realm": "synth"
-},
-{
-"id": "synth/128f056d",
-"name": "Halloween Radio - Main (MP3 128)",
-"group": "Halloween",
-"url": "https://radio1.streamserver.link/radio/8000/hrm-mp3",
-"type": "audio/mpeg",
-"meta": {
-"k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_main.json"
-},
-"realm": "synth"
-},
-{
-"id": "synth/2b5fd2e1",
-"name": "Halloween Radio - Movies (MP3 128)",
-"group": "Halloween",
-"url": "https://radio1.streamserver.link/radio/8050/hrs-mp3",
-"type": "audio/mpeg",
-"meta": {
-"k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_movies.json"
-},
-"realm": "synth"
-},
-{
-"id": "synth/fe65cb44",
-"name": "Halloween Radio - Oldies (MP3 128)",
-"group": "Halloween",
-"url": "https://radio1.streamserver.link/radio/8020/hro-mp3",
-"type": "audio/mpeg",
-"meta": {
-"k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_oldies.json"
-},
-"realm": "synth"
+"realm": "halloween"
 },
 {
 "id": "synth/5a559093",

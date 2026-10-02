@@ -15,8 +15,8 @@ The four realms are also their own apps: [Halloween Caster](https://cc666debug.g
 
 ## The realms
 
-- **🎃 Halloween:** every free Halloween Radio channel, with a countdown to Halloween. If you added Premium in Halloween Caster on this phone, it shows up here too.
-- **🌆 Synth:** hundreds of synthwave, darkwave, Halloween and chiptune stations.
+- **🎃 Halloween:** every free Halloween Radio channel first, then 20 more Halloween stations (horror, psychobilly, old-time radio and more), with a countdown to Halloween. If you added Premium in Halloween Caster on this phone, it shows up here too.
+- **🌆 Synth:** hundreds of synthwave, darkwave and chiptune stations.
 - **🌙 Pagan:** pagan, Wiccan, Norse, Celtic and medieval folk, with the moon phase and the next sabbat.
 - **⛧ Kvlt:** black metal and its neighbours, with the moon phase and the next unholy date.
 

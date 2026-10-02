@@ -430,7 +430,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -465,11 +465,13 @@ const SIGIL = '<svg class="sigil" viewBox="0 0 100 100" aria-hidden="true"><g fi
 const REALMS = [
   { id: 'halloween', name: 'Halloween Caster', short: 'Halloween', icon: '🎃', badge: '🎃', color: '#120d17',
     tag: 'Happy haunting!',
-    genres: [{ id: 'Halloween Radio', label: '🎃 Halloween Radio', icon: '🎃' }] },
+    genres: [
+      { id: 'Halloween Radio', label: '🎃 Halloween Radio', icon: '🎃' },
+      { id: 'More Halloween', label: '👻 More Halloween', icon: '👻' },
+    ] },
   { id: 'synth', name: 'Synth Caster', short: 'Synth', icon: '🌆', badge: '🌆', color: '#0d0a1a',
     tag: 'Neon never dies!',
     genres: [
-      { id: 'Halloween', label: '🎃 Halloween', icon: '🎃' },
       { id: 'Synthwave / Retrowave', label: '🌆 Synthwave', icon: '🌆' },
       { id: 'Darkwave / Goth / Industrial', label: '🦇 Darkwave & Goth', icon: '🦇' },
       { id: 'Chiptune / Game', label: '👾 Chiptune & Game', icon: '👾' },
@@ -536,7 +538,7 @@ const SKY = {
     if (today > h) h = new Date(today.getFullYear() + 1, 9, 31);
     const d = Math.round((h - today) / 86400000);
     return `<span>${d === 0 ? '🎃 <b>Happy Halloween!</b> 🦇' : d === 1 ? '🎃 <b>Halloween is tomorrow!</b>' : `🎃 <b>${plural(d, 'day')}</b> until Halloween`}</span>`
-      + '<span>Halloween Radio</span>';
+
   },
   synth: () => '',
   pagan() {
@@ -605,8 +607,7 @@ function renderChips() {
   const mine = STATIONS.filter(s => s.realm === realm.id);
   const counts = { all: mine.length, favs: mine.filter(s => favs.has(s.id)).length };
   realm.genres.forEach(g => { counts[g.id] = mine.filter(s => s.group === g.id).length; });
-  // A realm with only one genre (Halloween) doesn't need a chip for it.
-  const chips = [{ id: 'all', label: 'All' }, { id: 'favs', label: '★ Favorites' }, ...(realm.genres.length > 1 ? realm.genres : [])];
+  const chips = [{ id: 'all', label: 'All' }, { id: 'favs', label: '★ Favorites' }, ...realm.genres];
   const v = view();
   els.chips.innerHTML = '';
   chips.forEach(c => {
@@ -1530,10 +1531,14 @@ async function start() {
     about: 'For supporters, from your Halloween Caster', url: premium, type: /mp3/i.test(premium) ? 'audio/mpeg' : 'audio/aac',
     meta: { k: 'azura', u: 'https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_premium.json' } });
   STATIONS.forEach((s, i) => {
-    // Halloween Radio's channels keep the station's own order (Main first), like in Halloween Caster.
-    s.sortName = s.realm === 'halloween' ? String(i).padStart(3, '0') : norm(s.name).replace(/^[^\p{L}\p{N}]+/u, '');
+    // Halloween Radio's own channels come first, in the station's order (Main first), like in Halloween Caster.
+    const name = norm(s.name).replace(/^[^\p{L}\p{N}]+/u, '');
+    s.sortName = s.group === 'Halloween Radio' ? '0' + String(i).padStart(3, '0') : s.realm === 'halloween' ? '1' + name : name;
     s.search = norm(s.name + ' ' + s.group + ' ' + (s.tags || '') + ' ' + (s.about || ''));
   });
+  const moved = id => id && id.startsWith('synth/') && STATIONS.some(s => s.id === 'halloween/' + id.slice(6)) ? 'halloween/' + id.slice(6) : id;
+  if ([...favs].some(id => moved(id) !== id)) { favs = new Set([...favs].map(moved)); safeSet('fr_favs', JSON.stringify([...favs])); }
+  if (moved(safeGet('fr_station')) !== safeGet('fr_station')) safeSet('fr_station', moved(safeGet('fr_station')));
   REALMS.forEach(r => {
     const v = views[r.id];
     if (v.filter !== 'all' && v.filter !== 'favs' && !r.genres.some(g => g.id === v.filter)) v.filter = 'all';
