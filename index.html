@@ -695,7 +695,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.9.1';
+const VERSION = '1.9.2';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2440,7 +2440,9 @@ start();
   if (topEl && mainEl) {
     let mini = false, vt = null;
     const apply = on => {
-      if (on) { const h = topEl.offsetHeight; topEl.classList.add('mini'); mainEl.style.paddingBottom = Math.max(0, h - topEl.offsetHeight) + 'px'; }
+      // Pad the bottom first, so the page never gets shorter than the screen mid-swap (on short lists that
+      // would snap the scroll back to the top and bounce between mini and full).
+      if (on) { const h = topEl.offsetHeight; mainEl.style.paddingBottom = h + 'px'; topEl.classList.add('mini'); mainEl.style.paddingBottom = Math.max(0, h - topEl.offsetHeight) + 'px'; }
       else { topEl.classList.remove('mini'); mainEl.style.paddingBottom = ''; }
     };
     const setMini = on => {
