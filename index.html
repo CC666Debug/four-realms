@@ -472,7 +472,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.2.0';
+const VERSION = '1.2.1';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -499,7 +499,7 @@ function diag(msg) {
 }
 // How it was opened: its own app window (installed) or an ordinary browser tab.
 const openedAs = ['standalone', 'minimal-ui', 'fullscreen', 'browser'].find(m => matchMedia('(display-mode: ' + m + ')').matches) || 'unknown';
-diag('── opened · Four Realms v' + VERSION + ' · ' + (openedAs === 'browser' ? 'browser tab' : 'app window (' + openedAs + ')')
+diag('── opened · Four Realms v' + VERSION + ' · ' + (window.AndroidCast ? 'Four Realms Android app' : openedAs === 'browser' ? 'browser tab' : 'app window (' + openedAs + ')')
   + (document.referrer ? ' · from ' + document.referrer : '') + ' · ' + navigator.userAgent);
 
 // ── The four realms ─────────────────────────────
@@ -1743,7 +1743,8 @@ async function start() {
   if (!gate.hidden) openGate();   // again, now with station counts
   // The cast library loads after the station list, so a rejoined speaker can be matched to its station.
   const cs = document.createElement('script');
-  cs.src = 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1';
+  // Inside the Android app, casting goes through Android's own Google Cast service instead.
+  cs.src = window.AndroidCast ? 'android-cast.js' : 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1';
   cs.onerror = () => { diag('cast library failed to load'); els.castLabel.textContent = 'Unavailable'; };
   document.head.appendChild(cs);
 }
