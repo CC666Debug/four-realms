@@ -246,7 +246,7 @@
   .icon-btn.mini-cast { display: none; }
   html { overflow-anchor: none; }   /* stop the browser's scroll anchoring from yanking the page while the top shrinks */
   .top.mini { gap: 6px; padding-top: max(6px, env(safe-area-inset-top)); padding-bottom: 6px; }
-  .top.mini .topbar, .top.mini .notice, .top.mini .now .label, .top.mini .now .next, .top.mini .links,
+  .top.mini .sky, .top.mini .tools, .top.mini .notice, .top.mini .now .label, .top.mini .now .next, .top.mini .links,
   .top.mini #shuffleBtn, .top.mini #prevBtn, .top.mini #muteBtn, .top.mini .volnum, .top.mini #disconnectBtn,
   .top.mini .prog .omen, .top.mini .prog-time, .top.mini .chips, .top.mini .sort { display: none !important; }
   .top.mini .player { position: relative; flex-direction: row; align-items: center; gap: 6px; padding: 5px 4px 5px 5px; border-radius: 12px; overflow: hidden; }
@@ -260,7 +260,8 @@
   .top.mini .play svg { width: 20px; height: 20px; }
   .top.mini .row .icon-btn { padding: 7px; }
   .top.mini .row .icon-btn svg { width: 20px; height: 20px; }
-  .top.mini:has(.cast-btn.connected) .icon-btn.mini-cast { display: grid; color: var(--neon); filter: drop-shadow(0 0 3px var(--neon)); }
+  .top.mini .topbar { gap: 0; }
+  .top.mini header { zoom: .8; }   /* the top line stays, just smaller */
   .top.mini .prog { position: absolute; left: 0; right: 0; bottom: 0; gap: 0; }
   .top.mini .prog .bar { height: 2px; border-radius: 0; background: transparent; }
   .top.mini .prog .bar i { background: var(--neon); box-shadow: 0 0 4px var(--neon); }
@@ -271,6 +272,7 @@
   /* The shrink is a morph: the art, names, buttons and search glide into their mini places while the panel
      closes up from the bottom and the list slides up with it (names are only set while it runs). */
   .top.vt { view-transition-name: mini-top; }
+  .top.vt header { view-transition-name: mini-head; }
   .top.vt #badge { view-transition-name: mini-badge; }
   .top.vt #nowName { view-transition-name: mini-name; }
   .top.vt #nowSong { view-transition-name: mini-song; }
@@ -695,7 +697,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.9.2';
+const VERSION = '1.10.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1331,7 +1333,7 @@ function loadStation(s) {
   const md = new chrome.cast.media.GenericMediaMetadata();
   md.title = s.name;
   md.subtitle = realmById(s.realm).name + ' · ' + shortGenre(s);
-  if (s === metaStation && songArt) md.images = [new chrome.cast.Image(songArt)];
+  md.images = [new chrome.cast.Image(s === metaStation && songArt ? songArt : new URL('icon-512.png', location.href).href)];   // the song's cover, or the app icon
   info.metadata = md;
   const req = new chrome.cast.media.LoadRequest(info);
   req.autoplay = true;
