@@ -10,7 +10,9 @@
 "meta": {
 "k": "azura",
 "u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_main.json"
-}
+},
+"lite": "https://radio1.streamserver.link/radio/8000/hrm-aac",
+"spine": "hrm"
 },
 {
 "realm": "halloween",
@@ -23,7 +25,9 @@
 "meta": {
 "k": "azura",
 "u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_oldies.json"
-}
+},
+"lite": "https://radio1.streamserver.link/radio/8020/hro-aac",
+"spine": "hro"
 },
 {
 "realm": "halloween",
@@ -49,7 +53,9 @@
 "meta": {
 "k": "azura",
 "u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_kids.json"
-}
+},
+"lite": "https://radio1.streamserver.link/radio/8030/hrk-aac",
+"spine": "hrk"
 },
 {
 "realm": "halloween",
@@ -62,7 +68,9 @@
 "meta": {
 "k": "azura",
 "u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_movies.json"
-}
+},
+"lite": "https://radio1.streamserver.link/radio/8050/hrs-aac",
+"spine": "hrs"
 },
 {
 "realm": "halloween",
@@ -75,7 +83,9 @@
 "meta": {
 "k": "azura",
 "u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_atmosphere.json"
-}
+},
+"lite": "https://radio1.streamserver.link/radio/8040/hra-aac",
+"spine": "hra"
 },
 {
 "realm": "halloween",
@@ -88,7 +98,8 @@
 "meta": {
 "k": "azura",
 "u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_instrumental.json"
-}
+},
+"spine": "hri"
 },
 {
 "id": "halloween/1cc7fcc8",
@@ -3338,6 +3349,935 @@
 "realm": "synth"
 },
 {
+"id": "synth/dd3aa569",
+"name": "Darksynth",
+"group": "Synthwave / Retrowave",
+"about": "Synthwave: Carpenter Brut, Dance With the Dead, Danger",
+"url": "https://darksynth.stream.laut.fm/darksynth",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "darksynth"
+},
+"realm": "synth"
+},
+{
+"id": "synth/41fe6740",
+"name": "Synthwave",
+"group": "Synthwave / Retrowave",
+"about": "Synthwave: Bourgeoisie, DANCE WITH THE DEAD, Dynatron",
+"url": "https://synthwave.stream.laut.fm/synthwave",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "synthwave"
+},
+"realm": "synth"
+},
+{
+"id": "synth/b1d8a16e",
+"name": "Eltronic",
+"group": "Synthwave / Retrowave",
+"about": "Synthwave: Daft Punk, Essenger, Mr.Kitty",
+"url": "https://eltronic.stream.laut.fm/eltronic",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "eltronic"
+},
+"realm": "synth"
+},
+{
+"id": "synth/f9ed9727",
+"name": "Boombar Radio",
+"group": "Synthwave / Retrowave",
+"about": "Synthwave: Com Truise, Dan Terminus, Embryonik",
+"url": "https://boombarradio.stream.laut.fm/boombarradio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "boombarradio"
+},
+"realm": "synth"
+},
+{
+"id": "synth/3f751858",
+"name": "Lightyeartraxx",
+"group": "Synthwave / Retrowave",
+"about": "Synthwave: Daft Punk, Kavinsky & Lovefoxxx, Klaus Doldinger",
+"url": "https://lightyeartraxx.stream.laut.fm/lightyeartraxx",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "lightyeartraxx"
+},
+"realm": "synth"
+},
+{
+"id": "synth/271600b7",
+"name": "E Tronic FM",
+"group": "Synth-Pop & New Wave",
+"about": "Synth-pop and new wave: (E)TRONIC.FM, Blancmange, Bronski Beat",
+"url": "https://e-tronic-fm.stream.laut.fm/e-tronic-fm",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "e-tronic-fm"
+},
+"realm": "synth"
+},
+{
+"id": "synth/22049e29",
+"name": "Radio Mic",
+"group": "Synth-Pop & New Wave",
+"about": "Synth-pop and new wave: A Flock Of Seagulls, Desireless, Howard Jones",
+"url": "https://radio-mic.stream.laut.fm/radio-mic",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "radio-mic"
+},
+"realm": "synth"
+},
+{
+"id": "synth/5b847fef",
+"name": "Depeche Mode Universe",
+"group": "Synth-Pop & New Wave",
+"about": "Synth-pop and new wave",
+"url": "https://depeche-mode-universe.stream.laut.fm/depeche-mode-universe",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "depeche-mode-universe"
+},
+"realm": "synth"
+},
+{
+"id": "synth/3cfc82ca",
+"name": "Secondfuture",
+"group": "Synth-Pop & New Wave",
+"about": "Synth-pop and new wave: David Carretta, Depeche Mode, Human Body",
+"url": "https://secondfuture.stream.laut.fm/secondfuture",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "secondfuture"
+},
+"realm": "synth"
+},
+{
+"id": "synth/7b62f49c",
+"name": "Synthesizergreatest",
+"group": "Synth-Pop & New Wave",
+"about": "Synth-pop and new wave: Francis Rimbert, Frederick Rousseau, Jean Michel Jarre",
+"url": "https://synthesizergreatest.stream.laut.fm/synthesizergreatest",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "synthesizergreatest"
+},
+"realm": "synth"
+},
+{
+"id": "synth/ababed02",
+"name": "Synthie Pop",
+"group": "Synth-Pop & New Wave",
+"about": "Synth-pop and new wave: Boy Harsher, CHVRCHES, Empire Of The Sun",
+"url": "https://synthie-pop.stream.laut.fm/synthie-pop",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "synthie-pop"
+},
+"realm": "synth"
+},
+{
+"id": "synth/34f9cb56",
+"name": "New Wave",
+"group": "Synth-Pop & New Wave",
+"about": "Synth-pop and new wave: Chris And Cosey, Fischer Z, The B-52's",
+"url": "https://new-wave.stream.laut.fm/new-wave",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "new-wave"
+},
+"realm": "synth"
+},
+{
+"id": "synth/91b37117",
+"name": "Anderswelt",
+"group": "Synth-Pop & New Wave",
+"about": "Synth-pop and new wave: 1000 Ohm, B-Movie, Depeche Mode",
+"url": "https://anderswelt.stream.laut.fm/anderswelt",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "anderswelt"
+},
+"realm": "synth"
+},
+{
+"id": "synth/26bc0c02",
+"name": "Numanme",
+"group": "Synth-Pop & New Wave",
+"about": "Synth-pop and new wave: B-Movie, Color Theory, Das Ich",
+"url": "https://numanme.stream.laut.fm/numanme",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "numanme"
+},
+"realm": "synth"
+},
+{
+"id": "synth/6f6a171b",
+"name": "Operating Generating",
+"group": "Synth-Pop & New Wave",
+"about": "Synth-pop and new wave: Crystalline Stricture, Kloq, Kompromat",
+"url": "https://operating-generating.stream.laut.fm/operating-generating",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "operating-generating"
+},
+"realm": "synth"
+},
+{
+"id": "synth/3e606454",
+"name": "Infinity Sector",
+"group": "Synth-Pop & New Wave",
+"about": "Synth-pop and new wave: Covenant, Empathy Test, Ginger Snap5",
+"url": "https://infinity-sector.stream.laut.fm/infinity-sector",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "infinity-sector"
+},
+"realm": "synth"
+},
+{
+"id": "synth/c4f4f3ba",
+"name": "Arsenic Radio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Alan Vega, Bauhaus, Cabaret Voltaire",
+"url": "https://arsenicradio.stream.laut.fm/arsenicradio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "arsenicradio"
+},
+"realm": "synth"
+},
+{
+"id": "synth/055f9c5f",
+"name": "Bluenightshadow",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Deathtrippers, Draining Kiss, Fashion Cult",
+"url": "https://bluenightshadow.stream.laut.fm/bluenightshadow",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "bluenightshadow"
+},
+"realm": "synth"
+},
+{
+"id": "synth/6f3fb053",
+"name": "German Gothic-Radio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Bauhaus, Hatesex feat. Severina Sol, Incubite",
+"url": "https://german-gothic-radio.stream.laut.fm/german-gothic-radio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "german-gothic-radio"
+},
+"realm": "synth"
+},
+{
+"id": "synth/8a31a425",
+"name": "Gothic Radio Saar",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Apoptygma Berzerk, Cephalgy, Covenant",
+"url": "https://gothic-radio-saar.stream.laut.fm/gothic-radio-saar",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "gothic-radio-saar"
+},
+"realm": "synth"
+},
+{
+"id": "synth/ee9d5b53",
+"name": "Radiodarkpulse",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: CRYTEK, In Strict Confidence, Iris",
+"url": "https://radiodarkpulse.stream.laut.fm/radiodarkpulse",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "radiodarkpulse"
+},
+"realm": "synth"
+},
+{
+"id": "synth/f24a346f",
+"name": "Schwarzer Kanal",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM",
+"url": "https://schwarzerkanal.stream.laut.fm/schwarzer_kanal",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "schwarzerkanal"
+},
+"realm": "synth"
+},
+{
+"id": "synth/4bb333f1",
+"name": "Silent Darkangel",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Apoptygma Berzerk, Down Below, HIM",
+"url": "https://silent-darkangel.stream.laut.fm/silent-darkangel",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "silent-darkangel"
+},
+"realm": "synth"
+},
+{
+"id": "synth/1a7da2fd",
+"name": "Dansemacabre",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Denner, Happy Rhodes, Julee Cruise",
+"url": "https://dansemacabre.stream.laut.fm/dansemacabre",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "dansemacabre"
+},
+"realm": "synth"
+},
+{
+"id": "synth/fc7d15c3",
+"name": "Die Schwarze Kunst",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Grendel, Icon Of Coil, Lebanon Hanover",
+"url": "https://die-schwarze-kunst.stream.laut.fm/die-schwarze-kunst",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "die-schwarze-kunst"
+},
+"realm": "synth"
+},
+{
+"id": "synth/2c7eb939",
+"name": "Irrlichts Welt",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Engelsstaub, Florian Grey, Kap Bambino",
+"url": "https://irrlichts-welt.stream.laut.fm/irrlichts-welt",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "irrlichts-welt"
+},
+"realm": "synth"
+},
+{
+"id": "synth/9e2724a2",
+"name": "Radio Body Music",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Ballad Bombs, Das M, Ductape",
+"url": "https://radio-body-music.stream.laut.fm/radio-body-music",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "radio-body-music"
+},
+"realm": "synth"
+},
+{
+"id": "synth/dbec191b",
+"name": "Darksound Radio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Acylum, Epinephrin, God Module",
+"url": "https://darksoundradio.stream.laut.fm/darksoundradio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "darksoundradio"
+},
+"realm": "synth"
+},
+{
+"id": "synth/976b7559",
+"name": "Darkwave",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Fields Of The Nephilim, Geometric Vision ft. Volkan Caner, Liaisons Dangereuses",
+"url": "https://darkwave.stream.laut.fm/darkwave",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "darkwave"
+},
+"realm": "synth"
+},
+{
+"id": "synth/257ad82a",
+"name": "Fallenangels",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Charles De Goal, Clan Of Xymox, Joy Division",
+"url": "https://fallenangels.stream.laut.fm/fallenangels",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "fallenangels"
+},
+"realm": "synth"
+},
+{
+"id": "synth/582e0964",
+"name": "Pitchblack Radio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Angels & agony, Blutengel, FunkerVogt",
+"url": "https://pitchblackradio.stream.laut.fm/pitchblackradio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "pitchblackradio"
+},
+"realm": "synth"
+},
+{
+"id": "synth/2e468de3",
+"name": "Ruleofthree",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: 1919, A.D. Mana, ACTORS",
+"url": "https://ruleofthree.stream.laut.fm/ruleofthree",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "ruleofthree"
+},
+"realm": "synth"
+},
+{
+"id": "synth/2671a00c",
+"name": "Schattenspiel",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Antony And The Johnsons, Dark Door, Die Ärzte",
+"url": "https://schattenspiel.stream.laut.fm/schattenspiel",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "schattenspiel"
+},
+"realm": "synth"
+},
+{
+"id": "synth/6df62e63",
+"name": "Distortionsekt",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: A.D.A.C. 8286, AUTODAFEH, Autodafeh",
+"url": "https://distortionsekt.stream.laut.fm/distortionsekt",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "distortionsekt"
+},
+"realm": "synth"
+},
+{
+"id": "synth/4196d32f",
+"name": "Electric Empire",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Angels & Agony, Front 242, Lights Of Euphoria",
+"url": "https://electric-empire.stream.laut.fm/electric-empire",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "electric-empire"
+},
+"realm": "synth"
+},
+{
+"id": "synth/22f80791",
+"name": "Electric Sound Area",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Cold Connection, Death By Varta, Dpoint",
+"url": "https://electric-sound-area.stream.laut.fm/electric-sound-area",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "electric-sound-area"
+},
+"realm": "synth"
+},
+{
+"id": "synth/6faa2586",
+"name": "Epomusic",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Aghast View, Agonoize, In Strict Confidence",
+"url": "https://epomusic.stream.laut.fm/epomusic",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "epomusic"
+},
+"realm": "synth"
+},
+{
+"id": "synth/2e6ecf80",
+"name": "Klang Ruinen",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Electrophobia, Eurythmics, Neonbabies",
+"url": "https://klangruinen.stream.laut.fm/klangruinen",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "klangruinen"
+},
+"realm": "synth"
+},
+{
+"id": "synth/6e5fda29",
+"name": "Mindestverzehr-Radio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Destroid, Fix8Sed8, Front 242",
+"url": "https://mindestverzehr-radio.stream.laut.fm/mindestverzehr-radio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "mindestverzehr-radio"
+},
+"realm": "synth"
+},
+{
+"id": "synth/e4e1995c",
+"name": "Terahertzwellen",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Björk, Caprifischer, DAF",
+"url": "https://terahertzwellen.stream.laut.fm/terahertzwellen",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "terahertzwellen"
+},
+"realm": "synth"
+},
+{
+"id": "synth/60499254",
+"name": "Castle Of Darkness",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Angel Nation, C-Lekktor, Denuit",
+"url": "https://castle-of-darkness.stream.laut.fm/castle-of-darkness",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "castle-of-darkness"
+},
+"realm": "synth"
+},
+{
+"id": "synth/f1add54d",
+"name": "Darkmix",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Beating Signal, Big Electric Cat, Cyber Strukture",
+"url": "https://darkmix.stream.laut.fm/darkmix",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "darkmix"
+},
+"realm": "synth"
+},
+{
+"id": "synth/f54551be",
+"name": "Darkmotion",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: ASP, Aesthetic Perfection, Attila",
+"url": "https://darkmotion.stream.laut.fm/darkmotion",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "darkmotion"
+},
+"realm": "synth"
+},
+{
+"id": "synth/25ac2e54",
+"name": "Darkradio Finetunez",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Centhron, Cold sequence, E-lektrotrieb!",
+"url": "https://darkradio-finetunez.stream.laut.fm/darkradio-finetunez",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "darkradio-finetunez"
+},
+"realm": "synth"
+},
+{
+"id": "synth/0650017c",
+"name": "Darkrave Radio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM",
+"url": "https://darkraveradio.stream.laut.fm/darkrave_radio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "darkraveradio"
+},
+"realm": "synth"
+},
+{
+"id": "synth/dcdda03c",
+"name": "Darkwave Sounds",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Blutengel, Bärnserker, Deathstars",
+"url": "https://darkwave-sounds.stream.laut.fm/darkwave-sounds",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "darkwave-sounds"
+},
+"realm": "synth"
+},
+{
+"id": "synth/1372c4f9",
+"name": "Darkzdream",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: And One, Das Ich, Faderhead",
+"url": "https://darkzdream.stream.laut.fm/darkzdream",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "darkzdream"
+},
+"realm": "synth"
+},
+{
+"id": "synth/852350ce",
+"name": "Darkzone",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: ESA (Electronic Substance Abuse), Hocico, Massive Attack",
+"url": "https://darkzone.stream.laut.fm/darkzone",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "darkzone"
+},
+"realm": "synth"
+},
+{
+"id": "synth/317a718f",
+"name": "Gothwriters Home",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: FRONT 242, GOTHWRITER`S HOME, PLACEBO",
+"url": "https://gothwritershome.stream.laut.fm/gothwritershome",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "gothwritershome"
+},
+"realm": "synth"
+},
+{
+"id": "synth/9d724cbd",
+"name": "Hellschwarz",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Erdling, Junksista, MajorVoice",
+"url": "https://hellschwarz.stream.laut.fm/hellschwarz",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "hellschwarz"
+},
+"realm": "synth"
+},
+{
+"id": "synth/0c764ed3",
+"name": "Moshhead Gothic",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Anathema, Atrocity, Funker Vogt",
+"url": "https://moshhead-gothic.stream.laut.fm/moshhead-gothic",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "moshhead-gothic"
+},
+"realm": "synth"
+},
+{
+"id": "synth/a0d40b2a",
+"name": "Postpunk",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: And Also The Trees, Bragolin, Christine Plays Viola",
+"url": "https://postpunk.stream.laut.fm/postpunk",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "postpunk"
+},
+"realm": "synth"
+},
+{
+"id": "synth/bded1ef3",
+"name": "Radio Dark Universe",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: ASP, Blutengel, Culture Kultür",
+"url": "https://radio-dark-universe.stream.laut.fm/radio-dark-universe",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "radio-dark-universe"
+},
+"realm": "synth"
+},
+{
+"id": "synth/0d4d7556",
+"name": "Radio Darkstar",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Crematory, Eisbrecher, Emilie Autumn",
+"url": "https://radio-darkstar.stream.laut.fm/radio-darkstar",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "radio-darkstar"
+},
+"realm": "synth"
+},
+{
+"id": "synth/1df54533",
+"name": "Radio Kingdom Of Darkness",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Bragolin, Dance My Darling, Kill Shelter & Antipole",
+"url": "https://radio-kingdom-of-darkness.stream.laut.fm/radio-kingdom-of-darkness",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "radio-kingdom-of-darkness"
+},
+"realm": "synth"
+},
+{
+"id": "synth/a564c967",
+"name": "Schwarzewelten",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: 45 Grave, Elektro Nord, Kindest Cuts",
+"url": "https://schwarzewelten.stream.laut.fm/schwarzewelten",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "schwarzewelten"
+},
+"realm": "synth"
+},
+{
+"id": "synth/ee49a256",
+"name": "Schwarzlauscher",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: 45 Grave, Clan Of Xymox, Einstürzende Neubauten",
+"url": "https://schwarzlauscher.stream.laut.fm/schwarzlauscher",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "schwarzlauscher"
+},
+"realm": "synth"
+},
+{
+"id": "synth/af05028a",
+"name": "Thedarkbluhell",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Cultus Ferox, Evereve, Hidden Citizens",
+"url": "https://thedarkbluhell.stream.laut.fm/thedarkbluhell",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "thedarkbluhell"
+},
+"realm": "synth"
+},
+{
+"id": "synth/1f7adb5f",
+"name": "Thedarknight",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: A Life Divided, Deine Lakaien, Faderhead",
+"url": "https://thedarknight.stream.laut.fm/thedarknight",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "thedarknight"
+},
+"realm": "synth"
+},
+{
+"id": "synth/d1708003",
+"name": "Thedarkside",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Desastroes, Desastroes feat.Maria Fendler, E Nomine",
+"url": "https://thedarkside.stream.laut.fm/thedarkside",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "thedarkside"
+},
+"realm": "synth"
+},
+{
+"id": "synth/9bfe4add",
+"name": "Vladsradio Darkinside",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: And One, Diary of Dreams, Heldmaschine",
+"url": "https://vladsradio-darkinside.stream.laut.fm/vladsradio-darkinside",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "vladsradio-darkinside"
+},
+"realm": "synth"
+},
+{
+"id": "synth/f7043041",
+"name": "Wavegotik",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Alien Sex Fiend, Catastrophe Ballet, D.A.F.",
+"url": "https://wavegotik.stream.laut.fm/wavegotik",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "wavegotik"
+},
+"realm": "synth"
+},
+{
+"id": "synth/d8cd092f",
+"name": "Worldofdarkness",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: ARISE-X, Blutengel, Cal Scruby",
+"url": "https://worldofdarkness.stream.laut.fm/worldofdarkness",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "worldofdarkness"
+},
+"realm": "synth"
+},
+{
+"id": "synth/37baff6a",
+"name": "Gothic Rock",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Alien Sex Fiend, Gene Loves Jezebel, Joy Division",
+"url": "https://gothic-rock.stream.laut.fm/gothic-rock",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "gothic-rock"
+},
+"realm": "synth"
+},
+{
+"id": "synth/79c1eabb",
+"name": "Radiodarksouls",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Agonoize, Dark Diamonds, Goethes Erben",
+"url": "https://radiodarksouls.stream.laut.fm/radiodarksouls",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "radiodarksouls"
+},
+"realm": "synth"
+},
+{
+"id": "synth/f10f0c40",
+"name": "Schwarze Rose",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Absurd Minds, Nightwish, Spektralized",
+"url": "https://schwarze-rose.stream.laut.fm/schwarze-rose",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "schwarze-rose"
+},
+"realm": "synth"
+},
+{
+"id": "synth/1efe7182",
+"name": "Altmearker Radio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: ASP, Am Inc, Depeche Mode",
+"url": "https://altmearker-radio.stream.laut.fm/altmearker-radio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "altmearker-radio"
+},
+"realm": "synth"
+},
+{
+"id": "synth/9b743e11",
+"name": "Bleak Radio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Camera Obscura, Culk, Death Of Abel",
+"url": "https://bleakradio.stream.laut.fm/bleakradio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "bleakradio"
+},
+"realm": "synth"
+},
+{
+"id": "synth/040c11ad",
+"name": "Booomb",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Alien Vampires, Blank, DJversion666",
+"url": "https://booomb.stream.laut.fm/booomb",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "booomb"
+},
+"realm": "synth"
+},
+{
+"id": "synth/36199dfc",
+"name": "Industrial",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM: Assemblage 23, Front 242, Helium Vola",
+"url": "https://industrial.stream.laut.fm/industrial",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "industrial"
+},
+"realm": "synth"
+},
+{
+"id": "synth/a3b4f9f4",
+"name": "The Tube / NTS",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM",
+"url": "https://stream-mixtape-geo.ntslive.net/mixtape26",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/fa0b1998",
+"name": "Radio Caprice WITCH HOUSE",
+"group": "Darkwave / Goth / Industrial",
+"about": "Darkwave, goth and EBM",
+"url": "http://79.120.77.11:8002/witchhouse",
+"type": "audio/aac",
+"insecure": true,
+"realm": "synth"
+},
+{
 "name": "International Pagan Radio",
 "group": "Wiccan & Witchy",
 "about": "All pagan, all the time: Wiccan chants, pagan folk and community shows",
@@ -4087,6 +5027,62 @@
 "type": "audio/mpeg",
 "kbps": 128,
 "id": "pagan/1ac35133",
+"realm": "pagan"
+},
+{
+"id": "pagan/adc56195",
+"name": "Radio Caprice - Pagan Metal",
+"group": "Pagan, Viking & Folk Metal",
+"about": "Pagan metal",
+"url": "http://79.111.119.111:8000/paganmetal",
+"type": "audio/aac",
+"insecure": true,
+"realm": "pagan"
+},
+{
+"id": "pagan/1a4bb5b7",
+"name": "Radio Caprice - Viking Metal",
+"group": "Pagan, Viking & Folk Metal",
+"about": "Viking metal",
+"url": "http://79.111.14.76:8000/vikingmetal",
+"type": "audio/aac",
+"insecure": true,
+"realm": "pagan"
+},
+{
+"id": "pagan/3824576c",
+"name": "Sinnflut",
+"group": "Pagan, Viking & Folk Metal",
+"about": "Folk and Mittelalter metal: Amon Amarth, Faun, Korpiklaani",
+"url": "https://sinnflut.stream.laut.fm/sinnflut",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "sinnflut"
+},
+"realm": "pagan"
+},
+{
+"id": "pagan/e7772824",
+"name": "RADIO BOB! Mittelalter Rock",
+"group": "Medieval & Pagan Folk (Mittelalter)",
+"about": "Mittelalter rock from Radio BOB",
+"url": "http://streams.radiobob.de/mittelalter/mp3-192/streams.radiobob.de/",
+"type": "audio/mpeg",
+"insecure": true,
+"realm": "pagan"
+},
+{
+"id": "pagan/af981ffd",
+"name": "Schwarzes Nrw",
+"group": "Medieval & Pagan Folk (Mittelalter)",
+"about": "Mittelalter and dark scene: Schandmaul, Schelmish, Unheilig",
+"url": "https://schwarzes-nrw.stream.laut.fm/schwarzes-nrw",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "schwarzes-nrw"
+},
 "realm": "pagan"
 },
 {
@@ -5577,6 +6573,78 @@
 "id": "wastewatermusic"
 },
 "id": "kvlt/7888056f",
+"realm": "kvlt"
+},
+{
+"id": "kvlt/07be16a5",
+"name": "Radio Caprice - Black Metal",
+"group": "Pure Black Metal",
+"about": "Radio Caprice's black metal channel",
+"url": "http://79.120.77.11:8002/blackmetal",
+"type": "audio/aac",
+"insecure": true,
+"realm": "kvlt"
+},
+{
+"id": "kvlt/62c721a8",
+"name": "Radio Caprice - Depressive Black Metal",
+"group": "Pure Black Metal",
+"about": "Depressive and suicidal black metal (DSBM)",
+"url": "http://79.111.119.111:8002/dsbm",
+"type": "audio/aac",
+"insecure": true,
+"realm": "kvlt"
+},
+{
+"id": "kvlt/88236a59",
+"name": "Almost Hell Radio",
+"group": "Pure Black Metal",
+"about": "Black metal",
+"url": "https://almosthellradio.duckdns.org/listen/almost_hell_radio/radio.mp3",
+"type": "audio/mpeg",
+"realm": "kvlt"
+},
+{
+"id": "kvlt/d3f10e3f",
+"name": "Radio Caprice - Black / Blackened Doom Metal",
+"group": "Blackened Doom, Funeral & Dark",
+"about": "Black metal and blackened doom",
+"url": "http://79.120.77.11:8002/blackdoom",
+"type": "audio/aac",
+"insecure": true,
+"realm": "kvlt"
+},
+{
+"id": "kvlt/97ad049c",
+"name": "Shamanic Tunes",
+"group": "Blackened Doom, Funeral & Dark",
+"about": "Doom and stoner: Electric Wizard and kin",
+"url": "https://shamanictunes.stream.laut.fm/shamanic_tunes",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "shamanictunes"
+},
+"realm": "kvlt"
+},
+{
+"id": "kvlt/6f2c687a",
+"name": "RadCap Post-Black & Blackgaze",
+"group": "Avant-garde & Ambient Black",
+"about": "Progressive black, post-black and blackgaze",
+"url": "http://79.111.14.76:8000/postblack",
+"type": "audio/aac",
+"insecure": true,
+"realm": "kvlt"
+},
+{
+"id": "kvlt/c27893db",
+"name": "Radio Caprice - Folk Black Metal",
+"group": "Pagan, Viking & Folk Black Metal",
+"about": "Folk black metal",
+"url": "http://79.120.12.130:8002/folkblackmet",
+"type": "audio/aac",
+"insecure": true,
 "realm": "kvlt"
 }
 ]

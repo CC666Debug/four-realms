@@ -92,14 +92,14 @@
   .logo .nm { overflow: hidden; text-overflow: ellipsis; }
   .logo .caret { font-size: 11px; color: var(--muted); font-weight: 400; transform: translateY(1px); }
   .logo svg { width: 28px; height: 28px; flex: none; }
-  [data-realm="halloween"] .logo .nm { font-family: "Creepster", system-ui, cursive; font-weight: 400; font-size: 25px; letter-spacing: 1px; color: var(--accent); text-shadow: 0 0 12px rgba(255, 122, 26, .45); }
+  [data-realm="halloween"] .logo .nm { font-family: "Creepster", system-ui, cursive; font-weight: 400; font-size: 20px; letter-spacing: 1px; color: var(--accent); text-shadow: 0 0 12px rgba(255, 122, 26, .45); }
   [data-realm="synth"] .logo .nm { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
   [data-realm="pagan"] .logo .nm { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent;
     font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif; letter-spacing: .5px; }
   [data-realm="kvlt"] .logo .nm { font-family: "UnifrakturMaguntia", "Old English Text MT", serif; font-weight: 400; font-size: 27px; letter-spacing: .5px;
     color: var(--accent-2); text-shadow: 0 0 10px rgba(179, 18, 26, .9), 0 2px 0 #000; line-height: 1; }
   .sigil { color: var(--accent); filter: drop-shadow(0 0 5px rgba(179, 18, 26, .8)); }
-  @media (max-width: 380px) { .logo { font-size: 17px; } [data-realm="halloween"] .logo .nm { font-size: 22px; } [data-realm="kvlt"] .logo .nm { font-size: 24px; } .cast-btn { padding: 9px 12px; } }
+  @media (max-width: 380px) { .logo { font-size: 17px; } [data-realm="halloween"] .logo .nm { font-size: 18px; } [data-realm="kvlt"] .logo .nm { font-size: 24px; } .cast-btn { padding: 9px 12px; } }
 
   .cast-btn {
     display: inline-flex; align-items: center; gap: 8px; flex: none;
@@ -303,6 +303,24 @@
   .tile .last { position: absolute; top: 10px; left: 0; right: 0; text-align: center; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-2); }
   .gate .fine { text-align: center; font-size: 11px; color: #6f6878; }
 
+  /* Halloween Radio extras: data saver and Premium in the Halloween realm; song links for its channels. */
+  .tools, .links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tools[hidden], .links[hidden] { display: none; }
+  .links { padding: 2px 0 6px; }
+  .pill {
+    font-size: 12.5px; padding: 6px 11px; border-radius: 999px; white-space: nowrap; text-decoration: none;
+    background: var(--surface); border: 1px solid var(--line); color: var(--muted);
+  }
+  .pill.on { color: var(--text); border-color: var(--accent); }
+  .badge { overflow: hidden; }
+  .badge img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #premiumDlg h2 { margin: 0 0 8px; font-size: 18px; }
+  #premiumDlg p { color: var(--muted); font-size: 14px; margin: 0 0 10px; }
+  #premiumUrl { width: 100%; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px; }
+  #premiumDlg .msg { min-height: 1.4em; margin-top: 8px; }
+  #premiumDlg .msg.good { color: var(--good); } #premiumDlg .msg.bad { color: var(--warn); }
+  #premiumDlg .primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
   .sleep-menu {
     position: fixed; z-index: 50; display: flex; gap: 4px; padding: 6px; border-radius: 999px;
     background: var(--surface-2); border: 1px solid var(--line); box-shadow: 0 6px 24px rgba(0, 0, 0, .5);
@@ -333,6 +351,10 @@
     </button>
   </header>
   <div class="sky" id="sky" aria-live="off"></div>
+  <div class="tools" id="tools" hidden>
+    <button class="pill" id="saverBtn" aria-pressed="false">📶 Data saver: off</button>
+    <button class="pill" id="premiumBtn">⭐ Add Premium</button>
+  </div>
 
   <div class="notice" id="notice" hidden></div>
 
@@ -365,6 +387,10 @@
         <svg viewBox="0 0 24 24" fill="currentColor" id="volIcon"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
       </button>
       <input type="range" id="vol" min="0" max="100" value="80" aria-label="Volume">
+    </div>
+    <div class="links" id="hrLinks" hidden>
+      <a class="pill" id="bewitchLink" href="https://halloweenradio.net/playlist" target="_blank" rel="noopener">👻 Bewitch on site</a>
+      <a class="pill" id="spineLink" href="https://halloweenradio.net/spine-tingler" target="_blank" rel="noopener" title="Rate how spooky this song feels on halloweenradio.net">🦴 Spine-Tingler</a>
     </div>
   </section>
 
@@ -420,6 +446,22 @@
   <button data-min="0">🌙 Off</button><button data-min="15">15</button><button data-min="30">30</button><button data-min="60">60</button><button data-min="90">90</button>
 </div>
 
+<dialog id="premiumDlg">
+  <form method="dialog" id="premiumForm" novalidate>
+    <h2>⭐ Premium channel</h2>
+    <div id="premiumAdd">
+      <p>For Halloween Radio supporters. Paste your Premium stream link from halloweenradio.net. It stays on this phone and is never shared.</p>
+      <input id="premiumUrl" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://…" aria-label="Premium stream link">
+    </div>
+    <p id="premiumHave" hidden>Premium is set up on this phone. Removing it only deletes the link from this phone.</p>
+    <p class="msg" id="premiumMsg" role="status"></p>
+    <div class="dlg-btns">
+      <button value="cancel" formnovalidate>Cancel</button>
+      <button class="primary" id="premiumGo" value="go">Test &amp; save</button>
+    </div>
+  </form>
+</dialog>
+
 <dialog id="diagDlg">
   <div id="diagText"></div>
   <div class="dlg-btns">
@@ -430,7 +472,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -474,6 +516,7 @@ const REALMS = [
     genres: [
       { id: 'Synthwave / Retrowave', label: '🌆 Synthwave', icon: '🌆' },
       { id: 'Darkwave / Goth / Industrial', label: '🦇 Darkwave & Goth', icon: '🦇' },
+      { id: 'Synth-Pop & New Wave', label: '🎹 Synth-Pop & New Wave', icon: '🎹' },
       { id: 'Chiptune / Game', label: '👾 Chiptune & Game', icon: '👾' },
     ] },
   { id: 'pagan', name: 'Pagan Caster', short: 'Pagan', icon: '🌙', badge: '🌙', color: '#0b1210',
@@ -726,6 +769,7 @@ function showRealm(r, how) {
   els.q.value = v.query; els.qClear.hidden = !v.query;
   els.q.placeholder = 'Search ' + r.short + ' stations';
   els.sort.value = v.sortBy;
+  $('tools').hidden = r.id !== 'halloween';
   renderSky(); renderChips(); renderList(); renderTabs(); render();
   scrollTo({ top: r === from ? scrollY : v.scroll });
   if (r !== from) diag('realm: ' + r.short + (how ? ' (' + how + ')' : ''));
@@ -984,6 +1028,7 @@ function loadStation(s) {
   const md = new chrome.cast.media.GenericMediaMetadata();
   md.title = s.name;
   md.subtitle = realmById(s.realm).name + ' · ' + shortGenre(s);
+  if (s === metaStation && songArt) md.images = [new chrome.cast.Image(songArt)];
   info.metadata = md;
   const req = new chrome.cast.media.LoadRequest(info);
   req.autoplay = true;
@@ -991,7 +1036,7 @@ function loadStation(s) {
   speakerLoading = s;
   const t = performance.now();
   loadStartedAt = t;
-  diag('sending ' + s.name + ' to ' + session.getCastDevice().friendlyName + ' · ' + s.url);
+  diag('sending ' + s.name + ' to ' + session.getCastDevice().friendlyName + ' · ' + (s.id === 'halloween/premium' ? '(private Premium link)' : s.url));
   kickStart();
   session.loadMedia(req).then(() => {
     diag('speaker accepted ' + s.name + ' after ' + ((performance.now() - t) / 1000).toFixed(2) + 's');
@@ -1162,18 +1207,30 @@ const RETRY_DELAYS = [1, 2, 4, 8, 15, 30];
 els.vol.value = safeGet('fr_vol') || 80;
 audio.volume = els.vol.value / 100;
 
+// Data saver: Halloween Radio's channels also come in a 64 kbps version (half the data), used when listening
+// on this device. Speakers always get full quality, since they're on Wi-Fi. It also turns on by itself when the
+// phone reports a weak connection, or after the stream keeps dropping.
+let dataSaver = safeGet('fr_saver') === '1';
+const net = navigator.connection;
+const weakSignal = () => !!net && (net.saveData || /2g|3g/.test(net.effectiveType || ''));
+let autoLite = false, triedBackup = false;
+const useLite = () => dataSaver || autoLite || weakSignal();
+const streamFor = s => useLite() && s.lite ? s.lite : s.url;
+// The Premium link is private: it never goes into the diagnostic log.
+const logUrl = s => s.id === 'halloween/premium' ? '(private Premium link)' : streamFor(s);
+
 function clearRetry() {
   clearTimeout(retryTimer); clearTimeout(stallTimer); clearTimeout(startTimer);
   retryTimer = stallTimer = startTimer = null;
 }
 
 function playHere(s) {
-  diag('playing ' + s.name + ' (' + s.realm + ') on this device · ' + s.url);
+  diag('playing ' + s.name + ' (' + s.realm + ') on this device · ' + logUrl(s));
   selected = s;
   localStation = s;
   hereLive = false; everPlayed = false;
-  clearRetry(); retry = 0; reconnecting = false;
-  audio.src = s.url;
+  clearRetry(); retry = 0; reconnecting = false; triedBackup = false;
+  audio.src = streamFor(s);
   audio.volume = els.vol.value / 100;
   hideNotice();
   // Not started within 15 seconds: count it as not playing.
@@ -1193,7 +1250,8 @@ function stopHere(keepNotice) {
   diag('stopped ' + localStation.name + ' on this device');
   localStation = null;
   hereLive = false;
-  clearRetry(); retry = 0; reconnecting = false;
+  clearRetry(); retry = 0; reconnecting = false; autoLite = false;
+  renderSaver();
   audio.pause();
   audio.removeAttribute('src');
   audio.load();
@@ -1208,12 +1266,13 @@ function reconnectHere() {
   if (!navigator.onLine) { reconnecting = 'offline'; render(); return; }
   const delay = RETRY_DELAYS[Math.min(retry, RETRY_DELAYS.length - 1)] * 1000;
   retry++;
+  if (retry >= 2 && localStation.lite && !autoLite) { autoLite = true; diag('keeps dropping: data saver on by itself'); renderSaver(); }
   reconnecting = true;
   render();
   retryTimer = setTimeout(() => {
     retryTimer = null;
     if (!localStation) return;
-    audio.src = localStation.url;
+    audio.src = streamFor(localStation);
     audio.play().catch(() => {});
     stallTimer = setTimeout(reconnectHere, 10000);
   }, delay);
@@ -1237,6 +1296,13 @@ audio.addEventListener('stalled', stalled);
 audio.addEventListener('error', () => {
   if (!localStation || retryTimer) return;
   const s = localStation;
+  // A channel with two versions: try the other one once before giving up.
+  if (s.lite && !triedBackup) {
+    triedBackup = true;
+    audio.src = audio.src === s.lite ? s.url : s.lite;
+    audio.play().catch(() => {});
+    return;
+  }
   if (!everPlayed && retry === 0) {
     // Never started: the station is down, or its link can't play here.
     const code = audio.error && audio.error.code;
@@ -1248,10 +1314,34 @@ audio.addEventListener('error', () => {
 });
 window.addEventListener('online', () => { if (localStation && reconnecting === 'offline') { retry = 0; reconnectHere(); } });
 
+const saverBtn = $('saverBtn');
+function renderSaver() {
+  const auto = !dataSaver && (autoLite || weakSignal());
+  saverBtn.textContent = '📶 Data saver: ' + (dataSaver ? 'on' : auto ? 'auto' : 'off');
+  saverBtn.classList.toggle('on', dataSaver || auto);
+  saverBtn.setAttribute('aria-pressed', String(dataSaver));
+}
+saverBtn.addEventListener('click', () => {
+  dataSaver = !dataSaver;
+  safeSet('fr_saver', dataSaver ? '1' : '0');
+  diag('data saver ' + (dataSaver ? 'on' : 'off'));
+  renderSaver();
+  if (localStation && localStation.lite) playHere(localStation);   // switch the stream now
+});
+renderSaver();
+// Signal got weak while listening: switch to the lighter stream.
+if (net) net.addEventListener('change', () => {
+  renderSaver();
+  if (localStation && hereLive && localStation.lite && audio.src !== streamFor(localStation)) {
+    audio.src = streamFor(localStation);
+    audio.play().catch(() => {});
+  }
+});
+
 // ── Song names ──────────────────────────────────
 // Many stations say what's playing through a web address the app can read
 // (saved in stations.json as "meta"). Only the playing station is checked.
-let song = '', metaStation = null, metaTimer = null, metaES = null;
+let song = '', songArt = '', metaStation = null, metaTimer = null, metaES = null;
 const META_EVERY = 15000;
 const JUNK_SONG = /azuracast|^unknown|^track$|^-+$|^\s*$/i;
 const pair = (a, t) => [a, t].map(x => (x || '').trim()).filter(Boolean).join(' – ');
@@ -1264,7 +1354,7 @@ async function fetchSong(m) {
     case 'rainwave': { const x = (await j(`https://rainwave.cc/api4/info?sid=${m.id}`)).sched_current.songs[0]; return pair(x.artists.map(a => a.name).join(', '), x.title); }
     case 'live365': { const x = (await j(`https://api.live365.com/station/${m.id}`))['current-track']; return pair(x.artist, x.title); }
     case 'radioco': return (await j(`https://public.radio.co/stations/${m.id}/status`)).current_track.title;
-    case 'azura': { const x = (await j(m.u)).now_playing.song; return pair(x.artist, x.title); }
+    case 'azura': { const x = (await j(m.u)).now_playing.song; return { text: pair(x.artist, x.title), art: x.art || '' }; }
     case 'icecast': {
       const src = [].concat((await j(m.u)).icestats.source || []);
       const x = src.find(z => { try { return new URL(z.listenurl).pathname === m.m; } catch (e) { return false; } });
@@ -1276,6 +1366,9 @@ async function fetchSong(m) {
 
 function setSong(s, text) {
   if (s !== metaStation) return;
+  const art = text && typeof text === 'object' ? text.art : '';
+  if (text && typeof text === 'object') text = text.text;
+  if (art !== songArt) { songArt = art; renderBadge(); updateMediaSession(); }
   text = (text || '').replace(/\s+/g, ' ').trim();
   if (JUNK_SONG.test(text) || text.toLowerCase() === s.name.toLowerCase()) text = '';
   if (text === song) return;
@@ -1290,6 +1383,7 @@ function stopMeta() {
   if (metaES) { metaES.close(); metaES = null; }
   metaStation = null;
   song = ''; els.nowSong.textContent = '';
+  if (songArt) { songArt = ''; renderBadge(); }
 }
 
 function startMeta(s) {
@@ -1323,7 +1417,7 @@ function updateMediaSession() {
   const sg = s === metaStation ? song : '';
   navigator.mediaSession.metadata = new MediaMetadata({
     title: sg || s.name, artist: sg ? s.name : shortGenre(s), album: 'Four Realms · ' + realmById(s.realm).short,
-    artwork: [{ src: 'icon-512.png', sizes: '512x512', type: 'image/png' }],
+    artwork: s === metaStation && songArt ? [{ src: songArt, sizes: '512x512' }] : [{ src: 'icon-512.png', sizes: '512x512', type: 'image/png' }],
   });
 }
 if ('mediaSession' in navigator) {
@@ -1415,6 +1509,22 @@ setInterval(checkSleep, 1000);   // every second, so the fade is smooth
 document.addEventListener('visibilitychange', checkSleep);
 
 // ── Drawing the screen ──────────────────────────
+// The badge shows the song's cover when the station sends one, otherwise the genre's icon.
+let badgeKey = null;
+function renderBadge() {
+  const s = playingStation() || selected;
+  const art = s && s === metaStation ? songArt : '';
+  const key = art || (s ? 'icon:' + iconFor(s) : 'realm:' + realm.id);
+  if (key === badgeKey) return;
+  badgeKey = key;
+  if (art) {
+    const img = new Image();
+    img.alt = ''; img.src = art;
+    img.onerror = () => { badgeKey = null; songArt = ''; renderBadge(); };
+    els.badge.replaceChildren(img);
+  } else if (s) els.badge.textContent = iconFor(s);
+  else els.badge.innerHTML = realm.id === 'kvlt' ? realm.badge : realm.icon;
+}
 function playingStation() {
   if (castConnected()) {
     const r = remoteStation();
@@ -1443,8 +1553,10 @@ function render() {
   els.shuffleBtn.setAttribute('aria-pressed', shuffle);
 
   const s = playingStation() || selected;
-  if (s) els.badge.textContent = iconFor(s);
-  else els.badge.innerHTML = realm.id === 'kvlt' ? realm.badge : realm.icon;
+  renderBadge();
+  // Halloween Radio channels: links to Bewitch (the station's song page) and Spine-Tingler (rate the song).
+  $('hrLinks').hidden = !(s && s.group === 'Halloween Radio');
+  if (s && s.group === 'Halloween Radio') $('spineLink').href = 'https://halloweenradio.net/spine-tingler' + (s.spine ? '?station=' + s.spine : '');
   els.nowName.textContent = s ? s.name : 'Pick a station, or tap shuffle';
   let where = 'Ready', st = '', live = false, icon = ICON_PLAY;
   if (session) {
@@ -1511,6 +1623,90 @@ function render() {
   });
 }
 
+// ── Halloween Radio Premium ─────────────────────
+// For supporters: the link is pasted once and kept only on this phone, never in this public code.
+// Halloween Caster uses the same storage (same web address), so adding it in either app adds it to both.
+const PREMIUM_KEY = 'hc_premium_url';
+const premiumStation = url => ({ realm: 'halloween', id: 'halloween/premium', name: 'Premium ⭐', group: 'Halloween Radio',
+  about: 'For Halloween Radio supporters', url, type: /mp3/i.test(url) ? 'audio/mpeg' : 'audio/aac', sortName: '0007',
+  search: 'premium halloween radio', meta: { k: 'azura', u: 'https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_premium.json' } });
+{
+  const btn = $('premiumBtn'), dlg = $('premiumDlg'), msg = $('premiumMsg'), go = $('premiumGo');
+  const have = () => STATIONS.find(s => s.id === 'halloween/premium');
+  const label = () => { btn.textContent = safeGet(PREMIUM_KEY) ? '⭐ Premium: on' : '⭐ Add Premium'; btn.classList.toggle('on', !!safeGet(PREMIUM_KEY)); };
+  label();
+  let failedUrl = '';   // a link that failed the test; tapping again saves it anyway
+  btn.addEventListener('click', () => {
+    const on = !!safeGet(PREMIUM_KEY);
+    $('premiumAdd').hidden = on; $('premiumHave').hidden = !on;
+    go.textContent = on ? 'Remove Premium' : 'Test & save';
+    $('premiumUrl').value = ''; msg.textContent = ''; msg.className = 'msg'; failedUrl = '';
+    dlg.showModal();
+  });
+  // Tries the link for up to 10 seconds; resolves true once audio starts arriving.
+  const testStream = url => new Promise(resolve => {
+    const a = new Audio();
+    const done = ok => { clearTimeout(timer); a.removeAttribute('src'); a.load(); resolve(ok); };
+    const timer = setTimeout(() => done(false), 10000);
+    a.addEventListener('canplay', () => done(true), { once: true });
+    a.addEventListener('error', () => done(false), { once: true });
+    a.preload = 'auto'; a.src = url; a.load();
+  });
+  const refresh = () => { label(); renderChips(); renderList(); render(); };
+  const save = url => {
+    safeSet(PREMIUM_KEY, url);
+    if (!have()) STATIONS.splice(STATIONS.findIndex(s => s.realm === 'halloween' && s.group !== 'Halloween Radio'), 0, premiumStation(url));
+    diag('Premium added');
+    dlg.close(); refresh();
+  };
+  $('premiumForm').addEventListener('submit', async e => {
+    if (e.submitter && e.submitter.value === 'cancel') return;   // let the dialog close
+    e.preventDefault();
+    if (safeGet(PREMIUM_KEY)) {
+      const p = have();
+      if (p && localStation === p) stopHere();
+      if (selected === p) selected = null;
+      try { localStorage.removeItem(PREMIUM_KEY); } catch (err) {}
+      STATIONS = STATIONS.filter(s => s !== p);
+      diag('Premium removed');
+      dlg.close(); refresh();
+      return;
+    }
+    const url = $('premiumUrl').value.trim();
+    const say = (text, cls) => { msg.textContent = text; msg.className = 'msg ' + (cls || ''); };
+    if (!/^https:\/\/\S+$/i.test(url)) { say('That doesn’t look like a stream link. It should start with https://', 'bad'); return; }
+    if (url === failedUrl) { save(url); return; }
+    go.disabled = true;
+    say('Testing the link…');
+    const ok = await testStream(url);
+    go.disabled = false;
+    if (ok) { say('It plays! Saving…', 'good'); setTimeout(() => save(url), 600); return; }
+    failedUrl = url;
+    go.textContent = 'Save anyway';
+    say('Couldn’t play that link. Check it was copied in full, or tap “Save anyway” if the stream might just be down.', 'bad');
+  });
+}
+
+// On a computer, links out (Bewitch on site, Spine-Tingler) open in a small window beside the app
+// instead of a new tab (like Halloween Caster). Ctrl/Shift-click still opens a normal tab. Phones keep their usual behavior.
+{
+  const computer = matchMedia('(pointer: fine)').matches && !/Android|iPhone|iPad/i.test(navigator.userAgent);
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[target="_blank"]');
+    if (!a || !computer || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    const w = Math.min(560, screen.availWidth - 40), h = Math.min(820, screen.availHeight - 80);
+    const x = window.screenX || 0, right = x + window.outerWidth + 10;
+    const left = right + w <= screen.availWidth ? right : Math.max(0, x + window.outerWidth - w - 30);
+    const top = Math.max(0, (window.screenY || 0) + 60);
+    const win = window.open(a.href, 'fr_site', `popup,width=${w},height=${h},left=${left},top=${top}`);
+    if (!win) return;   // pop-up blocked: let the link open as a normal tab
+    e.preventDefault();
+    try { win.opener = null; } catch (err) {}
+    win.focus();
+    diag('opened in a small window: ' + a.href);
+  });
+}
+
 // ── Start up ────────────────────────────────────
 async function start() {
   // The title screen greets each fresh open, but not the quick refresh that fixes the speaker list.
@@ -1525,11 +1721,8 @@ async function start() {
     diag('station list failed: ' + e);
     return;
   }
-  // Halloween Radio Premium, for supporters who added their link in Halloween Caster (same web address, same phone).
-  const premium = safeGet('hc_premium_url');
-  if (premium) STATIONS.splice(7, 0, { realm: 'halloween', id: 'halloween/premium', name: 'Premium ⭐', group: 'Halloween Radio',
-    about: 'For supporters, from your Halloween Caster', url: premium, type: /mp3/i.test(premium) ? 'audio/mpeg' : 'audio/aac',
-    meta: { k: 'azura', u: 'https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_premium.json' } });
+  const premium = safeGet(PREMIUM_KEY);
+  if (premium) STATIONS.splice(7, 0, premiumStation(premium));
   STATIONS.forEach((s, i) => {
     // Halloween Radio's own channels come first, in the station's order (Main first), like in Halloween Caster.
     const name = norm(s.name).replace(/^[^\p{L}\p{N}]+/u, '');
