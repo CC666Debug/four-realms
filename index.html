@@ -212,6 +212,7 @@
   .icon-btn.on { color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 14%, transparent); }
   /* The volume lives in a pop-up now (hold 🔊), so the row of controls spreads out. */
   #vol { display: none; }
+  @media (max-width: 370px) { .row .icon-btn { padding: 7px; } .volnum { min-width: 30px; margin-left: -4px; } }   /* narrow phones, with the ✕ while casting */
   .row { justify-content: space-between; }
   #muteBtn { touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
   .volpop {
