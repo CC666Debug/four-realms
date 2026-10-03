@@ -257,12 +257,12 @@
   .top.mini .now .song { font-size: 12px; }
   /* In the mini bar the listener count (and LIVE DJ) sits to the right of the station name, on the same line;
      the rest of the top line goes, so there's no empty space above the name. */
-  .top.mini .now > div:last-child { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "title crowd" "song song"; column-gap: 8px; align-items: baseline; }
+  .top.mini .now > div:last-child { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 7px; }
   .top.mini .now .label { display: contents; }
   .top.mini .now .label #where, .top.mini .now .label .state, .top.mini .now .label .sleep-left, .top.mini .crowd .sep:first-child { display: none; }
-  .top.mini .now .title { grid-area: title; }
-  .top.mini .now .song { grid-area: song; }
-  .top.mini .now .label .crowd { grid-area: crowd; font-size: 11px; letter-spacing: 0; text-transform: none; color: var(--muted); white-space: nowrap; }
+  .top.mini .now .title { order: 1; flex: 0 1 auto; min-width: 0; max-width: calc(100% - 4.2em); }   /* a long name gives way (…) so the count always fits beside it */
+  .top.mini .now .label .crowd { order: 2; flex: none; font-size: 11px; letter-spacing: 0; text-transform: none; color: var(--muted); white-space: nowrap; }
+  .top.mini .now .song { order: 3; flex: 0 0 100%; min-width: 0; }
   /* Slim genre pills ride along under the mini bar. */
   .top.mini .finder { gap: 0; }
   .top.mini .chips { gap: 5px; padding-bottom: 0; }
@@ -721,7 +721,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.13.0';
+const VERSION = '1.13.1';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
