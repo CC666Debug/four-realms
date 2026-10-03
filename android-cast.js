@@ -27,7 +27,7 @@
   const RemotePlayerEventType = { ANY_CHANGE: 'anyChanged' };
 
   // What the speaker is doing, as last reported by the app.
-  const state = { castState: CastState.NO_DEVICES_AVAILABLE, device: null, media: null, volume: 1, muted: false };
+  const state = { castState: CastState.NO_DEVICES_AVAILABLE, device: null, media: null, volume: null, muted: false };   // volume stays unknown until the speaker reports it
 
   function listeners() {
     const map = {};

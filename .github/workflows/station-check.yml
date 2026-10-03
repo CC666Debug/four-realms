@@ -1,0 +1,25 @@
+# Once a week, GitHub tries every station and looks for new ones, then posts the report as an issue.
+# Free on public repos (no minutes are billed); switch it off any time under the repo's Actions tab.
+name: Weekly station check
+on:
+  schedule:
+    - cron: '0 16 * * 1'   # Mondays, around noon US Eastern
+  workflow_dispatch:        # plus a "Run workflow" button for a check on demand
+permissions:
+  contents: read
+  issues: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check the stations
+        run: python .github/scripts/check_stations.py > report.md
+      - name: Post the report
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh issue create --title "Station check $(date +'%b %d, %Y')" --body-file report.md

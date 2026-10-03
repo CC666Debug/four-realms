@@ -246,29 +246,32 @@
   .icon-btn.mini-cast { display: none; }
   html { overflow-anchor: none; }   /* stop the browser's scroll anchoring from yanking the page while the top shrinks */
   .top.mini { gap: 6px; padding-top: max(6px, env(safe-area-inset-top)); padding-bottom: 6px; }
-  .top.mini .sky, .top.mini .tools, .top.mini .notice, .top.mini .now .label, .top.mini .now .next, .top.mini .links,
+  .top.mini .sky, .top.mini .tools, .top.mini .notice, .top.mini .now .next, .top.mini .links, .top.mini .finder,
   .top.mini #shuffleBtn, .top.mini #prevBtn, .top.mini #muteBtn, .top.mini .volnum, .top.mini #disconnectBtn,
   .top.mini .prog .omen, .top.mini .prog-time, .top.mini .chips, .top.mini .sort { display: none !important; }
-  .top.mini .player { position: relative; flex-direction: row; align-items: center; gap: 6px; padding: 5px 4px 5px 5px; border-radius: 12px; overflow: hidden; }
-  .top.mini .now { flex: 1; min-width: 0; grid-template-columns: 34px minmax(0, 1fr); gap: 9px; cursor: pointer; }
-  .top.mini .badge { width: 34px; height: 34px; border-radius: 8px; font-size: 17px; }
-  .top.mini .badge svg { width: 20px; height: 20px; }
-  .top.mini .now .title { font-size: 13.5px; line-height: 1.2; }
-  .top.mini .now .song { font-size: 11.5px; }
+  .top.mini .player { position: relative; flex-direction: row; align-items: center; gap: 6px; padding: 7px 5px 7px 7px; border-radius: 12px; overflow: hidden; }
+  .top.mini .now { flex: 1; min-width: 0; grid-template-columns: 40px minmax(0, 1fr); gap: 10px; cursor: pointer; }
+  .top.mini .badge { width: 40px; height: 40px; border-radius: 9px; font-size: 19px; }
+  .top.mini .badge svg { width: 22px; height: 22px; }
+  .top.mini .now .title { font-size: 14.5px; line-height: 1.2; }
+  .top.mini .now .song { font-size: 12px; }
+  /* The mini bar keeps just the listener count (and LIVE DJ) from the top line, when the station reports it. */
+  .top.mini .now .label { font-size: 10.5px; letter-spacing: .3px; text-transform: none; }
+  .top.mini .now .label #where, .top.mini .now .label .state, .top.mini .now .label .sleep-left, .top.mini .crowd .sep:first-child { display: none; }
+  .top.mini .now .label:has(.crowd:empty) { display: none; }
   .top.mini .row { flex: none; gap: 0; justify-content: flex-end; }
-  .top.mini .play { width: 36px; height: 36px; margin: 0 2px; }
-  .top.mini .play svg { width: 20px; height: 20px; }
-  .top.mini .row .icon-btn { padding: 7px; }
-  .top.mini .row .icon-btn svg { width: 20px; height: 20px; }
+  .top.mini .play { width: 40px; height: 40px; margin: 0 2px; }
+  .top.mini .play svg { width: 21px; height: 21px; }
+  .top.mini .row .icon-btn { padding: 8px; }
+  .top.mini .row .icon-btn svg { width: 21px; height: 21px; }
   .top.mini .topbar { gap: 0; }
   .top.mini header { zoom: .8; }   /* the top line stays, just smaller */
   .top.mini .prog { position: absolute; left: 0; right: 0; bottom: 0; gap: 0; }
   .top.mini .prog .bar { height: 2px; border-radius: 0; background: transparent; }
   .top.mini .prog .bar i { background: var(--neon); box-shadow: 0 0 4px var(--neon); }
-  .top.mini .finder { gap: 0; }
-  .top.mini .search input { padding: 6px 30px 6px 32px; font-size: 14px; border-radius: 10px; }
-  .top.mini .search svg { left: 10px; width: 16px; height: 16px; }
-  .top.mini .search button { padding: 4px 8px; font-size: 16px; }
+  /* Phones draw their own clear-X in search boxes; the app has its own ✕, so hide the built-in one. */
+  input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; appearance: none; display: none; }
+  .backup { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 2px; }
   /* The shrink is a morph: the art, names, buttons and search glide into their mini places while the panel
      closes up from the bottom and the list slides up with it (names are only set while it runs). */
   .top.vt { view-transition-name: mini-top; }
@@ -348,7 +351,7 @@
   .more { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; color: var(--muted); }
 
   .to-top {
-    position: fixed; right: 16px; bottom: calc(var(--tabbar) + max(14px, env(safe-area-inset-bottom))); z-index: 4;
+    position: fixed; right: 16px; bottom: calc(var(--tabbar-h, calc(var(--tabbar) + max(8px, env(safe-area-inset-bottom)))) + 14px); z-index: 4;
     width: 50px; height: 50px; border-radius: 50%; display: grid; place-items: center;
     background: var(--surface-2); border: 1px solid var(--accent-2); color: var(--accent-2);
     box-shadow: 0 4px 14px rgba(0, 0, 0, .5); transition: opacity .2s, transform .2s;
@@ -689,6 +692,12 @@
     <p class="sub" id="savedCount"></p>
     <ul id="savedList"></ul>
     <p class="empty" id="savedEmpty">Tap “🤍 Save” while a song plays to keep it here.</p>
+    <div class="backup">
+      <button class="pill" id="savedBackup">⬇️ Back up</button>
+      <button class="pill" id="savedRestore">⬆️ Restore</button>
+      <input type="file" id="savedFile" accept=".md,text/markdown,text/plain" hidden>
+    </div>
+    <p class="sub" id="backupMsg"></p>
   </section>
 </dialog>
 
@@ -702,7 +711,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.11.0';
+const VERSION = '1.12.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2028,13 +2037,14 @@ let lastDrawers = '';
 function renderSongInfo() {
   const c = currentSong();
   $('nowNext').textContent = songInfo.next && songInfo.next !== song ? 'Up next: ' + songInfo.next : '';
-  $('nowCrowd').innerHTML = (songInfo.dj ? ' · <b>🔴 LIVE</b> with ' + esc(songInfo.dj) : '') + (songInfo.listeners != null ? ' · 👥 ' + songInfo.listeners : '');
+  const sep = '<span class="sep"> · </span>';
+  $('nowCrowd').innerHTML = (songInfo.dj ? sep + '<b>🔴 LIVE</b> with ' + esc(songInfo.dj) : '') + (songInfo.listeners != null ? sep + '👥 ' + songInfo.listeners : '');
   const fav = $('favBtn'), on = isSaved(c);
   fav.hidden = $('shareBtn').hidden = !c;
   fav.textContent = on ? '❤️ Saved' : '🤍 Save';
   fav.classList.toggle('on', on);
   $('recentBtn').hidden = !songInfo.history.length;
-  $('savedBtn').hidden = !saved.length;
+  $('savedBtn').hidden = false;   // always there, so a backup can be restored into an empty list
   $('savedBtn').textContent = '📜 Saved songs (' + saved.length + ')';
   renderLinks();
   // The drawers only redraw when something in them changed (or a minute passed, for the "min ago" times).
@@ -2055,6 +2065,45 @@ function renderSongInfo() {
     del.addEventListener('click', () => { saved = saved.filter(x => x !== f); safeSet(SAVED_KEY, JSON.stringify(saved)); renderSongInfo(); });
     return songRow(f, f.station + ' · ' + new Date(f.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }), del, true);
   }));
+}
+// Saved songs backup: a small Markdown file to keep anywhere, and load back after a reinstall or on another phone.
+{
+  const msg = t => { $('backupMsg').textContent = t; };
+  const day = t => { const d = new Date(t); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };   // local date
+  $('savedBackup').addEventListener('click', () => {
+    if (!saved.length) { msg('No saved songs to back up yet.'); return; }
+    const md = '# Four Realms · saved songs\n\nBacked up ' + new Date().toLocaleString() + ' · ' + saved.length + (saved.length === 1 ? ' song' : ' songs')
+      + '\n\n' + saved.map(f => '- **' + f.song + '** · ' + (f.station || '') + ' · ' + day(f.at)).join('\n') + '\n';
+    const name = 'four-realms-saved-songs-' + day(Date.now()) + '.md';
+    if (window.AndroidCast && window.AndroidCast.saveFile) {   // the Android app saves it to Downloads itself
+      msg(window.AndroidCast.saveFile(name, md) ? 'Saved to Downloads as ' + name : 'Couldn’t save the backup file.');
+      return;
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }));
+    a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+    msg('Backup downloaded as ' + name);
+  });
+  $('savedRestore').addEventListener('click', () => $('savedFile').click());
+  $('savedFile').addEventListener('change', async e => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    let added = 0;
+    for (const line of (await file.text()).split(/\r?\n/)) {
+      const m = line.match(/^- \*\*(.+)\*\* · (.*) · (\d{4}-\d{2}-\d{2})\s*$/);
+      if (!m) continue;
+      const x = { song: m[1], station: m[2], at: Date.parse(m[3] + 'T12:00:00') || Date.now() };
+      if (isSaved(x)) continue;
+      saved.push(x); added++;
+    }
+    saved.sort((a, b) => b.at - a.at);
+    safeSet(SAVED_KEY, JSON.stringify(saved));
+    lastDrawers = ''; renderSongInfo();
+    msg(added ? 'Restored ' + added + (added === 1 ? ' song.' : ' songs.') : 'No new songs in that file.');
+  });
 }
 // The Recent and Saved songs buttons open the panel at the bottom.
 {
@@ -2279,7 +2328,7 @@ function render() {
   $('volNum').textContent = muted ? 'off' : els.vol.value + '%';
   paintVMeter();
   els.muteBtn.setAttribute('aria-label', (muted ? 'Unmute' : 'Mute') + '. Volume ' + els.vol.value + '%. Hold and slide to change');
-  if (castConnected() && player && !volTimer) els.vol.value = Math.round((player.volumeLevel || 0) * 100);
+  if (castConnected() && player && !volTimer && player.volumeLevel != null) els.vol.value = Math.round(player.volumeLevel * 100);
   document.title = s && (live || localStation) ? s.name + ' · Four Realms' : 'Four Realms';
 
   const ps = playingStation();
@@ -2489,6 +2538,13 @@ start();
     const mc = document.getElementById('miniCast');
     if (mc) mc.addEventListener('click', () => els.castBtn.click());   // the speaker picker, like the big cast button
   }
+}
+
+// Measure the tab bar, so the go-to-top button always clears it (its height differs between browsers and the app).
+{
+  const bar = document.getElementById('tabbar');
+  const set = () => document.documentElement.style.setProperty('--tabbar-h', bar.offsetHeight + 'px');
+  if (bar) { set(); addEventListener('resize', set); if (window.ResizeObserver) new ResizeObserver(set).observe(bar); }
 }
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
