@@ -320,6 +320,17 @@
 "realm": "halloween"
 },
 {
+"id": "halloween/b33674ef",
+"name": "Mixabilly Radio",
+"group": "More Halloween",
+"about": "Psychobilly, hellbilly and punkabilly",
+"url": "http://mars.streamerr.co:8142/stream",
+"type": "audio/mpeg",
+"kbps": 160,
+"insecure": true,
+"realm": "halloween"
+},
+{
 "id": "synth/5a559093",
 "name": "=Dark Asylum Radio= For The Digitally Insane",
 "group": "Darkwave / Goth / Industrial",
@@ -4278,6 +4289,469 @@
 "realm": "synth"
 },
 {
+"id": "synth/5b8c5273",
+"name": "SomaFM - Deep Space One",
+"group": "Darkwave / Goth / Industrial",
+"about": "Deep ambient electronic and space music",
+"url": "https://ice2.somafm.com/deepspaceone-128-mp3",
+"type": "audio/mpeg",
+"meta": {
+"k": "soma",
+"id": "deepspaceone"
+},
+"realm": "synth"
+},
+{
+"id": "synth/c2051069",
+"name": "SomaFM - Drone Zone 2",
+"group": "Darkwave / Goth / Industrial",
+"about": "Atmospheric drones and textures, a more eclectic Drone Zone",
+"url": "https://ice2.somafm.com/dz2-128-mp3",
+"type": "audio/mpeg",
+"meta": {
+"k": "soma",
+"id": "dz2"
+},
+"realm": "synth"
+},
+{
+"id": "synth/a7554a78",
+"name": "SomaFM - Synphaera",
+"group": "Darkwave / Goth / Industrial",
+"about": "Modern space music and ambient electronic",
+"url": "https://ice2.somafm.com/synphaera-128-mp3",
+"type": "audio/mpeg",
+"meta": {
+"k": "soma",
+"id": "synphaera"
+},
+"realm": "synth"
+},
+{
+"id": "synth/bd6290a0",
+"name": "SomaFM - Space Station Soma",
+"group": "Synthwave / Retrowave",
+"about": "Spaced-out ambient and mid-tempo electronica",
+"url": "https://ice2.somafm.com/spacestation-128-mp3",
+"type": "audio/mpeg",
+"meta": {
+"k": "soma",
+"id": "spacestation"
+},
+"realm": "synth"
+},
+{
+"id": "synth/363f5a42",
+"name": "Retro PC Game Music Radio",
+"group": "Chiptune / Game",
+"about": "Japanese retro PC game music: PC-88, PC-98 and MSX FM synth",
+"url": "http://gyusyabu.ddo.jp:8000/",
+"type": "audio/mpeg",
+"insecure": true,
+"realm": "synth"
+},
+{
+"id": "synth/bc8ad1f5",
+"name": "Classic 21 80's New Wave",
+"group": "Synth-Pop & New Wave",
+"about": "Belgian public radio: 80s new wave and post-punk",
+"url": "https://radio.rtbf.be/c21-80nw/mp3-128/me",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/ba6d9188",
+"name": "Radio Future Funk",
+"group": "Synthwave / Retrowave",
+"about": "Future funk, French filter house and vapor grooves",
+"url": "https://stream.zeno.fm/48533y95cnruv",
+"type": "audio/mpeg",
+"meta": {
+"k": "zeno",
+"id": "48533y95cnruv"
+},
+"realm": "synth"
+},
+{
+"id": "synth/7be1496b",
+"name": "Klassik Radio Games",
+"group": "Chiptune / Game",
+"about": "Orchestral video game soundtracks",
+"url": "http://stream.klassikradio.de/games/mp3-128/",
+"type": "audio/mpeg",
+"insecure": true,
+"realm": "synth"
+},
+{
+"id": "synth/11e44544",
+"name": "New Wave Radio",
+"group": "Synth-Pop & New Wave",
+"about": "80s new wave, synth-pop and post-punk",
+"url": "https://digitalaudiobroadcasting.net:1085/stream",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/b435d6dd",
+"name": "Gem Radio New Wave",
+"group": "Synth-Pop & New Wave",
+"about": "70s and 80s new wave, synth-pop and post-punk",
+"url": "https://gemradionw.radioca.st/stream",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/9b0d2edf",
+"name": "SpriteLayer Video Game Radio",
+"group": "Chiptune / Game",
+"about": "Video game soundtracks across console generations",
+"url": "http://www.spritelayerradio.com:8010/all",
+"type": "audio/mpeg",
+"insecure": true,
+"realm": "synth"
+},
+{
+"id": "synth/d9c4dc89",
+"name": "RANGEBØSS Cyber Industrial Radio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Dark cyberpunk, darkwave and industrial bass",
+"url": "https://rangeboss.dreamvfia.com/radio.mp3",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/c52d9795",
+"name": "LiSTNR 80s New Wave",
+"group": "Synth-Pop & New Wave",
+"about": "Australian LiSTNR's 80s new wave and synth-pop stream",
+"url": "http://sa46.scastream.com.au/live/780snewwave_128.stream/playlist.m3u8",
+"type": "application/x-mpegURL",
+"insecure": true,
+"realm": "synth"
+},
+{
+"id": "synth/a23595d5",
+"name": "Teenage Kicks Radio",
+"group": "Synth-Pop & New Wave",
+"about": "Late 70s and 80s punk, post-punk and new wave",
+"url": "https://evcast.mediacp.eu:1165/stream",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/cab9a7bb",
+"name": "0N - New Wave",
+"group": "Synth-Pop & New Wave",
+"about": "Non-stop 80s new wave and synth-pop",
+"url": "https://0n-newwave.radionetz.de/0n-newwave.mp3",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/1eb05593",
+"name": "Concertzender X-Rated",
+"group": "Darkwave / Goth / Industrial",
+"about": "Avant-garde electronics, dark ambient and industrial noise",
+"url": "http://streams.greenhost.nl:8080/concertzenderlive",
+"type": "audio/mpeg",
+"insecure": true,
+"realm": "synth"
+},
+{
+"id": "synth/48a01b3c",
+"name": "VG Radio",
+"group": "Chiptune / Game",
+"about": "Video game music and remixes, around the clock",
+"url": "https://vgradio.sytes.net/listen/vg_radio/radio",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/ce78cdc2",
+"name": "ModFM",
+"group": "Chiptune / Game",
+"about": "Tracker music: Amiga MODs, XM and demoscene",
+"url": "http://radio.modules.pl:8500/;",
+"type": "audio/mpeg",
+"insecure": true,
+"realm": "synth"
+},
+{
+"id": "synth/f8947f00",
+"name": "Exclusively Simple Minds",
+"group": "Synth-Pop & New Wave",
+"about": "Simple Minds, around the clock",
+"url": "https://nl4.mystreaming.net/er/simpleminds/icecast.audio",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/793fc7dc",
+"name": "Exclusively Talking Heads",
+"group": "Synth-Pop & New Wave",
+"about": "Talking Heads, around the clock",
+"url": "https://nl4.mystreaming.net/er/talkingheads/icecast.audio",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/ce01628e",
+"name": "Exclusively Tears for Fears",
+"group": "Synth-Pop & New Wave",
+"about": "Tears for Fears, around the clock",
+"url": "https://nl4.mystreaming.net/er/tearsforfears/icecast.audio",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/d58343b6",
+"name": "Pop & Wave (laut.fm)",
+"group": "Synth-Pop & New Wave",
+"about": "80s synth-pop, new wave and dark wave",
+"url": "https://stream.laut.fm/pop-and-wave",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "pop-and-wave"
+},
+"realm": "synth"
+},
+{
+"id": "synth/ff8ba802",
+"name": "Nostalgie New Wave",
+"group": "Synth-Pop & New Wave",
+"about": "Belgian Nostalgie: new wave, synth-pop and post-punk",
+"url": "https://n03.rcs.revma.com/52g2hx43ehuvv",
+"type": "audio/aac",
+"realm": "synth"
+},
+{
+"id": "synth/79e105c8",
+"name": "Radio DarkFire",
+"group": "Darkwave / Goth / Industrial",
+"about": "German dark alternative: darkwave, dark electro and gothic rock",
+"url": "http://37.59.82.8:8344/",
+"type": "audio/mpeg",
+"insecure": true,
+"realm": "synth"
+},
+{
+"id": "synth/7775ef45",
+"name": "Gametation (laut.fm)",
+"group": "Chiptune / Game",
+"about": "Instrumental video game scores",
+"url": "https://stream.laut.fm/game-tation",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "game-tation"
+},
+"realm": "synth"
+},
+{
+"id": "synth/3e8897cc",
+"name": "VGM Radio",
+"group": "Chiptune / Game",
+"about": "Retro and modern video game music",
+"url": "http://radio.vgmradio.com:8040/stream",
+"type": "audio/mpeg",
+"insecure": true,
+"realm": "synth"
+},
+{
+"id": "synth/b2fa27fd",
+"name": "Nerds and Geeks: The Station",
+"group": "Chiptune / Game",
+"about": "Retro gaming and demoscene: C64, Amiga and consoles",
+"url": "http://nerdsandgeeks.de:2808/stream/1/;",
+"type": "audio/mpeg",
+"insecure": true,
+"realm": "synth"
+},
+{
+"id": "synth/8f625999",
+"name": "New Wave - BestNet Radio",
+"group": "Synth-Pop & New Wave",
+"about": "80s new wave, synth-pop and post-punk",
+"url": "https://bigrradio.cdnstream1.com/5162_128",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/fb6173c3",
+"name": "ALT/80",
+"group": "Synth-Pop & New Wave",
+"about": "80s alternative, post-punk and new wave",
+"url": "https://jenny.torontocast.com:8050/stream",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/73b148ad",
+"name": "80er-Revival (laut.fm)",
+"group": "Synth-Pop & New Wave",
+"about": "Neue Deutsche Welle and German 80s synth-pop",
+"url": "https://stream.laut.fm/80er-revival",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "80er-revival"
+},
+"realm": "synth"
+},
+{
+"id": "synth/5f42ddc5",
+"name": "New Wave 80s Earth Radio",
+"group": "Synth-Pop & New Wave",
+"about": "80s new wave, synth-pop and electronic",
+"url": "https://stream.zeno.fm/uv6z1a5rxrhvv",
+"type": "audio/mpeg",
+"meta": {
+"k": "zeno",
+"id": "uv6z1a5rxrhvv"
+},
+"realm": "synth"
+},
+{
+"id": "synth/87b8b68d",
+"name": "Radio Nachtflug",
+"group": "Darkwave / Goth / Industrial",
+"about": "German gothic radio: darkwave, EBM and electro-industrial",
+"url": "http://streamplus55.leonex.de:11810/stream",
+"type": "audio/mpeg",
+"insecure": true,
+"realm": "synth"
+},
+{
+"id": "synth/0bb81675",
+"name": "Best of Rock FM - Rammstein",
+"group": "Darkwave / Goth / Industrial",
+"about": "Rammstein and Neue Deutsche Härte, around the clock",
+"url": "https://bestofrockfm.stream.vip/rammstein/mp3-256/",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/b08d5688",
+"name": "Radio Schwarze Welle",
+"group": "Darkwave / Goth / Industrial",
+"about": "German gothic: darkwave, EBM and gothic rock",
+"url": "https://schwarze-welle.de:7500/",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/89907b3d",
+"name": "RetroByte Radio",
+"group": "Chiptune / Game",
+"about": "Retro computer and video game music",
+"url": "https://retrobytesradio.radioca.st/stream",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/d4739431",
+"name": "RadioSEGA",
+"group": "Chiptune / Game",
+"about": "Sega game soundtracks, classic and modern",
+"url": "https://icecast.radiosega.net/live",
+"type": "audio/aac",
+"realm": "synth"
+},
+{
+"id": "synth/11422637",
+"name": "Sonic Radio",
+"group": "Chiptune / Game",
+"about": "Music from the Sonic the Hedgehog games",
+"url": "https://play.soundtest.fm/sonic",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/e802777f",
+"name": "Fluffyland RPG (laut.fm)",
+"group": "Chiptune / Game",
+"about": "Japanese RPG and video game soundtracks",
+"url": "https://stream.laut.fm/fluffylandrpg",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "fluffylandrpg"
+},
+"realm": "synth"
+},
+{
+"id": "synth/67a5cd89",
+"name": "Score Radio (laut.fm)",
+"group": "Chiptune / Game",
+"about": "Epic video game and cinematic orchestral scores",
+"url": "https://stream.laut.fm/score-radio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "score-radio"
+},
+"realm": "synth"
+},
+{
+"id": "synth/d01060e3",
+"name": "Icon Radio (laut.fm)",
+"group": "Chiptune / Game",
+"about": "Touhou Project music, arrangements and chiptune remixes",
+"url": "https://stream.laut.fm/icon_radio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "icon_radio"
+},
+"realm": "synth"
+},
+{
+"id": "synth/e591e187",
+"name": "Gamepad Music",
+"group": "Chiptune / Game",
+"about": "Video game music from 8-bit to modern",
+"url": "https://centova.listenon.in/proxy/gamepad/stream",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/29df6955",
+"name": "24/7 Vapor Funk Radio",
+"group": "Synthwave / Retrowave",
+"about": "Vaporwave, future funk and retro electronic",
+"url": "https://radio.zelerk.com/listen/vapor/stream.ogg",
+"type": "audio/ogg",
+"realm": "synth"
+},
+{
+"id": "synth/0e8bbf0a",
+"name": "The Red Robot Radio",
+"group": "Chiptune / Game",
+"about": "Space chiptunes, demoscene tracker music and keygen tunes",
+"url": "https://asteroid.asgardius.company/listen/r3/live",
+"type": "audio/aac",
+"realm": "synth"
+},
+{
+"id": "synth/5cf9e748",
+"name": "YourClassical Pixel & Plot",
+"group": "Chiptune / Game",
+"about": "Orchestral video game music from US public radio",
+"url": "https://pixelplot.stream.publicradio.org/pixelplot.mp3",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
+"id": "synth/6e51503f",
+"name": "Gamebytes Radio",
+"group": "Chiptune / Game",
+"about": "Classic and modern game soundtracks and remixes",
+"url": "https://broadcast.shoutcheap.com/proxy/gbrgameb/stream",
+"type": "audio/mpeg",
+"realm": "synth"
+},
+{
 "name": "International Pagan Radio",
 "group": "Wiccan & Witchy",
 "about": "All pagan, all the time: Wiccan chants, pagan folk and community shows",
@@ -5083,6 +5557,106 @@
 "k": "laut",
 "id": "schwarzes-nrw"
 },
+"realm": "pagan"
+},
+{
+"name": "Ancient FM",
+"group": "Medieval & Pagan Folk (Mittelalter)",
+"about": "Commercial-free medieval and Renaissance music",
+"url": "https://mediaserv73.live-streams.nl:18058/stream",
+"type": "audio/mpeg",
+"kbps": 128,
+"id": "pagan/880e9534",
+"realm": "pagan"
+},
+{
+"name": "Early Music (laut.fm)",
+"group": "Medieval & Pagan Folk (Mittelalter)",
+"about": "Medieval and Renaissance music, with some Baroque",
+"url": "https://stream.laut.fm/early_music",
+"type": "audio/mpeg",
+"kbps": 128,
+"meta": {
+"k": "laut",
+"id": "early_music"
+},
+"id": "pagan/67698fdd",
+"realm": "pagan"
+},
+{
+"name": "Toutes les couleurs du trad",
+"group": "Medieval & Pagan Folk (Mittelalter)",
+"about": "European traditional folk: French trad, Celtic and medieval tunes",
+"url": "https://my2.radiolize.com/radio/8100/radio.mp3",
+"type": "audio/aac",
+"kbps": 96,
+"id": "pagan/9d819aa6",
+"realm": "pagan"
+},
+{
+"name": "Celtic Music Radio",
+"group": "Celtic Pagan",
+"about": "Glasgow community station: Scottish and Irish trad and Celtic folk",
+"url": "https://uksoutha.streaming.broadcast.radio/celtic",
+"type": "audio/mpeg",
+"id": "pagan/442c9433",
+"realm": "pagan"
+},
+{
+"name": "LiveIreland",
+"group": "Celtic Pagan",
+"about": "Irish and Celtic music",
+"url": "http://lynx.prostreaming.net:8058/;",
+"type": "audio/mpeg",
+"kbps": 128,
+"insecure": true,
+"id": "pagan/20684393",
+"realm": "pagan"
+},
+{
+"name": "Celtic Rock (laut.fm)",
+"group": "Celtic Pagan",
+"about": "Celtic folk and Celtic rock",
+"url": "https://stream.laut.fm/celtic-rock",
+"type": "audio/mpeg",
+"kbps": 128,
+"meta": {
+"k": "laut",
+"id": "celtic-rock"
+},
+"id": "pagan/0382e578",
+"realm": "pagan"
+},
+{
+"name": "Irish Pub Radio",
+"group": "Celtic Pagan",
+"about": "Irish folk and pub ballads, with some Irish pop",
+"url": "http://solid24.streamupsolutions.com:8026/stream",
+"type": "audio/mpeg",
+"kbps": 128,
+"insecure": true,
+"id": "pagan/b10ea918",
+"realm": "pagan"
+},
+{
+"name": "WUMB Celtic Journey",
+"group": "Celtic Pagan",
+"about": "Celtic folk from Boston's WUMB (low-quality stream)",
+"url": "http://wumb.streamguys1.com/wumb919cj",
+"type": "audio/mpeg",
+"kbps": 32,
+"insecure": true,
+"id": "pagan/2819b386",
+"realm": "pagan"
+},
+{
+"name": "Donald's Radio",
+"group": "Celtic Pagan",
+"about": "Celtic rock and Highland music",
+"url": "https://radio.donald.cat/listen/donalds_radio/radio.mp3",
+"type": "audio/mpeg",
+"kbps": 192,
+"id": "pagan/1f7b3082",
 "realm": "pagan"
 },
 {
@@ -6645,6 +7219,47 @@
 "url": "http://79.120.12.130:8002/folkblackmet",
 "type": "audio/aac",
 "insecure": true,
+"realm": "kvlt"
+},
+{
+"name": "Exclusive Radio - Black Sabbath",
+"group": "Metal Mix",
+"about": "Black Sabbath, around the clock",
+"url": "https://streaming.exclusive.radio/er/blacksabbath/icecast.audio",
+"type": "audio/mpeg",
+"kbps": 128,
+"id": "kvlt/4cd4d45f",
+"realm": "kvlt"
+},
+{
+"name": "Metalourgio Radio",
+"group": "Extreme Metal Mixes (lots of black metal)",
+"about": "Greek metal webzine radio: black, death, doom and thrash",
+"url": "http://cast.metalourgio.com:8427/stream192",
+"type": "audio/mpeg",
+"kbps": 192,
+"insecure": true,
+"id": "kvlt/a7c490a2",
+"realm": "kvlt"
+},
+{
+"name": "Best of Rock FM - Rammstein",
+"group": "Metal Mix",
+"about": "Rammstein and Neue Deutsche Härte, around the clock",
+"url": "https://bestofrockfm.stream.vip/rammstein/mp3-256/",
+"type": "audio/mpeg",
+"kbps": 256,
+"id": "kvlt/13022778",
+"realm": "kvlt"
+},
+{
+"name": "Wacken Radio",
+"group": "Metal Mix",
+"about": "Wacken Open Air festival radio: heavy, thrash and extreme metal",
+"url": "https://streams.radiobob.de/bob-wacken/mp3-192/mediaplayer",
+"type": "audio/mpeg",
+"kbps": 192,
+"id": "kvlt/2b0711c1",
 "realm": "kvlt"
 }
 ]

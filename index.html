@@ -246,19 +246,28 @@
   .icon-btn.mini-cast { display: none; }
   html { overflow-anchor: none; }   /* stop the browser's scroll anchoring from yanking the page while the top shrinks */
   .top.mini { gap: 6px; padding-top: max(6px, env(safe-area-inset-top)); padding-bottom: 6px; }
-  .top.mini .sky, .top.mini .tools, .top.mini .notice, .top.mini .now .next, .top.mini .links, .top.mini .finder,
+  .top.mini .sky, .top.mini .tools, .top.mini .notice, .top.mini .now .next, .top.mini .links, .top.mini .search-row,
   .top.mini #shuffleBtn, .top.mini #prevBtn, .top.mini #muteBtn, .top.mini .volnum, .top.mini #disconnectBtn,
-  .top.mini .prog .omen, .top.mini .prog-time, .top.mini .chips, .top.mini .sort { display: none !important; }
+  .top.mini .prog .omen, .top.mini .prog-time { display: none !important; }
   .top.mini .player { position: relative; flex-direction: row; align-items: center; gap: 6px; padding: 7px 5px 7px 7px; border-radius: 12px; overflow: hidden; }
   .top.mini .now { flex: 1; min-width: 0; grid-template-columns: 40px minmax(0, 1fr); gap: 10px; cursor: pointer; }
   .top.mini .badge { width: 40px; height: 40px; border-radius: 9px; font-size: 19px; }
   .top.mini .badge svg { width: 22px; height: 22px; }
   .top.mini .now .title { font-size: 14.5px; line-height: 1.2; }
   .top.mini .now .song { font-size: 12px; }
-  /* The mini bar keeps just the listener count (and LIVE DJ) from the top line, when the station reports it. */
-  .top.mini .now .label { font-size: 10.5px; letter-spacing: .3px; text-transform: none; }
+  /* In the mini bar the listener count (and LIVE DJ) sits to the right of the station name, on the same line;
+     the rest of the top line goes, so there's no empty space above the name. */
+  .top.mini .now > div:last-child { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "title crowd" "song song"; column-gap: 8px; align-items: baseline; }
+  .top.mini .now .label { display: contents; }
   .top.mini .now .label #where, .top.mini .now .label .state, .top.mini .now .label .sleep-left, .top.mini .crowd .sep:first-child { display: none; }
-  .top.mini .now .label:has(.crowd:empty) { display: none; }
+  .top.mini .now .title { grid-area: title; }
+  .top.mini .now .song { grid-area: song; }
+  .top.mini .now .label .crowd { grid-area: crowd; font-size: 11px; letter-spacing: 0; text-transform: none; color: var(--muted); white-space: nowrap; }
+  /* Slim genre pills ride along under the mini bar. */
+  .top.mini .finder { gap: 0; }
+  .top.mini .chips { gap: 5px; padding-bottom: 0; }
+  .top.mini .chip { padding: 3px 10px; font-size: 12px; }
+  .top.mini .chip b { font-size: 10.5px; }
   .top.mini .row { flex: none; gap: 0; justify-content: flex-end; }
   .top.mini .play { width: 40px; height: 40px; margin: 0 2px; }
   .top.mini .play svg { width: 21px; height: 21px; }
@@ -282,6 +291,7 @@
   .top.vt #playBtn { view-transition-name: mini-play; }
   .top.vt #nextBtn { view-transition-name: mini-next; }
   .top.vt .finder .search { view-transition-name: mini-search; }
+  .top.vt .chips { view-transition-name: mini-chips; }
   /* The page under the bar slides by exactly the amount the player shrinks, on the same curve, so the list stays
      glued to the player's bottom edge the whole way (the top station never slips out of sight). */
   ::view-transition-old(root), ::view-transition-new(root) { mix-blend-mode: normal; animation-duration: .34s; animation-timing-function: cubic-bezier(.25, .8, .25, 1); }
@@ -711,7 +721,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.12.0';
+const VERSION = '1.13.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
