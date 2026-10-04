@@ -544,6 +544,8 @@
     *, *::before { animation: none !important; transition: none !important; }
   }
 </style>
+<!-- Visit counter (GoatCounter: free, no cookies). Diag log has a "Don't count me" switch. -->
+<script data-goatcounter="https://cc666debug.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 <main id="main">
@@ -716,12 +718,13 @@
   <div class="dlg-btns">
     <button id="diagClear">Clear</button>
     <button id="diagCopy">Copy log</button>
+    <button id="gcSkip"></button>
     <button onclick="this.closest('dialog').close()">Close</button>
   </div>
 </dialog>
 
 <script>
-const VERSION = '1.13.2';
+const VERSION = '1.14.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2365,6 +2368,19 @@ function render() {
     try { await navigator.clipboard.writeText(diagLines.join('\n')); $('diagCopy').textContent = 'Copied ✓'; }
     catch (e) { getSelection().selectAllChildren(text); $('diagCopy').textContent = 'Selected: copy it'; }
     setTimeout(() => { $('diagCopy').textContent = 'Copy log'; }, 2500);
+  });
+  // GoatCounter skips counting when localStorage skipgc = 't' (shared by all the apps on this site)
+  const gcLabel = () => {
+    let off = false; try { off = localStorage.getItem('skipgc') === 't'; } catch (e) {}
+    $('gcSkip').textContent = off ? 'Count me' : "Don't count me";
+  };
+  gcLabel();
+  $('gcSkip').addEventListener('click', () => {
+    try {
+      if (localStorage.getItem('skipgc') === 't') localStorage.removeItem('skipgc');
+      else localStorage.setItem('skipgc', 't');
+    } catch (e) {}
+    gcLabel();
   });
   $('diagClear').addEventListener('click', () => {
     diagLines = [];
