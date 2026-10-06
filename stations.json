@@ -67,7 +67,7 @@
 "type": "audio/mpeg",
 "meta": {
 "k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_movies.json"
+"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_soundtracks.json"
 },
 "lite": "https://radio1.streamserver.link/radio/8050/hrs-aac",
 "spine": "hrs"
