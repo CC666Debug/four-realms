@@ -31,19 +31,6 @@
 },
 {
 "realm": "halloween",
-"id": "halloween/classics",
-"name": "Classics",
-"group": "Halloween Radio",
-"about": "Old favourites and novelty songs",
-"url": "https://radio1.streamserver.link/radio/8180/radio.mp3",
-"type": "audio/mpeg",
-"meta": {
-"k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_classics.json"
-}
-},
-{
-"realm": "halloween",
 "id": "halloween/kids",
 "name": "Kids",
 "group": "Halloween Radio",
