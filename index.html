@@ -452,7 +452,7 @@
   .tile .last { position: absolute; top: 10px; left: 0; right: 0; text-align: center; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-2); }
   .gate .fine { text-align: center; font-size: 11px; color: #6f6878; }
 
-  /* Halloween Radio extras: data saver and Premium in the Halloween realm; song links for its channels. */
+  /* Halloween Radio extras: data saver and Phantom in the Halloween realm; song links for its channels. */
   .tools, .links { display: flex; gap: 8px; flex-wrap: wrap; }
   .tools[hidden], .links[hidden] { display: none; }
   .links { padding: 2px 0 6px; }
@@ -561,7 +561,7 @@
   <div class="sky" id="sky" aria-live="off"></div>
   <div class="tools" id="tools" hidden>
     <button class="pill" id="saverBtn" aria-pressed="false">📶 Data saver: off</button>
-    <button class="pill" id="premiumBtn">⭐ Add Premium</button>
+    <button class="pill" id="premiumBtn">⭐ Add Phantom</button>
   </div>
 
   </div>
@@ -679,12 +679,12 @@
 
 <dialog id="premiumDlg">
   <form method="dialog" id="premiumForm" novalidate>
-    <h2>⭐ Premium channel</h2>
+    <h2>⭐ Phantom channel</h2>
     <div id="premiumAdd">
-      <p>For Halloween Radio supporters. Paste your Premium stream link from halloweenradio.net. It stays on this phone and is never shared.</p>
-      <input id="premiumUrl" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://…" aria-label="Premium stream link">
+      <p>For Halloween Radio supporters. Paste your Phantom stream link from halloweenradio.net (it used to be called Premium). It stays on this phone and is never shared.</p>
+      <input id="premiumUrl" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://…" aria-label="Phantom stream link">
     </div>
-    <p id="premiumHave" hidden>Premium is set up on this phone. Removing it only deletes the link from this phone.</p>
+    <p id="premiumHave" hidden>Phantom is set up on this phone. Removing it only deletes the link from this phone.</p>
     <p class="msg" id="premiumMsg" role="status"></p>
     <div class="dlg-btns">
       <button value="cancel" formnovalidate>Cancel</button>
@@ -724,7 +724,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.14.2';
+const VERSION = '1.15.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1370,7 +1370,7 @@ function loadStation(s) {
   speakerLoading = s;
   const t = performance.now();
   loadStartedAt = t;
-  diag('sending ' + s.name + ' to ' + session.getCastDevice().friendlyName + ' · ' + (s.id === 'halloween/premium' ? '(private Premium link)' : s.url));
+  diag('sending ' + s.name + ' to ' + session.getCastDevice().friendlyName + ' · ' + (s.id === 'halloween/premium' ? '(private Phantom link)' : s.url));
   kickStart();
   session.loadMedia(req).then(() => {
     diag('speaker accepted ' + s.name + ' after ' + ((performance.now() - t) / 1000).toFixed(2) + 's');
@@ -1602,8 +1602,8 @@ const weakSignal = () => !!net && (net.saveData || /2g|3g/.test(net.effectiveTyp
 let autoLite = false, triedBackup = false;
 const useLite = () => dataSaver || autoLite || weakSignal();
 const streamFor = s => useLite() && s.lite ? s.lite : s.url;
-// The Premium link is private: it never goes into the diagnostic log.
-const logUrl = s => s.id === 'halloween/premium' ? '(private Premium link)' : streamFor(s);
+// The Phantom link is private: it never goes into the diagnostic log.
+const logUrl = s => s.id === 'halloween/premium' ? '(private Phantom link)' : streamFor(s);
 
 function clearRetry() {
   clearTimeout(retryTimer); clearTimeout(stallTimer); clearTimeout(startTimer);
@@ -2389,23 +2389,23 @@ function render() {
   });
 }
 
-// ── Halloween Radio Premium ─────────────────────
+// ── Halloween Radio Phantom (once called Premium; its id and saved key keep the old name) ──
 // For supporters: the link is pasted once and kept only on this phone, never in this public code.
 // Halloween Caster uses the same storage (same web address), so adding it in either app adds it to both.
 const PREMIUM_KEY = 'hc_premium_url';
-const premiumStation = url => ({ realm: 'halloween', id: 'halloween/premium', name: 'Premium ⭐', group: 'Halloween Radio',
+const premiumStation = url => ({ realm: 'halloween', id: 'halloween/premium', name: 'Phantom ⭐', group: 'Halloween Radio',
   about: 'For Halloween Radio supporters', url, type: /mp3/i.test(url) ? 'audio/mpeg' : 'audio/aac', sortName: '0007',
-  search: 'premium halloween radio', meta: { k: 'azura', u: 'https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_premium.json' } });
+  search: 'phantom premium halloween radio', meta: { k: 'azura', u: 'https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_premium.json' } });
 {
   const btn = $('premiumBtn'), dlg = $('premiumDlg'), msg = $('premiumMsg'), go = $('premiumGo');
   const have = () => STATIONS.find(s => s.id === 'halloween/premium');
-  const label = () => { btn.textContent = safeGet(PREMIUM_KEY) ? '⭐ Premium: on' : '⭐ Add Premium'; btn.classList.toggle('on', !!safeGet(PREMIUM_KEY)); };
+  const label = () => { btn.textContent = safeGet(PREMIUM_KEY) ? '⭐ Phantom: on' : '⭐ Add Phantom'; btn.classList.toggle('on', !!safeGet(PREMIUM_KEY)); };
   label();
   let failedUrl = '';   // a link that failed the test; tapping again saves it anyway
   btn.addEventListener('click', () => {
     const on = !!safeGet(PREMIUM_KEY);
     $('premiumAdd').hidden = on; $('premiumHave').hidden = !on;
-    go.textContent = on ? 'Remove Premium' : 'Test & save';
+    go.textContent = on ? 'Remove Phantom' : 'Test & save';
     $('premiumUrl').value = ''; msg.textContent = ''; msg.className = 'msg'; failedUrl = '';
     dlg.showModal();
   });
@@ -2422,7 +2422,7 @@ const premiumStation = url => ({ realm: 'halloween', id: 'halloween/premium', na
   const save = url => {
     safeSet(PREMIUM_KEY, url);
     if (!have()) STATIONS.splice(STATIONS.findIndex(s => s.realm === 'halloween' && s.group !== 'Halloween Radio'), 0, premiumStation(url));
-    diag('Premium added');
+    diag('Phantom added');
     dlg.close(); refresh();
   };
   $('premiumForm').addEventListener('submit', async e => {
@@ -2434,7 +2434,7 @@ const premiumStation = url => ({ realm: 'halloween', id: 'halloween/premium', na
       if (selected === p) selected = null;
       try { localStorage.removeItem(PREMIUM_KEY); } catch (err) {}
       STATIONS = STATIONS.filter(s => s !== p);
-      diag('Premium removed');
+      diag('Phantom removed');
       dlg.close(); refresh();
       return;
     }

@@ -102,6 +102,20 @@
 "spine": "hri"
 },
 {
+"realm": "halloween",
+"id": "halloween/cauldron",
+"name": "Cauldron",
+"group": "Halloween Radio",
+"about": "Halloween Radio's newest channel",
+"url": "https://radio1.streamserver.link/radio/8140/hrc-aac",
+"type": "audio/aac",
+"meta": {
+"k": "azura",
+"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_cauldron.json"
+},
+"spine": "hrc"
+},
+{
 "id": "halloween/1cc7fcc8",
 "name": "Dark Hollow Radio (Gothic Americana)",
 "group": "More Halloween",
