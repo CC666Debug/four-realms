@@ -724,7 +724,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.15.1';
+const VERSION = '1.15.2';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2106,9 +2106,12 @@ function renderSongInfo() {
     if (!file) return;
     let added = 0;
     for (const line of (await file.text()).split(/\r?\n/)) {
-      const m = line.match(/^- \*\*(.+)\*\* · (.*) · (\d{4}-\d{2}-\d{2})\s*$/);
-      if (!m) continue;
-      const x = { song: m[1], station: m[2], at: Date.parse(m[3] + 'T12:00:00') || Date.now() };
+      // This app's backups:        - **Artist – Title** · Station · 2026-10-06
+      // Halloween Caster backups:  - **Title** · Artist · Station · 2026-10-06
+      let x = null, m = line.match(/^- \*\*(.+)\*\* · (.*) · (.*) · (\d{4}-\d{2}-\d{2})\s*$/);
+      if (m) x = { song: m[2] ? m[2] + ' – ' + m[1] : m[1], station: m[3], at: Date.parse(m[4] + 'T12:00:00') || Date.now() };
+      else if ((m = line.match(/^- \*\*(.+)\*\* · (.*) · (\d{4}-\d{2}-\d{2})\s*$/))) x = { song: m[1], station: m[2], at: Date.parse(m[3] + 'T12:00:00') || Date.now() };
+      if (!x) continue;
       if (isSaved(x)) continue;
       saved.push(x); added++;
     }
