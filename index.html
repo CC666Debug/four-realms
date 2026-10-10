@@ -718,7 +718,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.18.1';
+const VERSION = '1.18.2';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2079,6 +2079,9 @@ function renderSongInfo() {
   const day = t => { const d = new Date(t); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };   // local date
   // Where the file goes: the Android app and browsers that can pick folders ask for a folder
   // the first time and keep using it (📁 Folder picks another); anything else downloads it.
+  // The device goes in the file name, so two devices backing up to one synced folder on the same day never share a file.
+  const device = () => /Windows/.test(navigator.userAgent) ? 'pc' : /Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints < 2 ? 'mac'
+    : Math.min(screen.width, screen.height) >= 600 ? 'tablet' : 'phone';
   const canPick = !!(window.AndroidCast && window.AndroidCast.saveBackup) || 'showDirectoryPicker' in window;
   $('savedFolder').hidden = !canPick;
   const db = (mode, fn) => new Promise((ok, fail) => {   // remembers the picked folder (localStorage can't hold it)
@@ -2097,7 +2100,7 @@ function renderSongInfo() {
       dir = await window.showDirectoryPicker({ id: 'fr-backup', mode: 'readwrite', startIn: 'documents' });
       await db('readwrite', kv => kv.put(dir, 'dir')).catch(() => {});
     }
-    const w = await (await dir.getFileHandle(name, { create: true })).createWritable();   // same day = same file, replaced
+    const w = await (await dir.getFileHandle(name, { create: true })).createWritable();   // same day on this device = same file, replaced
     await w.write(md); await w.close();
     return dir.name;
   }
@@ -2106,7 +2109,7 @@ function renderSongInfo() {
     if (!saved.length) { msg('No saved songs to back up yet.'); return; }
     const md = '# Four Realms · saved songs\n\nBacked up ' + new Date().toLocaleString() + ' · ' + saved.length + (saved.length === 1 ? ' song' : ' songs')
       + '\n\n' + saved.map(f => '- **' + f.song + '** · ' + (f.station || '') + ' · ' + day(f.at)).join('\n') + '\n';
-    const name = 'four-realms-saved-songs-' + day(Date.now()) + '.md';
+    const name = 'four-realms-saved-songs-' + day(Date.now()) + '-' + device() + '.md';
     if (window.AndroidCast && window.AndroidCast.saveBackup) { window.AndroidCast.saveBackup(name, md, !!pickNew); return; }   // answers through onAndroidBackup
     if (window.AndroidCast && window.AndroidCast.saveFile) {   // an older Android app saves it to Downloads itself
       msg(window.AndroidCast.saveFile(name, md) ? 'Saved to Downloads as ' + name : 'Couldn’t save the backup file.');
