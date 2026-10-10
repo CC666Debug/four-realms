@@ -718,7 +718,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.18.2';
+const VERSION = '1.19.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2093,30 +2093,55 @@ function renderSongInfo() {
       catch (e) { fail(e); }
     };
   });
-  async function saveInFolder(name, md, pickNew) {
+  // Each device keeps one list file that only grows: Back up adds this device's songs to the ones already in it
+  // and never removes any, so a wiped app can't shrink it. (Un-saved songs stay until deleted from the file.)
+  const listSong = line => {   // a line from either app's list → a saved song
+    let m = line.match(/^- \*\*(.+)\*\* · (.*) · (.*) · (\d{4}-\d{2}-\d{2})\s*$/);
+    if (m) return { song: m[2] ? m[2] + ' – ' + m[1] : m[1], station: m[3], at: Date.parse(m[4] + 'T12:00:00') || Date.now() };
+    if (!(m = line.match(/^- \*\*(.+)\*\* · (.*) · (\d{4}-\d{2}-\d{2})\s*$/))) return null;
+    return { song: m[1], station: m[2], at: Date.parse(m[3] + 'T12:00:00') || Date.now() };
+  };
+  function grownList(old) {
+    const all = [...saved], seen = new Set(saved.map(savedKey));
+    for (const line of (old || '').split(/\r?\n/)) {
+      const x = listSong(line);
+      if (x && !seen.has(savedKey(x))) { seen.add(savedKey(x)); all.push(x); }
+    }
+    all.sort((a, b) => b.at - a.at);
+    return '# Four Realms · saved songs\n\nBacked up ' + new Date().toLocaleString() + ' · ' + all.length + (all.length === 1 ? ' song' : ' songs')
+      + '\n\n' + all.map(f => '- **' + f.song + '** · ' + (f.station || '') + ' · ' + day(f.at)).join('\n') + '\n';
+  }
+  async function saveInFolder(name, make, pickNew) {
     let dir = pickNew ? null : await db('readonly', kv => kv.get('dir')).catch(() => null);
     if (dir && await dir.requestPermission({ mode: 'readwrite' }) !== 'granted') dir = null;
     if (!dir) {
       dir = await window.showDirectoryPicker({ id: 'fr-backup', mode: 'readwrite', startIn: 'documents' });
       await db('readwrite', kv => kv.put(dir, 'dir')).catch(() => {});
     }
-    const w = await (await dir.getFileHandle(name, { create: true })).createWritable();   // same day on this device = same file, replaced
-    await w.write(md); await w.close();
+    let old = '';   // what this device's list file already holds
+    try { old = await (await (await dir.getFileHandle(name)).getFile()).text(); } catch (e) { if (e.name !== 'NotFoundError') throw e; }
+    const w = await (await dir.getFileHandle(name, { create: true })).createWritable();
+    await w.write(make(old)); await w.close();
     return dir.name;
   }
   window.onAndroidBackup = r => msg(r.ok ? 'Saved in ' + r.where + ' as ' + r.name : r.where === 'cancel' ? 'Backup cancelled.' : 'Couldn’t save the backup file.');
   async function backUp(pickNew) {
     if (!saved.length) { msg('No saved songs to back up yet.'); return; }
-    const md = '# Four Realms · saved songs\n\nBacked up ' + new Date().toLocaleString() + ' · ' + saved.length + (saved.length === 1 ? ' song' : ' songs')
-      + '\n\n' + saved.map(f => '- **' + f.song + '** · ' + (f.station || '') + ' · ' + day(f.at)).join('\n') + '\n';
-    const name = 'four-realms-saved-songs-' + day(Date.now()) + '-' + device() + '.md';
-    if (window.AndroidCast && window.AndroidCast.saveBackup) { window.AndroidCast.saveBackup(name, md, !!pickNew); return; }   // answers through onAndroidBackup
+    const name = 'four-realms-saved-songs-' + device() + '.md';
+    const A = window.AndroidCast;
+    if (A && A.saveBackup) {   // answers through onAndroidBackup
+      let old = '';
+      if (A.readBackup && !pickNew) try { const r = JSON.parse(A.readBackup(name)); if (r.ok) old = r.text; } catch (e) {}
+      A.saveBackup(name, grownList(old), !!pickNew);
+      return;
+    }
+    const md = grownList('');
     if (window.AndroidCast && window.AndroidCast.saveFile) {   // an older Android app saves it to Downloads itself
       msg(window.AndroidCast.saveFile(name, md) ? 'Saved to Downloads as ' + name : 'Couldn’t save the backup file.');
       return;
     }
     if ('showDirectoryPicker' in window) {
-      try { msg('Saved in ' + await saveInFolder(name, md, pickNew) + ' as ' + name); return; }
+      try { msg('Saved in ' + await saveInFolder(name, grownList, pickNew) + ' as ' + name); return; }
       catch (e) { if (e.name === 'AbortError') { msg('Backup cancelled.'); return; } diag('backup folder failed: ' + e.message); }
     }
     const a = document.createElement('a');
