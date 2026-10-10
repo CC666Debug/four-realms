@@ -718,7 +718,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.17.0';
+const VERSION = '1.17.1';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2000,6 +2000,7 @@ $('shareBtn').addEventListener('click', async () => {
   const btn = $('shareBtn');
   const url = location.origin + location.pathname;
   const text = '🎧 Four Realms: a free app to play or cast Halloween, synthwave, pagan and black metal radio';
+  if (window.AndroidCast && window.AndroidCast.shareText) { window.AndroidCast.shareText('Four Realms', text + '\n' + url); return; }   // the phone app's share menu
   if (navigator.share) {
     try { await navigator.share({ title: 'Four Realms', text, url }); return; }
     catch (e) { if (e.name === 'AbortError') return; }   // closed the share sheet; otherwise fall back to copying
