@@ -718,7 +718,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.17.1';
+const VERSION = '1.18.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1988,9 +1988,18 @@ let saved = loadJSON(SAVED_KEY, []);
 const savedKey = x => x.song.toLowerCase();
 const isSaved = x => !!x && saved.some(f => savedKey(f) === savedKey(x));
 const currentSong = () => song && metaStation ? { song, station: metaStation.name } : null;
+let syncMaster = () => {};   // set up with the backup folder below
+// Saved songs also go into the master list in the backup folder: Halloween Radio's into Halloween Caster's list.
+const isHalloweenRadio = name => STATIONS.some(s => s.name === name && s.group === 'Halloween Radio') || name === 'Phantom ⭐';
+function syncSaved(x, add) {
+  const i = x.song.indexOf(' – ');
+  syncMaster(isHalloweenRadio(x.station) ? 'hc' : 'fr', { title: i < 0 ? x.song : x.song.slice(i + 3), artist: i < 0 ? '' : x.song.slice(0, i), station: x.station, at: x.at }, add);
+}
 function toggleSaved(x) {
-  if (isSaved(x)) saved = saved.filter(f => savedKey(f) !== savedKey(x));
-  else saved.unshift({ ...x, at: Date.now() });
+  const add = !isSaved(x);
+  if (add) saved.unshift({ ...x, at: Date.now() });
+  else saved = saved.filter(f => savedKey(f) !== savedKey(x));
+  syncSaved({ ...x, at: Date.now() }, add);
   safeSet(SAVED_KEY, JSON.stringify(saved));
   renderSongInfo();
 }
@@ -2069,7 +2078,7 @@ function renderSongInfo() {
   $('savedList').replaceChildren(...saved.map(f => {
     const del = document.createElement('button'); del.className = 'li-btn'; del.textContent = '✕';
     del.setAttribute('aria-label', 'Remove from saved songs');
-    del.addEventListener('click', () => { saved = saved.filter(x => x !== f); safeSet(SAVED_KEY, JSON.stringify(saved)); renderSongInfo(); });
+    del.addEventListener('click', () => { saved = saved.filter(x => x !== f); safeSet(SAVED_KEY, JSON.stringify(saved)); renderSongInfo(); syncSaved(f, false); });
     return songRow(f, f.station + ' · ' + new Date(f.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }), del, true);
   }));
 }
@@ -2101,6 +2110,50 @@ function renderSongInfo() {
     await w.write(md); await w.close();
     return dir.name;
   }
+  // Heart taps also add the song to (or take it out of) a master list in the backup folder, so Obsidian
+  // keeps one list for every device. Halloween Radio songs go to Halloween Caster's list, the rest to Four Realms'.
+  // It never asks for a folder: until Back up has picked one on this device, only this app's list changes.
+  const MASTER = {
+    hc: { name: 'halloween-caster-favorites-MASTER.md', head: '# Halloween Caster · favorites',
+          line: x => '- **' + x.title + '** · ' + x.artist + ' · ' + x.station + ' · ' + x.day },
+    fr: { name: 'four-realms-saved-songs-MASTER.md', head: '# Four Realms · saved songs',
+          line: x => '- **' + (x.artist ? x.artist + ' – ' + x.title : x.title) + '** · ' + x.station + ' · ' + x.day },
+  };
+  const songLine = line => {   // a line from either app's list → { title, artist, station, day }
+    let m = line.match(/^- \*\*(.+)\*\* · (.*) · (.*) · (\d{4}-\d{2}-\d{2})\s*$/);
+    if (m) return { title: m[1], artist: m[2], station: m[3], day: m[4] };
+    if (!(m = line.match(/^- \*\*(.+)\*\* · (.*) · (\d{4}-\d{2}-\d{2})\s*$/))) return null;
+    const i = m[1].indexOf(' – ');
+    return { title: i < 0 ? m[1] : m[1].slice(i + 3), artist: i < 0 ? '' : m[1].slice(0, i), station: m[2], day: m[3] };
+  };
+  async function folderIO() {   // reads and writes files in the backup folder; null when there isn't one yet
+    const A = window.AndroidCast;
+    if (A && A.readSaved) return {
+      read: async name => { const r = JSON.parse(A.readSaved(name)); if (!r.ok) throw new Error(r.error || 'no backup folder yet'); return r.text; },
+      write: async (name, text) => { if (!A.writeSaved(name, text)) throw new Error('couldn’t write ' + name); },
+    };
+    if (A || !('showDirectoryPicker' in window)) return null;
+    const dir = await db('readonly', kv => kv.get('dir')).catch(() => null);
+    if (!dir || await dir.requestPermission({ mode: 'readwrite' }) !== 'granted') return null;
+    return {
+      read: async name => { try { return await (await (await dir.getFileHandle(name)).getFile()).text(); } catch (e) { if (e.name === 'NotFoundError') return ''; throw e; } },
+      write: async (name, text) => { const w = await (await dir.getFileHandle(name, { create: true })).createWritable(); await w.write(text); await w.close(); },
+    };
+  }
+  let queue = Promise.resolve();   // one change at a time, so quick taps don't overwrite each other
+  syncMaster = (which, x, add) => { queue = queue.then(async () => {
+    const io = await folderIO();
+    if (!io) return;
+    const m = MASTER[which], key = s => (s.title + '\n' + s.artist).toLowerCase();
+    const song = { title: x.title, artist: x.artist || '', station: x.station || '', day: day(x.at || Date.now()) };
+    const list = (await io.read(m.name)).split(/\r?\n/).map(songLine).filter(Boolean);
+    const has = list.some(s => key(s) === key(song));
+    if (add === has) return;
+    const next = add ? [song, ...list] : list.filter(s => key(s) !== key(song));
+    await io.write(m.name, m.head + '\n\nUpdated ' + new Date().toLocaleString() + ' (master list) · ' + next.length + (next.length === 1 ? ' song' : ' songs')
+      + '\n\n' + next.map(m.line).join('\n') + '\n');
+    diag('master list ' + (add ? 'added ' : 'removed ') + song.title + ' (' + m.name + ')');
+  }).catch(e => diag('master list failed: ' + e.message)); };
   window.onAndroidBackup = r => msg(r.ok ? 'Saved in ' + r.where + ' as ' + r.name : r.where === 'cancel' ? 'Backup cancelled.' : 'Couldn’t save the backup file.');
   async function backUp(pickNew) {
     if (!saved.length) { msg('No saved songs to back up yet.'); return; }
