@@ -143,7 +143,6 @@
   .now .label .state { text-transform: none; letter-spacing: 0; }
   .now .label .state.live { color: var(--good); }
   .now .label .from { color: var(--accent-2); }
-  .now .label .sleep-left { text-transform: none; letter-spacing: 0; color: var(--accent-2); }
   .now .title { font-weight: 650; font-size: 15px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .now .song { font-size: 13px; color: var(--accent-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .now .song:empty { display: none; }
@@ -259,7 +258,7 @@
      the rest of the top line goes, so there's no empty space above the name. */
   .top.mini .now > div:last-child { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 7px; }
   .top.mini .now .label { display: contents; }
-  .top.mini .now .label #where, .top.mini .now .label .state, .top.mini .now .label .sleep-left, .top.mini .crowd .sep:first-child { display: none; }
+  .top.mini .now .label #where, .top.mini .now .label .state, .top.mini .crowd .sep:first-child { display: none; }
   .top.mini .now .title { order: 1; flex: 0 1 auto; min-width: 0; max-width: calc(100% - 4.2em); }   /* a long name gives way (…) so the count always fits beside it */
   .top.mini .now .label .crowd { order: 2; flex: none; font-size: 11px; letter-spacing: 0; text-transform: none; color: var(--muted); white-space: nowrap; }
   .top.mini .now .song { order: 3; flex: 0 0 100%; min-width: 0; }
@@ -470,13 +469,6 @@
   #premiumDlg .msg.good { color: var(--good); } #premiumDlg .msg.bad { color: var(--warn); }
   #premiumDlg .primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 
-  .sleep-menu {
-    position: fixed; z-index: 50; display: flex; gap: 4px; padding: 6px; border-radius: 999px;
-    background: var(--surface-2); border: 1px solid var(--line); box-shadow: 0 6px 24px rgba(0, 0, 0, .5);
-  }
-  .sleep-menu[hidden] { display: none; }
-  .sleep-menu button { background: none; color: var(--text); padding: 7px 10px; border-radius: 999px; font-size: 13px; }
-  .sleep-menu button.on { background: var(--accent); color: var(--accent-ink); }
 
   dialog { background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; width: min(520px, calc(100vw - 32px)); }
   dialog::backdrop { background: rgba(0, 0, 0, .6); }
@@ -571,7 +563,7 @@
   <div class="now" aria-live="polite">
     <div class="badge" id="badge"></div>
     <div style="min-width:0">
-      <div class="label"><span id="where">Ready</span> <span class="state" id="nowState"></span><span class="crowd" id="nowCrowd"></span> <span class="sleep-left" id="sleepLeft" hidden></span></div>
+      <div class="label"><span id="where">Ready</span> <span class="state" id="nowState"></span><span class="crowd" id="nowCrowd"></span></div>
       <div class="title" id="nowName">Pick a station, or tap shuffle</div>
       <div class="song" id="nowSong"></div>
       <div class="next" id="nowNext"></div>
@@ -673,9 +665,6 @@
   <div class="who">Phone</div>
 </div>
 
-<div class="sleep-menu" id="sleepMenu" role="menu" aria-label="Sleep timer" hidden>
-  <button data-min="0">🌙 Off</button><button data-min="15">15</button><button data-min="30">30</button><button data-min="60">60</button><button data-min="90">90</button>
-</div>
 
 <dialog id="premiumDlg">
   <form method="dialog" id="premiumForm" novalidate>
@@ -702,14 +691,15 @@
   </section>
   <section id="sheetSaved" hidden>
     <p class="sub" id="savedCount"></p>
-    <ul id="savedList"></ul>
-    <p class="empty" id="savedEmpty">Tap “🤍 Save” while a song plays to keep it here.</p>
     <div class="backup">
       <button class="pill" id="savedBackup">⬇️ Back up</button>
       <button class="pill" id="savedRestore">⬆️ Restore</button>
+      <button class="pill" id="savedFolder" hidden>📁 Folder</button>
       <input type="file" id="savedFile" accept=".md,text/markdown,text/plain" hidden>
     </div>
     <p class="sub" id="backupMsg"></p>
+    <ul id="savedList"></ul>
+    <p class="empty" id="savedEmpty">Tap “🤍 Save” while a song plays to keep it here.</p>
   </section>
 </dialog>
 
@@ -724,7 +714,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.15.2';
+const VERSION = '1.16.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1137,7 +1127,7 @@ $('tabbar').addEventListener('click', e => {
 {
   const m = els.main;
   let x0 = 0, y0 = 0, t0 = 0, dx = 0, mode = null;   // mode: null (deciding), 'x' (swiping realms) or 'y' (scrolling)
-  const ignore = el => el.closest('.chips, input, select, .sleep-menu, dialog, .row');
+  const ignore = el => el.closest('.chips, input, select, dialog, .row');
   m.addEventListener('touchstart', e => {
     if (e.touches.length !== 1 || ignore(e.target)) { mode = 'y'; return; }
     x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); dx = 0; mode = null;
@@ -2083,14 +2073,44 @@ function renderSongInfo() {
 {
   const msg = t => { $('backupMsg').textContent = t; };
   const day = t => { const d = new Date(t); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };   // local date
-  $('savedBackup').addEventListener('click', () => {
+  // Where the file goes: the Android app and browsers that can pick folders ask for a folder
+  // the first time and keep using it (📁 Folder picks another); anything else downloads it.
+  const canPick = !!(window.AndroidCast && window.AndroidCast.saveBackup) || 'showDirectoryPicker' in window;
+  $('savedFolder').hidden = !canPick;
+  const db = (mode, fn) => new Promise((ok, fail) => {   // remembers the picked folder (localStorage can't hold it)
+    const o = indexedDB.open('fr_backup', 1);
+    o.onupgradeneeded = () => o.result.createObjectStore('kv');
+    o.onerror = () => fail(o.error);
+    o.onsuccess = () => {
+      try { const t = o.result.transaction('kv', mode), r = fn(t.objectStore('kv')); t.oncomplete = () => ok(r.result); t.onerror = () => fail(t.error); }
+      catch (e) { fail(e); }
+    };
+  });
+  async function saveInFolder(name, md, pickNew) {
+    let dir = pickNew ? null : await db('readonly', kv => kv.get('dir')).catch(() => null);
+    if (dir && await dir.requestPermission({ mode: 'readwrite' }) !== 'granted') dir = null;
+    if (!dir) {
+      dir = await window.showDirectoryPicker({ id: 'fr-backup', mode: 'readwrite', startIn: 'documents' });
+      await db('readwrite', kv => kv.put(dir, 'dir')).catch(() => {});
+    }
+    const w = await (await dir.getFileHandle(name, { create: true })).createWritable();   // same day = same file, replaced
+    await w.write(md); await w.close();
+    return dir.name;
+  }
+  window.onAndroidBackup = r => msg(r.ok ? 'Saved in ' + r.where + ' as ' + r.name : r.where === 'cancel' ? 'Backup cancelled.' : 'Couldn’t save the backup file.');
+  async function backUp(pickNew) {
     if (!saved.length) { msg('No saved songs to back up yet.'); return; }
     const md = '# Four Realms · saved songs\n\nBacked up ' + new Date().toLocaleString() + ' · ' + saved.length + (saved.length === 1 ? ' song' : ' songs')
       + '\n\n' + saved.map(f => '- **' + f.song + '** · ' + (f.station || '') + ' · ' + day(f.at)).join('\n') + '\n';
     const name = 'four-realms-saved-songs-' + day(Date.now()) + '.md';
-    if (window.AndroidCast && window.AndroidCast.saveFile) {   // the Android app saves it to Downloads itself
+    if (window.AndroidCast && window.AndroidCast.saveBackup) { window.AndroidCast.saveBackup(name, md, !!pickNew); return; }   // answers through onAndroidBackup
+    if (window.AndroidCast && window.AndroidCast.saveFile) {   // an older Android app saves it to Downloads itself
       msg(window.AndroidCast.saveFile(name, md) ? 'Saved to Downloads as ' + name : 'Couldn’t save the backup file.');
       return;
+    }
+    if ('showDirectoryPicker' in window) {
+      try { msg('Saved in ' + await saveInFolder(name, md, pickNew) + ' as ' + name); return; }
+      catch (e) { if (e.name === 'AbortError') { msg('Backup cancelled.'); return; } diag('backup folder failed: ' + e.message); }
     }
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }));
@@ -2098,7 +2118,9 @@ function renderSongInfo() {
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 10000);
     msg('Backup downloaded as ' + name);
-  });
+  }
+  $('savedBackup').addEventListener('click', () => backUp(false));
+  $('savedFolder').addEventListener('click', () => backUp(true));
   $('savedRestore').addEventListener('click', () => $('savedFile').click());
   $('savedFile').addEventListener('change', async e => {
     const file = e.target.files && e.target.files[0];
@@ -2161,84 +2183,6 @@ if ('mediaSession' in navigator) {
   ms.setActionHandler('previoustrack', goPrev);
 }
 
-// ── Sleep timer ─────────────────────────────────
-// Long-press play/stop to pick a length; the page has to stay open for the timer to fire.
-const sleepLeft = $('sleepLeft'), sleepMenu = $('sleepMenu');
-let sleepAt = 0, sleepMin = 0;   // time to stop, in ms; 0 = off
-const FADE_MS = 60000;   // the music fades out over the last minute
-let fade = null;         // volumes from before the fade, so they can be put back
-let pressTimer = null, longPressed = false;
-
-els.playBtn.addEventListener('pointerdown', () => {
-  longPressed = false;
-  clearTimeout(pressTimer);
-  pressTimer = setTimeout(() => { longPressed = true; openSleepMenu(); }, 550);
-});
-['pointerup', 'pointerleave', 'pointercancel'].forEach(e => els.playBtn.addEventListener(e, () => clearTimeout(pressTimer)));
-els.playBtn.addEventListener('contextmenu', e => e.preventDefault());
-// A long press must not also count as a tap on play/stop.
-els.playBtn.addEventListener('click', e => { if (longPressed) { longPressed = false; e.stopImmediatePropagation(); } }, true);
-
-function openSleepMenu() {
-  if (navigator.vibrate) navigator.vibrate(15);
-  sleepMenu.querySelectorAll('button').forEach(b => b.classList.toggle('on', +b.dataset.min === sleepMin));
-  sleepMenu.hidden = false;
-  const r = els.playBtn.getBoundingClientRect(), w = sleepMenu.offsetWidth;
-  sleepMenu.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + 'px';
-  sleepMenu.style.top = Math.max(8, r.top - sleepMenu.offsetHeight - 10) + 'px';
-}
-sleepMenu.addEventListener('click', e => {
-  const b = e.target.closest('button');
-  if (!b) return;
-  endFade();
-  sleepMin = +b.dataset.min;
-  sleepAt = sleepMin ? Date.now() + sleepMin * 60000 : 0;
-  diag(sleepMin ? 'sleep timer ' + sleepMin + ' min' : 'sleep timer off');
-  sleepMenu.hidden = true;
-  checkSleep();
-});
-document.addEventListener('pointerdown', e => {
-  if (!sleepMenu.hidden && !sleepMenu.contains(e.target) && e.target !== els.playBtn && !els.playBtn.contains(e.target)) sleepMenu.hidden = true;
-});
-
-// Only touch the speaker if it's playing one of ours, not something else.
-function speakerIsOurs() {
-  const r = remoteStation();
-  return !!(r && r !== 'other' && castActive());
-}
-
-function fadeTo(frac) {
-  if (!fade) fade = { here: els.vol.value / 100, speaker: speakerIsOurs() ? player.volumeLevel : null };
-  audio.volume = fade.here * frac;
-  if (fade.speaker != null && castConnected()) {
-    player.volumeLevel = fade.speaker * frac;
-    ctrl.setVolumeLevel();
-  }
-}
-
-// Put the volume back where it was, so the next listen isn't quiet.
-function endFade() {
-  if (!fade) return;
-  fadeTo(1);
-  fade = null;
-}
-
-function checkSleep() {
-  const left = sleepAt - Date.now();
-  if (sleepAt && left <= 0) {
-    sleepAt = 0; sleepMin = 0;
-    diag('sleep timer ran out');
-    stopHere();
-    if (speakerIsOurs()) ctrl.stop();
-    endFade();
-  } else if (sleepAt && left <= FADE_MS && (localStation || speakerIsOurs() || fade)) {
-    fadeTo(left / FADE_MS);
-  }
-  sleepLeft.hidden = !sleepAt;
-  sleepLeft.textContent = sleepAt ? '· 🌙 ' + Math.ceil((sleepAt - Date.now()) / 60000) + 'm' : '';
-}
-setInterval(checkSleep, 1000);   // every second, so the fade is smooth
-document.addEventListener('visibilitychange', checkSleep);
 
 // ── Drawing the screen ──────────────────────────
 // The badge shows the song's cover when the station sends one, otherwise the genre's icon.
