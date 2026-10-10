@@ -31,6 +31,19 @@
 },
 {
 "realm": "halloween",
+"id": "halloween/classics",
+"name": "Classics",
+"group": "Halloween Radio",
+"about": "Old favourites and novelty songs",
+"url": "https://radio1.streamserver.link/radio/8180/radio.mp3",
+"type": "audio/mpeg",
+"meta": {
+"k": "azura",
+"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_classics.json"
+}
+},
+{
+"realm": "halloween",
 "id": "halloween/kids",
 "name": "Kids",
 "group": "Halloween Radio",
@@ -47,14 +60,14 @@
 {
 "realm": "halloween",
 "id": "halloween/movies",
-"name": "Soundtracks",
+"name": "Movies",
 "group": "Halloween Radio",
 "about": "Horror soundtracks and themes",
 "url": "https://radio1.streamserver.link/radio/8050/hrs-mp3",
 "type": "audio/mpeg",
 "meta": {
 "k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_soundtracks.json"
+"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_movies.json"
 },
 "lite": "https://radio1.streamserver.link/radio/8050/hrs-aac",
 "spine": "hrs"
@@ -87,20 +100,6 @@
 "u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_instrumental.json"
 },
 "spine": "hri"
-},
-{
-"realm": "halloween",
-"id": "halloween/cauldron",
-"name": "Cauldron",
-"group": "Halloween Radio",
-"about": "Halloween Radio's newest channel",
-"url": "https://radio1.streamserver.link/radio/8140/hrc-aac",
-"type": "audio/aac",
-"meta": {
-"k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_cauldron.json"
-},
-"spine": "hrc"
 },
 {
 "id": "halloween/1cc7fcc8",
@@ -5870,6 +5869,26 @@
 "realm": "pagan"
 },
 {
+"name": "KPPR Pure Pagan Radio",
+"group": "Pagan & Heathen",
+"about": "Pagan talk and music",
+"url": "https://playerservices.streamtheworld.com/api/livestream-redirect/SAM07AAC244.mp3",
+"type": "audio/mpeg",
+"kbps": 64,
+"id": "pagan/8ad4ffd1",
+"realm": "pagan"
+},
+{
+"name": "The Cauldron WCAS",
+"group": "Pagan & Heathen",
+"about": "Pagan, earth-based and European rock",
+"url": "https://a9.asurahosting.com/listen/the_cauldron_wcas-db/radio.mp3",
+"type": "audio/mpeg",
+"kbps": 192,
+"id": "pagan/0005c0f0",
+"realm": "pagan"
+},
+{
 "name": "Black Metal Radio",
 "group": "Pure Black Metal",
 "about": "Black metal around the clock",
@@ -7976,6 +7995,16 @@
 "kbps": 320,
 "insecure": true,
 "id": "kvlt/314c69df",
+"realm": "kvlt"
+},
+{
+"name": "Desde Las Tinieblas Radio",
+"group": "Metal Mix",
+"about": "Metal from Spain",
+"url": "https://stream.zeno.fm/fumcys21ag0uv",
+"type": "audio/mpeg",
+"kbps": 128,
+"id": "kvlt/6b8bf83a",
 "realm": "kvlt"
 }
 ]
