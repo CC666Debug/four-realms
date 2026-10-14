@@ -31,19 +31,6 @@
 },
 {
 "realm": "halloween",
-"id": "halloween/classics",
-"name": "Classics",
-"group": "Halloween Radio",
-"about": "Old favourites and novelty songs",
-"url": "https://radio1.streamserver.link/radio/8180/radio.mp3",
-"type": "audio/mpeg",
-"meta": {
-"k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_classics.json"
-}
-},
-{
-"realm": "halloween",
 "id": "halloween/kids",
 "name": "Kids",
 "group": "Halloween Radio",
@@ -60,14 +47,14 @@
 {
 "realm": "halloween",
 "id": "halloween/movies",
-"name": "Movies",
+"name": "Soundtracks",
 "group": "Halloween Radio",
 "about": "Horror soundtracks and themes",
 "url": "https://radio1.streamserver.link/radio/8050/hrs-mp3",
 "type": "audio/mpeg",
 "meta": {
 "k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_movies.json"
+"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_soundtracks.json"
 },
 "lite": "https://radio1.streamserver.link/radio/8050/hrs-aac",
 "spine": "hrs"
@@ -100,6 +87,20 @@
 "u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_instrumental.json"
 },
 "spine": "hri"
+},
+{
+"realm": "halloween",
+"id": "halloween/cauldron",
+"name": "Cauldron",
+"group": "Halloween Radio",
+"about": "Halloween Radio's newest channel",
+"url": "https://radio1.streamserver.link/radio/8140/hrc-aac",
+"type": "audio/aac",
+"meta": {
+"k": "azura",
+"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_cauldron.json"
+},
+"spine": "hrc"
 },
 {
 "id": "halloween/1cc7fcc8",
