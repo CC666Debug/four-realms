@@ -20,11 +20,11 @@
 "name": "Oldies",
 "group": "Halloween Radio",
 "about": "Spooky golden oldies",
-"url": "https://radio1.streamserver.link/radio/8020/hro-mp3",
-"type": "audio/mpeg",
+"url": "https://stream.halloweenradio.net/listen/halloween_radio_oldies/aac",
+"type": "audio/aac",
 "meta": {
 "k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_oldies.json"
+"u": "https://stream.halloweenradio.net/api/nowplaying_static/halloween_radio_oldies.json"
 },
 "lite": "https://radio1.streamserver.link/radio/8020/hro-aac",
 "spine": "hro"
@@ -35,11 +35,11 @@
 "name": "Kids",
 "group": "Halloween Radio",
 "about": "Not-too-scary songs for little monsters",
-"url": "https://radio1.streamserver.link/radio/8030/hrk-mp3",
-"type": "audio/mpeg",
+"url": "https://stream.halloweenradio.net/listen/halloween_radio_kids/aac",
+"type": "audio/aac",
 "meta": {
 "k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_kids.json"
+"u": "https://stream.halloweenradio.net/api/nowplaying_static/halloween_radio_kids.json"
 },
 "lite": "https://radio1.streamserver.link/radio/8030/hrk-aac",
 "spine": "hrk"
@@ -50,11 +50,11 @@
 "name": "Soundtracks",
 "group": "Halloween Radio",
 "about": "Horror soundtracks and themes",
-"url": "https://radio1.streamserver.link/radio/8050/hrs-mp3",
-"type": "audio/mpeg",
+"url": "https://stream.halloweenradio.net/listen/halloween_radio_soundtracks/aac",
+"type": "audio/aac",
 "meta": {
 "k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_soundtracks.json"
+"u": "https://stream.halloweenradio.net/api/nowplaying_static/halloween_radio_soundtracks.json"
 },
 "lite": "https://radio1.streamserver.link/radio/8050/hrs-aac",
 "spine": "hrs"
