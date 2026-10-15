@@ -94,11 +94,11 @@
 "name": "Cauldron",
 "group": "Halloween Radio",
 "about": "Halloween Radio's newest channel",
-"url": "https://radio1.streamserver.link/radio/8140/hrc-aac",
+"url": "https://stream.halloweenradio.net/listen/halloween_radio_cauldron/aac",
 "type": "audio/aac",
 "meta": {
 "k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_cauldron.json"
+"u": "https://stream.halloweenradio.net/api/nowplaying_static/halloween_radio_cauldron.json"
 },
 "spine": "hrc"
 },
