@@ -719,7 +719,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.22.0';
+const VERSION = '1.23.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1352,7 +1352,8 @@ window.__onGCastApiAvailable = function (available) {
 function loadStation(s) {
   const session = ctx.getCurrentSession();
   if (!session) return;
-  const info = new chrome.cast.media.MediaInfo(s.url, s.type);
+  const stream = speakerStreamFor(s);
+  const info = new chrome.cast.media.MediaInfo(stream.url, stream.type);
   info.streamType = chrome.cast.media.StreamType.LIVE;
   const md = new chrome.cast.media.GenericMediaMetadata();
   md.title = s.name;
@@ -1365,7 +1366,7 @@ function loadStation(s) {
   speakerLoading = s;
   const t = performance.now();
   loadStartedAt = t;
-  diag('sending ' + s.name + ' to ' + session.getCastDevice().friendlyName + ' · ' + (isSupporter(s) ? '(private supporter link)' : s.url));
+  diag('sending ' + s.name + ' to ' + session.getCastDevice().friendlyName + ' · ' + (isSupporter(s) ? '(private supporter link)' : stream.url));
   kickStart();
   session.loadMedia(req).then(() => {
     diag('speaker accepted ' + s.name + ' after ' + ((performance.now() - t) / 1000).toFixed(2) + 's');
@@ -1448,8 +1449,8 @@ function onSpeakerState() {
 function remoteStation() {
   const id = player && player.mediaInfo && player.mediaInfo.contentId;
   if (!id) return null;
-  if (selected && selected.url === id) return selected;
-  return STATIONS.find(s => s.url === id) || 'other';
+  if (selected && (selected.url === id || selected.lite === id)) return selected;
+  return STATIONS.find(s => s.url === id || s.lite === id) || 'other';
 }
 
 els.castBtn.addEventListener('click', () => {
@@ -1587,15 +1588,16 @@ const RETRY_DELAYS = [1, 2, 4, 8, 15, 30];
 els.vol.value = safeGet('fr_vol') || 80;
 audio.volume = els.vol.value / 100;
 
-// Data saver: Halloween Radio's channels also come in a 64 kbps version (half the data), used when listening
-// on this device. Speakers always get full quality, since they're on Wi-Fi. It also turns on by itself when the
-// phone reports a weak connection, or after the stream keeps dropping.
+// Data saver: Halloween Radio's channels also come in a 64 kbps version (half the data), on this device and on a
+// speaker. It also turns on by itself when the phone reports a weak connection, or after the stream keeps dropping;
+// a speaker follows only the switch set by hand, so the phone's weak signal never lowers a speaker's quality.
 let dataSaver = safeGet('fr_saver') === '1';
 const net = navigator.connection;
 const weakSignal = () => !!net && (net.saveData || /2g|3g/.test(net.effectiveType || ''));
 let autoLite = false, triedBackup = false;
 const useLite = () => dataSaver || autoLite || weakSignal();
 const streamFor = s => useLite() && s.lite ? s.lite : s.url;
+const speakerStreamFor = s => dataSaver && s.lite ? { url: s.lite, type: 'audio/aac' } : { url: s.url, type: s.type };
 // Supporter links are private: they never go into the diagnostic log.
 const isSupporter = s => !!s.supporter;
 const logUrl = s => isSupporter(s) ? '(private supporter link)' : streamFor(s);
@@ -1708,6 +1710,10 @@ saverBtn.addEventListener('click', () => {
   diag('data saver ' + (dataSaver ? 'on' : 'off'));
   renderSaver();
   if (localStation && localStation.lite) playHere(localStation);   // switch the stream now
+  else if (castActive()) {                     // and on the speaker, if it's playing a channel with two versions
+    const s = remoteStation();
+    if (s && s !== 'other' && s.lite) loadStation(s);
+  }
 });
 renderSaver();
 // Signal got weak while listening: switch to the lighter stream.
