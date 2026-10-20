@@ -333,6 +333,55 @@
 "realm": "halloween"
 },
 {
+"id": "halloween/03ab6846",
+"name": "Hard Rock Halloween",
+"group": "More Halloween",
+"about": "Hard rock and heavy metal Halloween songs",
+"url": "https://streaming.live365.com/a10373",
+"type": "audio/mpeg",
+"kbps": 192,
+"realm": "halloween"
+},
+{
+"id": "halloween/52cf094b",
+"name": "The Midnight Exchange (Suspense Radio)",
+"group": "More Halloween",
+"about": "Old-time radio horror, mystery and suspense dramas",
+"url": "https://stupidpotato.com/midnight-exchange/live",
+"type": "audio/mpeg",
+"kbps": 128,
+"realm": "halloween"
+},
+{
+"id": "halloween/b37897f1",
+"name": "The Night Shift",
+"group": "More Halloween",
+"about": "Spooky novelty songs and oldies",
+"url": "https://stupidpotato.com/the-night-shift/live",
+"type": "audio/mpeg",
+"kbps": 128,
+"realm": "halloween"
+},
+{
+"id": "halloween/9f0eca36",
+"name": "Ghost Service",
+"group": "More Halloween",
+"about": "Haunted sounds and Halloween",
+"url": "https://www.maxxwave.co.uk/ghost32.mp2",
+"type": "audio/mpeg",
+"realm": "halloween"
+},
+{
+"id": "halloween/023e3fcb",
+"name": "Conyers Old Time Radio",
+"group": "More Halloween",
+"about": "Old-time radio shows, with Halloween specials in season",
+"url": "https://s8.yesstreaming.net:17011/stream",
+"type": "audio/mpeg",
+"kbps": 64,
+"realm": "halloween"
+},
+{
 "id": "synth/5a559093",
 "name": "=Dark Asylum Radio= For The Digitally Insane",
 "group": "Darkwave / Goth / Industrial",
@@ -2760,15 +2809,6 @@
 "u": "https://quincy.torontocast.com:1100/status-json.xsl",
 "m": "/stream"
 },
-"realm": "synth"
-},
-{
-"id": "synth/da625e31",
-"name": "RADIO BOB - Gothic Rock_neu",
-"group": "Darkwave / Goth / Industrial",
-"url": "http://live02.rfi.fr/rfienanglais-64.mp3",
-"type": "audio/mpeg",
-"insecure": true,
 "realm": "synth"
 },
 {
@@ -5891,6 +5931,37 @@
 "realm": "pagan"
 },
 {
+"name": "CEU Medieval Radio",
+"group": "Medieval & Pagan Folk (Mittelalter)",
+"about": "Medieval music from Central European University, Budapest",
+"url": "http://137.74.85.85:7020/;stream",
+"type": "audio/mpeg",
+"kbps": 128,
+"insecure": true,
+"id": "pagan/0f9c748f",
+"realm": "pagan"
+},
+{
+"name": "Dzed Bardaitis Radio",
+"group": "Neofolk, Dark Folk & Ritual",
+"about": "Neofolk, industrial and dark electronica",
+"url": "https://samcloud.spacial.com/api/listen?sid=113442&m=sc&rid=195031",
+"type": "audio/aac",
+"kbps": 128,
+"id": "pagan/73ed6b4a",
+"realm": "pagan"
+},
+{
+"name": "Explorers Emporium Radio",
+"group": "Medieval & Pagan Folk (Mittelalter)",
+"about": "Medieval, Renaissance and fantasy music",
+"url": "https://listen.radioking.com/radio/155740/stream/196375",
+"type": "audio/mpeg",
+"kbps": 128,
+"id": "pagan/22141ae5",
+"realm": "pagan"
+},
+{
 "name": "Black Metal Radio",
 "group": "Pure Black Metal",
 "about": "Black metal around the clock",
@@ -8007,6 +8078,25 @@
 "type": "audio/mpeg",
 "kbps": 128,
 "id": "kvlt/6b8bf83a",
+"realm": "kvlt"
+},
+{
+"name": "Hedgehog Radio",
+"group": "Blackened Doom, Funeral & Dark",
+"about": "Doom, gothic and atmospheric metal and darkwave",
+"url": "https://stream.hedgehogradio.com/radio.mp3",
+"type": "audio/mpeg",
+"id": "kvlt/cc1a7a08",
+"realm": "kvlt"
+},
+{
+"name": "kobold.FM",
+"group": "Avant-garde & Ambient Black",
+"about": "Dungeon synth and dark ambient",
+"url": "https://kobold.messy.quest/listen/kobold.fm/radio.mp3",
+"type": "audio/mpeg",
+"kbps": 192,
+"id": "kvlt/83a8ad80",
 "realm": "kvlt"
 }
 ]
