@@ -9,6 +9,7 @@
 It only writes a report (Markdown, to stdout). Nothing in the apps changes until the owner OKs it.
 Standard library only, so it runs anywhere with Python 3.
 """
+import http.client
 import json
 import socket
 import ssl
@@ -59,6 +60,12 @@ def probe(url, tries=2):
                     return ''
         except urllib.error.HTTPError as e:
             reason = f'HTTP {e.code}'
+        except http.client.BadStatusLine as e:
+            # Old SHOUTcast servers (Radio Caprice etc.) answer "ICY 200 OK" instead of "HTTP/1.0 200 OK".
+            # Players take that fine; Python doesn't, so it counts as playing.
+            if str(e).startswith('ICY 200'):
+                return ''
+            reason = 'BadStatusLine: ' + str(e)[:60]
         except (socket.timeout, TimeoutError):
             reason = 'no answer (timed out)'
         except urllib.error.URLError as e:
