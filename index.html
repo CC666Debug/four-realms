@@ -719,7 +719,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.23.1';
+const VERSION = '1.23.2';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1298,6 +1298,7 @@ function stationWorked(s) {
 // ── Casting (Google Cast, Chrome only) ──────────
 let ctx = null, player = null, ctrl = null;
 let speakerLoading = null, speakerStation = null, speakerRetries = 0, speakerReconnecting = false;
+let rejoinStation = null, rejoinTimer = 0;   // station to restart when the Android app reconnects after code 2055
 let carryOver = null;
 
 window.__onGCastApiAvailable = function (available) {
@@ -1335,6 +1336,23 @@ window.__onGCastApiAvailable = function (available) {
       if (s) { stopHere(); loadStation(s); }
     }
     if (e.sessionState === S.SESSION_START_FAILED) showNotice('The speaker didn’t accept the connection. Try again.');
+    // Google's speaker player shut itself down (code 2055, e.g. a volume change in Google Home):
+    // the Android app reconnects to the same speaker by itself, and the station starts again there.
+    if (e.sessionState === S.SESSION_ENDED && /2055/.test(e.errorCode || '') && speakerStation && !carryOver) {
+      rejoinStation = speakerStation;
+      clearTimeout(rejoinTimer);
+      rejoinTimer = setTimeout(() => { rejoinStation = null; }, 40000);
+      showNotice('Google’s speaker player stopped. Reconnecting…');
+    }
+    if (e.sessionState === 'REJOIN_FAILED' && rejoinStation) {
+      rejoinStation = null;
+      showNotice('Couldn’t reconnect to the speaker. Pick it again (if it’s missing, turn Wi-Fi off and on).');
+    }
+    if (e.sessionState === S.SESSION_STARTED && rejoinStation) {
+      const s = rejoinStation;
+      rejoinStation = null;
+      if (!speakerLoading) { diag('reconnected after Google’s player stopped: restarting ' + s.name); loadStation(s); }
+    }
     // Disconnecting carries the music back to the phone (unless the speaker was stopped).
     if (e.sessionState === S.SESSION_ENDING) {
       const r = remoteStation();
