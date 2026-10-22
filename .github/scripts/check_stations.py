@@ -220,8 +220,8 @@ def azuracast_neighbours():
             realm_of[m['u'].split('/api/')[0]][st['realm']] += 1
     found = defaultdict(list)
     for base in realm_of:
-        if base == HR_API.split('/api/')[0]:
-            continue   # Halloween Radio's own server has its own section
+        if base in (HR_API.split('/api/')[0], 'https://stream.halloweenradio.net'):
+            continue   # Halloween Radio's own servers have their own section
         try:
             chans = get_json(base + '/api/stations')
         except Exception:
