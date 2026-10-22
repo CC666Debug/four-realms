@@ -3,14 +3,17 @@
 1. Tries every stream in stations.json and lists the ones that don't answer or don't send audio.
    Then checks the song info is still updating, for the feeds that say when a song started
    (Halloween Radio and other AzuraCast servers, laut.fm). A renamed channel keeps playing, but its old song info freezes.
-2. Searches Radio Browser (a free public station directory) for each realm's genres and lists
-   popular stations that aren't in the apps yet.
+2. Searches free public station directories (Radio Browser, laut.fm, TuneIn, SHOUTcast, Icecast/Xiph)
+   for each realm's genres, plus the other channels on AzuraCast servers the apps already use,
+   and lists stations that aren't in the apps yet.
 
 It only writes a report (Markdown, to stdout). Nothing in the apps changes until the owner OKs it.
 Standard library only, so it runs anywhere with Python 3.
 """
+import html
 import http.client
 import json
+import re
 import socket
 import ssl
 import time
@@ -33,6 +36,7 @@ REALMS = {
     'kvlt': ('🐐 Kvlt', ['black metal', 'death metal', 'doom metal', 'dark ambient']),
 }
 NEW_PER_REALM = 10
+NEW_PER_SOURCE = 5   # for each directory after Radio Browser
 STALE_HOURS = 3   # no new song for this long means the song info is stuck
 HR_API = 'https://radio1.streamserver.link/api/nowplaying'
 # Only "does audio come out" matters here, like a player would see it, so certificate quirks don't count as dead.
@@ -115,6 +119,121 @@ def radio_browser(tag):
     return []
 
 
+def fits(x, tags):
+    """Whether a directory hit names one of the realm's genres. Directory searches are loose
+    (a "halloween" search on SHOUTcast also turns up 80s and Disney stations)."""
+    text = ' '.join((x.get('name') or '', x.get('info') or '', x.get('text') or '')).lower()
+    return any(t in text or t.replace(' ', '') in text for t in tags)
+
+
+def laut_fm(tag):
+    """laut.fm search (names, genres and descriptions)."""
+    try:
+        res = get_json(f'https://api.laut.fm/search/stations?query={urllib.parse.quote(tag)}&limit=40')
+    except Exception:
+        return []
+    found = []
+    for cat in res.get('results', []):
+        for it in cat.get('items', []):
+            st = it.get('station') or {}
+            if st.get('stream_url'):
+                found.append({'name': st.get('display_name') or st['name'], 'url': st['stream_url'],
+                              'info': ', '.join((st.get('genres') or [])[:4]), 'score': 0,
+                              'text': ' '.join([st.get('description') or '', st.get('format') or ''] + (st.get('genres') or []))})
+    return found
+
+
+def tunein(tag):
+    """TuneIn's free OPML search; each hit's stream is looked up separately."""
+    try:
+        res = get_json(f'https://opml.radiotime.com/Search.ashx?query={urllib.parse.quote(tag)}&types=station&render=json')
+    except Exception:
+        return []
+    found = []
+    for it in res.get('body', []):
+        if it.get('item') != 'station' or not it.get('guide_id'):
+            continue
+        try:
+            streams = get_json(f'https://opml.radiotime.com/Tune.ashx?id={it["guide_id"]}&render=json').get('body', [])
+        except Exception:
+            continue
+        if streams and streams[0].get('url'):
+            bits = (it.get('formats', ''), f'{it["bitrate"]} kbps' if it.get('bitrate') else '', (it.get('subtext') or '')[:60])
+            found.append({'name': it.get('text', ''), 'url': streams[0]['url'],
+                          'info': ', '.join(b for b in bits if b), 'score': int(it.get('reliability') or 0)})
+        if len(found) >= 15:
+            break
+    return found
+
+
+def shoutcast(tag):
+    """SHOUTcast directory search (the one its own website uses), most listeners first."""
+    try:
+        req = urllib.request.Request('https://directory.shoutcast.com/Search/UpdateSearch',
+                                     data=urllib.parse.urlencode({'query': tag}).encode(), headers={'User-Agent': UA})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            res = json.loads(r.read().decode('utf-8'))
+    except Exception:
+        return []
+    found = []
+    for st in sorted(res, key=lambda x: x.get('Listeners') or 0, reverse=True)[:15]:
+        try:
+            req = urllib.request.Request(f'https://yp.shoutcast.com/sbin/tunein-station.pls?id={st["ID"]}', headers={'User-Agent': UA})
+            with urllib.request.urlopen(req, timeout=15) as r:
+                m = re.search(r'^File1=(\S+)', r.read().decode('utf-8', 'replace'), re.M)
+        except Exception:
+            continue
+        if m:
+            bits = (st.get('Genre', ''), f'{st["Bitrate"]} kbps' if st.get('Bitrate') else '', f'{st.get("Listeners", 0)} listening')
+            found.append({'name': st.get('Name', ''), 'url': m.group(1),
+                          'info': ', '.join(b for b in bits if b), 'score': st.get('Listeners') or 0})
+    return found
+
+
+def xiph(tag):
+    """Icecast's public directory (dir.xiph.org). It has no API, so this reads its genre page."""
+    try:
+        req = urllib.request.Request(f'https://dir.xiph.org/genres/{urllib.parse.quote(tag)}', headers={'User-Agent': UA})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            page = r.read().decode('utf-8', 'replace')
+    except Exception:
+        return []
+    found = []
+    for card in page.split('<div class="card shadow-sm')[1:]:
+        name = re.search(r'card-title">(.*?)</h5>', card, re.S)
+        play = re.search(r'href="([^"]+)" class="btn btn-sm btn-primary">Play', card)
+        if not (name and play):
+            continue
+        n = re.search(r'(\d+) Listeners', card)
+        found.append({'name': html.unescape(name.group(1).strip()), 'url': html.unescape(play.group(1)),
+                      'info': ', '.join(html.unescape(t) for t in re.findall(r'badge-secondary">(.*?)</a>', card)[:4]),
+                      'score': int(n.group(1)) if n else 0})
+    return found
+
+
+def azuracast_neighbours():
+    """Other public channels on the AzuraCast servers the apps already use that name one of the realms' genres."""
+    realm_of = defaultdict(lambda: defaultdict(int))
+    for st in STATIONS:
+        m = st.get('meta') or {}
+        if m.get('k') == 'azura':
+            realm_of[m['u'].split('/api/')[0]][st['realm']] += 1
+    found = defaultdict(list)
+    for base in realm_of:
+        if base == HR_API.split('/api/')[0]:
+            continue   # Halloween Radio's own server has its own section
+        try:
+            chans = get_json(base + '/api/stations')
+        except Exception:
+            continue
+        for c in chans:
+            realm = next((k for k, (_, tags) in REALMS.items() if fits({'name': c.get('name', ''), 'text': c.get('description') or ''}, tags)), None)
+            if realm and c.get('is_public', True) and c.get('listen_url'):
+                about = urllib.parse.urlsplit(base).hostname + (' · ' + c['description'][:60] if c.get('description') else '')
+                found[realm].append({'name': c.get('name', ''), 'url': c['listen_url'], 'info': about, 'score': 0})
+    return found
+
+
 def main():
     out = [f'# Station check · {date.today():%b %d, %Y}', '']
 
@@ -187,6 +306,7 @@ def main():
     # 2. New candidates
     have_urls = {norm(s['url']) for s in STATIONS} | {norm(s.get('lite')) for s in STATIONS if s.get('lite')}
     have_names = {s['name'].strip().lower() for s in STATIONS}
+    shown = set()
     out.append('## Stations you might add')
     out.append('')
     out.append('Popular in Radio Browser for each realm’s genres, and not in the apps yet. Say which ones you want.')
@@ -210,11 +330,51 @@ def main():
         if not picks:
             out.append('- nothing new found')
         for st in picks[:NEW_PER_REALM]:
+            shown.add(norm(st.get('url_resolved') or st.get('url')))
             bits = [st.get('codec') or '', f'{st["bitrate"]} kbps' if st.get('bitrate') else '', st.get('country') or '']
             meta = ', '.join(b for b in bits if b)
             tags_s = ', '.join((st.get('tags') or '').split(',')[:4])
             out.append(f'- **{st["name"].strip()}** ({meta}) · {tags_s}  ')
             out.append(f'  {st.get("url_resolved") or st.get("url")}')
+        out.append('')
+
+    # 2b. The other directories, a short list each per realm
+    sources = [('laut.fm', laut_fm), ('TuneIn', tunein), ('SHOUTcast', shoutcast), ('Icecast directory', xiph)]
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        jobs = {(src, tag): pool.submit(fn, tag) for src, fn in sources for _, tags in REALMS.values() for tag in tags}
+        neighbours = pool.submit(azuracast_neighbours).result()
+    out.append('## More from other directories')
+    out.append('')
+    out.append('Not in the list above or in the apps. Each stream was tried once; only ones that played are listed.')
+    out.append('')
+    seen = set(shown)
+    for key, (label, tags) in REALMS.items():
+        out.append(f'**{label}**')
+        groups = [(src, [x for tag in tags for x in jobs[(src, tag)].result()]) for src, _ in sources]
+        groups.append(('AzuraCast servers the apps already use', neighbours.get(key, [])))
+        any_new = False
+        for src, found in groups:
+            picks = []
+            for x in sorted(found, key=lambda x: x['score'], reverse=True):
+                u = norm(x['url'])
+                if not u or u in have_urls or u in seen or x['name'].strip().lower() in have_names:
+                    continue
+                if not fits(x, tags) or 'notcompatible' in u:   # TuneIn's "can't play here" clip
+                    continue
+                seen.add(u)
+                if probe(x['url'], tries=1):
+                    continue
+                picks.append(x)
+                if len(picks) >= NEW_PER_SOURCE:
+                    break
+            if picks:
+                any_new = True
+                out.append(f'- *{src}*')
+                for x in picks:
+                    out.append(f'  - **{x["name"].strip()}**' + (f' · {x["info"]}' if x['info'] else '') + '  ')
+                    out.append(f'    {x["url"]}')
+        if not any_new:
+            out.append('- nothing new found')
         out.append('')
 
     sys.stdout.write('\n'.join(out) + '\n')
