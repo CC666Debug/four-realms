@@ -15,7 +15,7 @@ The four realms are also their own apps: [Halloween Caster](https://cc666debug.g
 
 ## The realms
 
-- **🎃 Halloween:** every free Halloween Radio channel first, then 20 more Halloween stations (horror, psychobilly, old-time radio and more), with a countdown to Halloween. Halloween Radio's channels show the song's cover art, with links to **👻 Bewitch** and **🦴 Spine-Tingler**. **📶 Data saver** plays their 64 kbps version on your phone (it also turns on by itself on a weak signal). Supporters can add **⭐ Phantom** (once called Premium): the link stays on your phone only, and it's shared with Halloween Caster on the same phone. Supporters of the new Halloween Radio NEW channel can add it the same way.
+- **🎃 Halloween:** every free Halloween Radio channel first, then 20 more Halloween stations (horror, psychobilly, old-time radio and more), with a countdown to Halloween. Halloween Radio's channels show the song's cover art, with links to **👻 Bewitch** and **🦴 Spine-Tingler**. The **📶 Stream** button lists every link for a channel (new server first, old server as backup, smaller versions to save data); the best one plays unless you pick another, and a dead link falls back to the next one. Supporters can add **⭐ Phantom** (once called Premium): the link stays on your phone only, and it's shared with Halloween Caster on the same phone.
 - **🌆 Synth:** hundreds of synthwave, darkwave, goth, EBM, synth-pop, new wave and chiptune stations.
 - **🌙 Pagan:** pagan, Wiccan, Norse, Celtic and medieval folk, with the moon phase and the next sabbat.
 - **⛧ Kvlt:** black metal and its neighbours, with the moon phase and the next unholy date.

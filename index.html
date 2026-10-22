@@ -573,7 +573,6 @@
   <div class="tools" id="tools" hidden>
     <button class="pill" id="saverBtn" aria-haspopup="dialog">📶 Stream: Best</button>
     <button class="pill" id="premiumBtn">⭐ Add Phantom</button>
-    <button class="pill" id="newBtn">⭐ Add NEW</button>
   </div>
 
   </div>
@@ -744,7 +743,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.24.1';
+const VERSION = '1.25.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2561,17 +2560,16 @@ function render() {
   });
 }
 
-// ── Halloween Radio supporter channels: Phantom and NEW ──
+// ── Halloween Radio supporter channel: Phantom ──
 // For supporters: each link is pasted once and kept only on this phone, never in this public code.
 // Halloween Caster uses the same storage (same web address), so adding one in either app adds it to both.
-// Phantom (once called Premium) keeps the old id and saved key. NEW (the upgraded Main, on the station's new server)
-// reads its song info from the server in its own link.
+// Phantom (once called Premium) keeps the old id and saved key. NEW is gone: its supporter link turned out to be
+// the public Main on the new server (Oct 21, 2026).
 const SUPPORTERS = [
   { id: 'premium', name: 'Phantom', key: 'hc_premium_url', btn: 'premiumBtn', search: 'phantom premium',
     feed: () => 'https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_premium.json' },
-  { id: 'new', name: 'NEW', key: 'hc_new_url', btn: 'newBtn', search: 'new main',
-    feed: url => { const m = url.match(/^(https:\/\/[^/]+)\/listen\/([^/]+)/); return m ? `${m[1]}/api/nowplaying_static/${m[2]}.json` : ''; } },
 ];
+try { localStorage.removeItem('hc_new_url'); } catch (e) {}
 const supporterStation = (c, url) => ({ realm: 'halloween', id: 'halloween/' + c.id, name: c.name + ' ⭐', group: 'Halloween Radio',
   about: 'For Halloween Radio supporters', url, type: /mp3/i.test(url) ? 'audio/mpeg' : 'audio/aac', supporter: true,
   search: c.search + ' supporter halloween radio', meta: { k: 'azura', u: c.feed(url) } });
@@ -2607,7 +2605,7 @@ const supporterStation = (c, url) => ({ realm: 'halloween', id: 'halloween/' + c
   const save = url => {
     safeSet(sup.key, url);
     if (!have(sup)) {
-      // after Halloween Radio's own channels, Phantom before NEW
+      // after Halloween Radio's own channels
       const s = supporterStation(sup, url);
       s.sortName = '0' + String(900 + SUPPORTERS.indexOf(sup)).padStart(3, '0');
       STATIONS.splice(STATIONS.findIndex(x => x.realm === 'halloween' && x.group !== 'Halloween Radio'), 0, s);
