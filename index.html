@@ -481,6 +481,20 @@
   #diagText { max-height: 55vh; overflow: auto; font-size: 11px; white-space: pre-wrap; background: var(--bg); padding: 8px; border-radius: 8px; }
   .dlg-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
   .dlg-btns button { background: var(--surface-2); border: 1px solid var(--line); padding: 8px 12px; border-radius: 8px; }
+  #streamDlg h2 { margin: 0 0 8px; font-size: 18px; }
+  #streamDlg p { margin: 0 0 4px; color: var(--muted); font-size: 14px; }
+  #streamList .opt {
+    width: 100%; display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; gap: 10px; align-items: center; text-align: left;
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-top: 8px;
+  }
+  #streamList .opt.on { border-color: var(--accent); }
+  #streamList .rad { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--muted); }
+  #streamList .opt.on .rad { border-color: var(--accent); background: radial-gradient(var(--accent) 40%, transparent 46%); }
+  #streamList .opt small { display: block; color: var(--muted); font-size: 12px; }
+  #streamList .grp { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-top: 14px; }
+  #streamList .b { font-size: 11px; border-radius: 6px; padding: 2px 7px; white-space: nowrap; }
+  #streamList .b.best { background: var(--accent); color: var(--bg); font-weight: 700; }
+  #streamList .b.sv { border: 1px solid var(--line); color: var(--muted); }
 
   /* A rich, resolution-independent flourish when entering a realm. SVG filters give real fire/fog texture. */
   .realmfx { position: fixed; inset: 0; z-index: 25; pointer-events: none; overflow: hidden; }
@@ -558,7 +572,7 @@
   </header>
   <div class="sky" id="sky" aria-live="off"></div>
   <div class="tools" id="tools" hidden>
-    <button class="pill" id="saverBtn" aria-pressed="false">📶 Data saver: off</button>
+    <button class="pill" id="saverBtn" aria-haspopup="dialog">📶 Stream: Best</button>
     <button class="pill" id="premiumBtn">⭐ Add Phantom</button>
     <button class="pill" id="newBtn">⭐ Add NEW</button>
   </div>
@@ -671,6 +685,18 @@
 </div>
 
 
+<dialog id="streamDlg">
+  <form method="dialog">
+    <h2 id="streamTitle">📶 Streams</h2>
+    <p>The best one plays unless you pick another. If a stream won’t play, the app tries the next one down.</p>
+    <div id="streamList"></div>
+    <div class="dlg-btns">
+      <button id="streamBest" value="best">↺ Back to best</button>
+      <button value="done">Done</button>
+    </div>
+  </form>
+</dialog>
+
 <dialog id="premiumDlg">
   <form method="dialog" id="premiumForm" novalidate>
     <h2 id="premiumTitle">⭐ Phantom channel</h2>
@@ -719,7 +745,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.23.4';
+const VERSION = '1.24.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1349,10 +1375,9 @@ window.__onGCastApiAvailable = function (available) {
   render();
 };
 
-function loadStation(s) {
+function loadStation(s, stream = speakerStreamFor(s)) {
   const session = ctx.getCurrentSession();
   if (!session) return;
-  const stream = speakerStreamFor(s);
   const info = new chrome.cast.media.MediaInfo(stream.url, stream.type);
   info.streamType = chrome.cast.media.StreamType.LIVE;
   const md = new chrome.cast.media.GenericMediaMetadata();
@@ -1374,6 +1399,8 @@ function loadStation(s) {
   }).catch(err => {
     diag('speaker REFUSED ' + s.name + ' · ' + err);
     if (speakerLoading !== s) return;
+    const backup = backupFor(s, stream.url);
+    if (backup) { loadStation(s, backup); return; }
     speakerLoading = null;
     stationFailed(s, 'speaker refused: ' + err);
     render();
@@ -1449,8 +1476,9 @@ function onSpeakerState() {
 function remoteStation() {
   const id = player && player.mediaInfo && player.mediaInfo.contentId;
   if (!id) return null;
-  if (selected && (selected.url === id || selected.lite === id)) return selected;
-  return STATIONS.find(s => s.url === id || s.lite === id) || 'other';
+  const has = s => s.streams ? s.streams.some(x => (x.url || x) === id) : s.url === id;
+  if (selected && has(selected)) return selected;
+  return STATIONS.find(has) || 'other';
 }
 
 els.castBtn.addEventListener('click', () => {
@@ -1588,16 +1616,56 @@ const RETRY_DELAYS = [1, 2, 4, 8, 15, 30];
 els.vol.value = safeGet('fr_vol') || 80;
 audio.volume = els.vol.value / 100;
 
-// Data saver: Halloween Radio's channels also come in a 64 kbps version (half the data), on this device and on a
-// speaker. It also turns on by itself when the phone reports a weak connection, or after the stream keeps dropping;
-// a speaker follows only the switch set by hand, so the phone's weak signal never lowers a speaker's quality.
-let dataSaver = safeGet('fr_saver') === '1';
+// Streams: Halloween Radio's channels come in several links (new server, old server, smaller versions), best first.
+// The Stream button picks one per channel (kept on this phone); without a pick the best one plays. Data saver is the
+// smallest link. The phone also drops to it by itself on a weak connection or after the stream keeps dropping;
+// a speaker only plays what you picked.
+const isNewServer = url => /^https:\/\/stream\.halloweenradio\.net\//.test(url);
+const KBPS = { 'https://stream.halloweenradio.net/listen/halloween_radio_atmosphere/aac': 64 };
+const kbpsOf = url => KBPS[url] || (isNewServer(url) && /\/aac$/.test(url) ? 96 : /mp3/i.test(url) ? 128 : 64);
+function streamsOf(s) {
+  if (!s.streams || typeof s.streams[0] === 'string') {
+    s.streams = s.streams ? s.streams.map(u => {
+      const k = kbpsOf(u), srv = isNewServer(u) ? 'New' : 'Old', fmt = /mp3/i.test(u) ? 'MP3' : 'AAC';
+      return { url: u, type: fmt === 'MP3' ? 'audio/mpeg' : 'audio/aac', kbps: k, server: srv, fmt, label: srv + ' · ' + fmt + ' ' + k };
+    }) : [{ url: s.url, type: s.type, label: 'Station link' }];
+  }
+  return s.streams;
+}
+const pickKey = s => 'fr_stream_' + s.id;
+function pickedIndex(s) {
+  const u = safeGet(pickKey(s)), list = streamsOf(s);
+  const i = u ? list.findIndex(x => x.url === u) : -1;
+  return i >= 0 ? i : null;
+}
+const saverIndex = s => streamsOf(s).reduce((m, x, i, l) => (x.kbps || 999) < (l[m].kbps || 999) || (x.kbps === l[m].kbps && x.server === 'Old') ? i : m, 0);
 const net = navigator.connection;
 const weakSignal = () => !!net && (net.saveData || /2g|3g/.test(net.effectiveType || ''));
-let autoLite = false, triedBackup = false;
-const useLite = () => dataSaver || autoLite || weakSignal();
-const streamFor = s => useLite() && s.lite ? s.lite : s.url;
-const speakerStreamFor = s => dataSaver && s.lite ? { url: s.lite, type: 'audio/aac' } : { url: s.url, type: s.type };
+let autoLite = false;
+let hereUrl = null;   // the link this device is playing (may be a backup further down the list)
+const autoSaver = s => pickedIndex(s) === null && streamsOf(s).length > 1 && (autoLite || weakSignal());
+const streamOf = s => streamsOf(s)[autoSaver(s) ? saverIndex(s) : pickedIndex(s) ?? 0];
+const streamFor = s => streamOf(s).url;
+const speakerStreamFor = s => streamsOf(s)[pickedIndex(s) ?? 0];
+// The next link down the list, used as a backup if one won't play (never goes back up by itself).
+const backupFor = (s, url) => { const l = streamsOf(s), i = l.findIndex(x => x.url === url); return i >= 0 && l[i + 1] || null; };
+// The link a channel is playing right now (on this device or the speaker), or would play next.
+function playingUrl(s) {
+  const l = streamsOf(s);
+  if (localStation === s && hereUrl && l.some(x => x.url === hereUrl)) return hereUrl;
+  const id = player && player.mediaInfo && player.mediaInfo.contentId;
+  if (id && l.some(x => x.url === id)) return id;
+  return (castConnected() ? speakerStreamFor(s) : streamOf(s)).url;
+}
+// Halloween Radio's song info comes from the server being played (the old server can run a different playlist).
+function syncFeed(s) {
+  if (!s || !s.meta || s.meta.k !== 'azura' || s.supporter || streamsOf(s).length < 2) return;
+  const host = isNewServer(playingUrl(s)) ? 'https://stream.halloweenradio.net' : 'https://radio1.streamserver.link';
+  const u = s.meta.u.replace(/^https:\/\/[^/]+/, host);
+  if (u === s.meta.u) return;
+  s.meta.u = u;
+  if (metaStation === s) { stopMeta(); startMeta(s); }
+}
 // Supporter links are private: they never go into the diagnostic log.
 const isSupporter = s => !!s.supporter;
 const logUrl = s => isSupporter(s) ? '(private supporter link)' : streamFor(s);
@@ -1612,8 +1680,9 @@ function playHere(s) {
   selected = s;
   localStation = s;
   hereLive = false; everPlayed = false;
-  clearRetry(); retry = 0; reconnecting = false; triedBackup = false;
-  audio.src = streamFor(s);
+  clearRetry(); retry = 0; reconnecting = false;
+  audio.src = hereUrl = streamFor(s);
+  syncFeed(s);
   audio.volume = els.vol.value / 100;
   hideNotice();
   // Not started within 15 seconds: count it as not playing.
@@ -1649,13 +1718,15 @@ function reconnectHere() {
   if (!navigator.onLine) { reconnecting = 'offline'; render(); return; }
   const delay = RETRY_DELAYS[Math.min(retry, RETRY_DELAYS.length - 1)] * 1000;
   retry++;
-  if (retry >= 2 && localStation.lite && !autoLite) { autoLite = true; diag('keeps dropping: data saver on by itself'); renderSaver(); }
+  if (retry >= 2 && streamsOf(localStation).length > 1 && !autoLite) { autoLite = true; diag('keeps dropping: data saver on by itself'); renderSaver(); }
   reconnecting = true;
   render();
   retryTimer = setTimeout(() => {
     retryTimer = null;
     if (!localStation) return;
-    audio.src = streamFor(localStation);
+    if (autoSaver(localStation) || !hereUrl) hereUrl = streamFor(localStation);
+    audio.src = hereUrl;
+    syncFeed(localStation);
     audio.play().catch(() => {});
     stallTimer = setTimeout(reconnectHere, 10000);
   }, delay);
@@ -1679,10 +1750,13 @@ audio.addEventListener('stalled', stalled);
 audio.addEventListener('error', () => {
   if (!localStation || retryTimer) return;
   const s = localStation;
-  // A channel with two versions: try the other one once before giving up.
-  if (s.lite && !triedBackup) {
-    triedBackup = true;
-    audio.src = audio.src === s.lite ? s.url : s.lite;
+  // A channel with several links: try the next one down before giving up.
+  const backup = backupFor(s, hereUrl);
+  if (backup) {
+    diag(s.name + ': ' + (streamsOf(s).find(x => x.url === hereUrl) || {}).label + ' won’t play, trying ' + backup.label);
+    audio.src = hereUrl = backup.url;
+    syncFeed(s);
+    renderSaver();
     audio.play().catch(() => {});
     return;
   }
@@ -1697,30 +1771,71 @@ audio.addEventListener('error', () => {
 });
 window.addEventListener('online', () => { if (localStation && reconnecting === 'offline') { retry = 0; reconnectHere(); } });
 
+// ── Stream button ───────────────────────────────
+// Shows which link the current channel plays; tapping it lists every link for that channel.
 const saverBtn = $('saverBtn');
+const streamStation = () => { const r = castActive() && remoteStation(); return r && r !== 'other' ? r : localStation || selected; };
 function renderSaver() {
-  const auto = !dataSaver && (autoLite || weakSignal());
-  saverBtn.textContent = '📶 Data saver: ' + (dataSaver ? 'on' : auto ? 'auto' : 'off');
-  saverBtn.classList.toggle('on', dataSaver || auto);
-  saverBtn.setAttribute('aria-pressed', String(dataSaver));
+  const s = streamStation();
+  if (!s) { saverBtn.textContent = '📶 Stream: Best'; saverBtn.classList.remove('on'); return; }
+  const l = streamsOf(s), url = playingUrl(s), i = l.findIndex(x => x.url === url);
+  const picked = pickedIndex(s) !== null;
+  saverBtn.textContent = '📶 Stream: ' + (i <= 0 && !picked ? 'Best' : l[i].label + (autoSaver(s) && i === saverIndex(s) ? ' (auto)' : ''));
+  saverBtn.classList.toggle('on', i > 0 || picked);
 }
-saverBtn.addEventListener('click', () => {
-  dataSaver = !dataSaver;
-  safeSet('fr_saver', dataSaver ? '1' : '0');
-  diag('data saver ' + (dataSaver ? 'on' : 'off'));
+const streamDlg = $('streamDlg');
+function openStreams() {
+  const s = streamStation();
+  if (!s) { showNotice('Pick a channel first.'); return; }
+  const l = streamsOf(s), url = playingUrl(s), sv = saverIndex(s);
+  $('streamTitle').textContent = '📶 ' + s.name.replace(' ⭐', '') + ' streams';
+  let html = '', group = '';
+  l.forEach((x, i) => {
+    if (x.server && x.server !== group) {
+      group = x.server;
+      html += `<div class="grp">${group === 'New' ? 'New server · songs match the website' : i ? 'Old server · backups' : 'Old server'}</div>`;
+    }
+    const badge = i === 0 && l.length > 1 ? '<span class="b best">★ Best</span>'
+      : i === sv && l.length > 1 ? '<span class="b sv">📶 Data saver</span>' : '<span></span>';
+    const name = x.kbps ? x.fmt + ' ' + x.kbps + ' kbps' : x.label;
+    const size = x.kbps ? `About ${Math.round(x.kbps * 0.45)} MB an hour` : 'Only stream for this station';
+    html += `<button type="button" class="opt${x.url === url ? ' on' : ''}" data-i="${i}"><span class="rad"></span><span><b>${name}</b><small>${size}</small></span>${badge}</button>`;
+  });
+  $('streamList').innerHTML = html;
+  $('streamBest').hidden = pickedIndex(s) === null;
+  streamDlg.dataset.station = s.id;
+  streamDlg.returnValue = '';
+  streamDlg.showModal();
+}
+// Switch the channel to a link now, wherever it's playing.
+function useStream(s) {
+  syncFeed(s);
   renderSaver();
-  if (localStation && localStation.lite) playHere(localStation);   // switch the stream now
-  else if (castActive()) {                     // and on the speaker, if it's playing a channel with two versions
-    const s = remoteStation();
-    if (s && s !== 'other' && s.lite) loadStation(s);
-  }
+  if (localStation === s) playHere(s);
+  else if (castActive() && remoteStation() === s) loadStation(s);
+}
+$('streamList').addEventListener('click', e => {
+  const o = e.target.closest('.opt');
+  const s = STATIONS.find(x => x.id === streamDlg.dataset.station);
+  if (!o || !s) return;
+  const x = streamsOf(s)[+o.dataset.i];
+  safeSet(pickKey(s), o.dataset.i === '0' ? '' : x.url);
+  diag(s.name + ': stream picked · ' + x.label);
+  streamDlg.close();
+  useStream(s);
 });
+streamDlg.addEventListener('close', () => {
+  const s = STATIONS.find(x => x.id === streamDlg.dataset.station);
+  if (s && streamDlg.returnValue === 'best') { safeSet(pickKey(s), ''); diag(s.name + ': back to best stream'); useStream(s); }
+});
+saverBtn.addEventListener('click', openStreams);
+window.streamReady = true;
 renderSaver();
 // Signal got weak while listening: switch to the lighter stream.
 if (net) net.addEventListener('change', () => {
   renderSaver();
-  if (localStation && hereLive && localStation.lite && audio.src !== streamFor(localStation)) {
-    audio.src = streamFor(localStation);
+  if (localStation && hereLive && autoSaver(localStation) && hereUrl !== streamFor(localStation)) {
+    audio.src = hereUrl = streamFor(localStation);
     audio.play().catch(() => {});
   }
 });
@@ -2336,6 +2451,7 @@ function paintVMeter() {   // the speaker icon: 0-3 neon sound waves for the vol
     WAVES.map((d, i) => `<path class="wave w${i + 1}${i < n ? ' on' : ''}" d="${d}"/>`).join('');
 }
 function render() {
+  if (window.streamReady) renderSaver();
   const CS = window.cast && cast.framework && cast.framework.CastState;
   const state = ctx ? ctx.getCastState() : null;
   const session = ctx && ctx.getCurrentSession();
