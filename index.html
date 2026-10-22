@@ -494,7 +494,6 @@
   #streamList .grp { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-top: 14px; }
   #streamList .b { font-size: 11px; border-radius: 6px; padding: 2px 7px; white-space: nowrap; }
   #streamList .b.best { background: var(--accent); color: var(--bg); font-weight: 700; }
-  #streamList .b.sv { border: 1px solid var(--line); color: var(--muted); }
 
   /* A rich, resolution-independent flourish when entering a realm. SVG filters give real fire/fog texture. */
   .realmfx { position: fixed; inset: 0; z-index: 25; pointer-events: none; overflow: hidden; }
@@ -745,7 +744,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.24.0';
+const VERSION = '1.24.1';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1787,7 +1786,7 @@ const streamDlg = $('streamDlg');
 function openStreams() {
   const s = streamStation();
   if (!s) { showNotice('Pick a channel first.'); return; }
-  const l = streamsOf(s), url = playingUrl(s), sv = saverIndex(s);
+  const l = streamsOf(s), url = playingUrl(s);
   $('streamTitle').textContent = '📶 ' + s.name.replace(' ⭐', '') + ' streams';
   let html = '', group = '';
   l.forEach((x, i) => {
@@ -1796,7 +1795,7 @@ function openStreams() {
       html += `<div class="grp">${group === 'New' ? 'New server · songs match the website' : i ? 'Old server · backups' : 'Old server'}</div>`;
     }
     const badge = i === 0 && l.length > 1 ? '<span class="b best">★ Best</span>'
-      : i === sv && l.length > 1 ? '<span class="b sv">📶 Data saver</span>' : '<span></span>';
+      : '<span></span>';
     const name = x.kbps ? x.fmt + ' ' + x.kbps + ' kbps' : x.label;
     const size = x.kbps ? `About ${Math.round(x.kbps * 0.45)} MB an hour` : 'Only stream for this station';
     html += `<button type="button" class="opt${x.url === url ? ' on' : ''}" data-i="${i}"><span class="rad"></span><span><b>${name}</b><small>${size}</small></span>${badge}</button>`;
@@ -1827,6 +1826,11 @@ $('streamList').addEventListener('click', e => {
 streamDlg.addEventListener('close', () => {
   const s = STATIONS.find(x => x.id === streamDlg.dataset.station);
   if (s && streamDlg.returnValue === 'best') { safeSet(pickKey(s), ''); diag(s.name + ': back to best stream'); useStream(s); }
+});
+// Tapping outside the list closes it.
+streamDlg.addEventListener('click', e => {
+  const r = streamDlg.getBoundingClientRect();
+  if (e.target === streamDlg && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom)) streamDlg.close();
 });
 saverBtn.addEventListener('click', openStreams);
 window.streamReady = true;
