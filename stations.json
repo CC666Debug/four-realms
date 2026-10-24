@@ -101,14 +101,16 @@
 "name": "Instrumental",
 "group": "Halloween Radio",
 "about": "Eerie music, no words",
-"url": "https://radio1.streamserver.link/radio/8100/hri-aac",
+"url": "https://stream.halloweenradio.net/listen/halloween_radio_instrumental/aac",
 "type": "audio/aac",
 "streams": [
+"https://stream.halloweenradio.net/listen/halloween_radio_instrumental/aac",
+"https://stream.halloweenradio.net/listen/halloween_radio_instrumental/mp3",
 "https://radio1.streamserver.link/radio/8100/hri-aac"
 ],
 "meta": {
 "k": "azura",
-"u": "https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_instrumental.json"
+"u": "https://stream.halloweenradio.net/api/nowplaying_static/halloween_radio_instrumental.json"
 },
 "spine": "hri"
 },
