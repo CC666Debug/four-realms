@@ -5,9 +5,10 @@
 "name": "Main",
 "group": "Halloween Radio",
 "about": "The classic Halloween mix",
-"url": "https://stream.halloweenradio.net/listen/halloween_radio_main/aac",
-"type": "audio/aac",
+"url": "https://stream.halloweenradio.net/listen/halloween_radio_main/mp3",
+"type": "audio/mpeg",
 "streams": [
+"https://stream.halloweenradio.net/listen/halloween_radio_main/mp3",
 "https://stream.halloweenradio.net/listen/halloween_radio_main/aac",
 "https://radio1.streamserver.link/radio/8000/hrm-mp3",
 "https://radio1.streamserver.link/radio/8000/hrm-aac"
@@ -24,9 +25,10 @@
 "name": "Oldies",
 "group": "Halloween Radio",
 "about": "Spooky golden oldies",
-"url": "https://stream.halloweenradio.net/listen/halloween_radio_oldies/aac",
-"type": "audio/aac",
+"url": "https://stream.halloweenradio.net/listen/halloween_radio_oldies/mp3",
+"type": "audio/mpeg",
 "streams": [
+"https://stream.halloweenradio.net/listen/halloween_radio_oldies/mp3",
 "https://stream.halloweenradio.net/listen/halloween_radio_oldies/aac",
 "https://radio1.streamserver.link/radio/8020/hro-mp3",
 "https://radio1.streamserver.link/radio/8020/hro-aac"
@@ -43,9 +45,10 @@
 "name": "Kids",
 "group": "Halloween Radio",
 "about": "Not-too-scary songs for little monsters",
-"url": "https://stream.halloweenradio.net/listen/halloween_radio_kids/aac",
-"type": "audio/aac",
+"url": "https://stream.halloweenradio.net/listen/halloween_radio_kids/mp3",
+"type": "audio/mpeg",
 "streams": [
+"https://stream.halloweenradio.net/listen/halloween_radio_kids/mp3",
 "https://stream.halloweenradio.net/listen/halloween_radio_kids/aac",
 "https://radio1.streamserver.link/radio/8030/hrk-mp3",
 "https://radio1.streamserver.link/radio/8030/hrk-aac"
@@ -62,9 +65,10 @@
 "name": "Soundtracks",
 "group": "Halloween Radio",
 "about": "Horror soundtracks and themes",
-"url": "https://stream.halloweenradio.net/listen/halloween_radio_soundtracks/aac",
-"type": "audio/aac",
+"url": "https://stream.halloweenradio.net/listen/halloween_radio_soundtracks/mp3",
+"type": "audio/mpeg",
 "streams": [
+"https://stream.halloweenradio.net/listen/halloween_radio_soundtracks/mp3",
 "https://stream.halloweenradio.net/listen/halloween_radio_soundtracks/aac",
 "https://radio1.streamserver.link/radio/8050/hrs-mp3",
 "https://radio1.streamserver.link/radio/8050/hrs-aac"
@@ -101,11 +105,11 @@
 "name": "Instrumental",
 "group": "Halloween Radio",
 "about": "Eerie music, no words",
-"url": "https://stream.halloweenradio.net/listen/halloween_radio_instrumental/aac",
-"type": "audio/aac",
+"url": "https://stream.halloweenradio.net/listen/halloween_radio_instrumental/mp3",
+"type": "audio/mpeg",
 "streams": [
-"https://stream.halloweenradio.net/listen/halloween_radio_instrumental/aac",
 "https://stream.halloweenradio.net/listen/halloween_radio_instrumental/mp3",
+"https://stream.halloweenradio.net/listen/halloween_radio_instrumental/aac",
 "https://radio1.streamserver.link/radio/8100/hri-aac"
 ],
 "meta": {
@@ -120,9 +124,10 @@
 "name": "Cauldron",
 "group": "Halloween Radio",
 "about": "Halloween Radio's newest channel",
-"url": "https://stream.halloweenradio.net/listen/halloween_radio_cauldron/aac",
-"type": "audio/aac",
+"url": "https://stream.halloweenradio.net/listen/halloween_radio_cauldron/mp3",
+"type": "audio/mpeg",
 "streams": [
+"https://stream.halloweenradio.net/listen/halloween_radio_cauldron/mp3",
 "https://stream.halloweenradio.net/listen/halloween_radio_cauldron/aac",
 "https://radio1.streamserver.link/radio/8140/hrc-aac"
 ],
