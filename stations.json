@@ -10,7 +10,6 @@
 "streams": [
 "https://stream.halloweenradio.net/listen/halloween_radio_main/mp3",
 "https://stream.halloweenradio.net/listen/halloween_radio_main/aac",
-"https://radio1.streamserver.link/radio/8000/hrm-mp3",
 "https://radio1.streamserver.link/radio/8000/hrm-aac"
 ],
 "meta": {
@@ -30,7 +29,6 @@
 "streams": [
 "https://stream.halloweenradio.net/listen/halloween_radio_oldies/mp3",
 "https://stream.halloweenradio.net/listen/halloween_radio_oldies/aac",
-"https://radio1.streamserver.link/radio/8020/hro-mp3",
 "https://radio1.streamserver.link/radio/8020/hro-aac"
 ],
 "meta": {
@@ -50,7 +48,6 @@
 "streams": [
 "https://stream.halloweenradio.net/listen/halloween_radio_kids/mp3",
 "https://stream.halloweenradio.net/listen/halloween_radio_kids/aac",
-"https://radio1.streamserver.link/radio/8030/hrk-mp3",
 "https://radio1.streamserver.link/radio/8030/hrk-aac"
 ],
 "meta": {
@@ -70,7 +67,6 @@
 "streams": [
 "https://stream.halloweenradio.net/listen/halloween_radio_soundtracks/mp3",
 "https://stream.halloweenradio.net/listen/halloween_radio_soundtracks/aac",
-"https://radio1.streamserver.link/radio/8050/hrs-mp3",
 "https://radio1.streamserver.link/radio/8050/hrs-aac"
 ],
 "meta": {
@@ -90,7 +86,6 @@
 "streams": [
 "https://stream.halloweenradio.net/listen/halloween_radio_atmosphere/mp3",
 "https://stream.halloweenradio.net/listen/halloween_radio_atmosphere/aac",
-"https://radio1.streamserver.link/radio/8040/hra-mp3",
 "https://radio1.streamserver.link/radio/8040/hra-aac"
 ],
 "meta": {
