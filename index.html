@@ -746,6 +746,9 @@
 <script>
 // Old http:// stations (Radio Caprice etc.): once one has played on this device, it can play them (Android app, or Brave set to allow it), so stop skipping them.
 let httpOK = false; try { httpOK = localStorage.getItem('http_ok') === '1'; } catch (e) {}
+// Brave won't load old http:// streams at a bare number address (Radio Caprice) inside this secure app,
+// but it will by name: sslip.io turns 1.2.3.4 into the name 1-2-3-4.sslip.io (free, same server). Speakers keep the original link.
+const hereSrc = u => location.protocol === 'https:' ? u.replace(/^http:\/\/(\d+)\.(\d+)\.(\d+)\.(\d+)(?=[:/]|$)/, 'http://$1-$2-$3-$4.sslip.io') : u;
 const VERSION = '1.27.0';
 const $ = id => document.getElementById(id);
 const els = {
@@ -1682,7 +1685,7 @@ function playHere(s) {
   localStation = s;
   hereLive = false; everPlayed = false;
   clearRetry(); retry = 0; reconnecting = false;
-  audio.src = hereUrl = streamFor(s);
+  audio.src = hereSrc(hereUrl = streamFor(s));
   syncFeed(s);
   audio.volume = els.vol.value / 100;
   hideNotice();
@@ -1726,7 +1729,7 @@ function reconnectHere() {
     retryTimer = null;
     if (!localStation) return;
     if (autoSaver(localStation) || !hereUrl) hereUrl = streamFor(localStation);
-    audio.src = hereUrl;
+    audio.src = hereSrc(hereUrl);
     syncFeed(localStation);
     audio.play().catch(() => {});
     stallTimer = setTimeout(reconnectHere, 10000);
@@ -1756,7 +1759,7 @@ audio.addEventListener('error', () => {
   const backup = backupFor(s, hereUrl);
   if (backup) {
     diag(s.name + ': ' + (streamsOf(s).find(x => x.url === hereUrl) || {}).label + ' won’t play, trying ' + backup.label);
-    audio.src = hereUrl = backup.url;
+    audio.src = hereSrc(hereUrl = backup.url);
     syncFeed(s);
     renderSaver();
     audio.play().catch(() => {});
@@ -1842,7 +1845,7 @@ renderSaver();
 if (net) net.addEventListener('change', () => {
   renderSaver();
   if (localStation && hereLive && autoSaver(localStation) && hereUrl !== streamFor(localStation)) {
-    audio.src = hereUrl = streamFor(localStation);
+    audio.src = hereSrc(hereUrl = streamFor(localStation));
     audio.play().catch(() => {});
   }
 });
