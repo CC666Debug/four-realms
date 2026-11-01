@@ -743,7 +743,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.25.5';
+const VERSION = '1.25.6';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2567,7 +2567,9 @@ function render() {
 // the public Main on the new server (Oct 21, 2026).
 const SUPPORTERS = [
   { id: 'premium', name: 'Phantom', key: 'hc_premium_url', btn: 'premiumBtn', search: 'phantom premium',
-    feed: () => 'https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_premium.json' },
+    // Song info comes from the pasted link's own server; the new server calls Phantom 'halloween_radio_phatom' (their spelling).
+    feed: url => isNewServer(url) ? 'https://stream.halloweenradio.net/api/nowplaying_static/halloween_radio_phatom.json'
+                                  : 'https://radio1.streamserver.link/api/nowplaying_static/halloween_radio_premium.json' },
 ];
 try { localStorage.removeItem('hc_new_url'); } catch (e) {}
 const supporterStation = (c, url) => ({ realm: 'halloween', id: 'halloween/' + c.id, name: c.name + ' ⭐', group: 'Halloween Radio',
