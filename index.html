@@ -744,7 +744,9 @@
 </dialog>
 
 <script>
-const VERSION = '1.26.1';
+// Old http:// stations (Radio Caprice etc.): once one has played on this device, it can play them (Android app, or Brave set to allow it), so stop skipping them.
+let httpOK = false; try { httpOK = localStorage.getItem('http_ok') === '1'; } catch (e) {}
+const VERSION = '1.27.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -952,7 +954,7 @@ function renderList() {
     const row = document.createElement('div');
     row.className = 'st' + (s === playingStation() ? ' active' : '') + (failed[s.id] ? ' failed' : '');
     row.innerHTML = `<button class="pick"><span class="nm"><span class="dot"></span>${esc(s.name)}</span>`
-      + `<span class="gr">${iconFor(s)} ${esc(s.about || shortGenre(s))}${s.meta ? ' · ♪' : ''}${failed[s.id] ? ' · didn’t play last time' : s.insecure ? ' · older link, may not play on phones' : ''}</span></button>`
+      + `<span class="gr">${iconFor(s)} ${esc(s.about || shortGenre(s))}${s.meta ? ' · ♪' : ''}${failed[s.id] ? ' · didn’t play last time' : s.insecure && !httpOK ? ' · older link, may not play on phones' : ''}</span></button>`
       + `<button class="star${favs.has(s.id) ? ' on' : ''}" aria-label="${favs.has(s.id) ? 'Remove from' : 'Add to'} favorites">${favs.has(s.id) ? '★' : '☆'}</button>`;
     row.querySelector('.pick').addEventListener('click', () => chooseStation(s));
     row.querySelector('.star').addEventListener('click', () => toggleFav(s));
@@ -1267,7 +1269,7 @@ function nextStation() {
     // Avoid the last 20 played and ones that just failed, when there are enough others.
     const recentIds = new Set(history.slice(-20).map(s => s.id).concat(selected ? [selected.id] : []));
     // Older http-only links usually can't play on a phone (the app is a secure page), so shuffle skips them there.
-    const playable = s => !failed[s.id] && (castConnected() || !s.insecure);
+    const playable = s => !failed[s.id] && (castConnected() || httpOK || !s.insecure);
     let pool = list.filter(s => !recentIds.has(s.id) && playable(s));
     if (!pool.length) pool = list.filter(s => s !== selected && playable(s));
     if (!pool.length) pool = list.filter(s => s !== selected);
@@ -1736,6 +1738,7 @@ audio.addEventListener('playing', () => {
   hereLive = true; everPlayed = true;
   clearRetry(); retry = 0; reconnecting = false;
   if (localStation) stationWorked(localStation);
+  if (localStation && localStation.insecure && !httpOK) { httpOK = true; try { localStorage.setItem('http_ok', '1'); } catch (e) {} }
   render();
 });
 const stalled = () => {
