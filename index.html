@@ -743,7 +743,7 @@
 </dialog>
 
 <script>
-const VERSION = '1.25.6';
+const VERSION = '1.26.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2691,7 +2691,12 @@ async function start() {
     s.sortName = s.group === 'Halloween Radio' ? '0' + String(i).padStart(3, '0') : s.realm === 'halloween' ? '1' + name : name;
     s.search = norm(s.name + ' ' + s.group + ' ' + (s.tags || '') + ' ' + (s.about || ''));
   });
-  const moved = id => id && id.startsWith('synth/') && STATIONS.some(s => s.id === 'halloween/' + id.slice(6)) ? 'halloween/' + id.slice(6) : id;
+  // A station that moved realms keeps its tail (synth/02c0ce73 ↔ halloween/02c0ce73), so stars and the last station follow it.
+  const moved = id => {
+    if (!id || STATIONS.some(s => s.id === id)) return id;
+    const tail = id.slice(id.indexOf('/') + 1), s = STATIONS.find(s => s.id.slice(s.id.indexOf('/') + 1) === tail);
+    return s ? s.id : id;
+  };
   if ([...favs].some(id => moved(id) !== id)) { favs = new Set([...favs].map(moved)); safeSet('fr_favs', JSON.stringify([...favs])); }
   if (moved(safeGet('fr_station')) !== safeGet('fr_station')) safeSet('fr_station', moved(safeGet('fr_station')));
   REALMS.forEach(r => {

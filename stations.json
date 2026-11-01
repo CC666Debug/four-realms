@@ -254,18 +254,6 @@
 "realm": "halloween"
 },
 {
-"id": "halloween/02c0ce73",
-"name": "Nightride FM Horrorsynth",
-"group": "More Halloween",
-"url": "https://stream.nightride.fm/horrorsynth.mp3",
-"type": "audio/mpeg",
-"meta": {
-"k": "nightride",
-"id": "horrorsynth"
-},
-"realm": "halloween"
-},
-{
 "id": "halloween/de38af30",
 "name": "Old Time Radio Horror & Sci-Fi (ADRN Ch 4)",
 "group": "More Halloween",
@@ -409,6 +397,18 @@
 "type": "audio/mpeg",
 "kbps": 64,
 "realm": "halloween"
+},
+{
+"id": "synth/02c0ce73",
+"name": "Nightride FM Horrorsynth",
+"group": "Synthwave / Retrowave",
+"url": "https://stream.nightride.fm/horrorsynth.mp3",
+"type": "audio/mpeg",
+"meta": {
+"k": "nightride",
+"id": "horrorsynth"
+},
+"realm": "synth"
 },
 {
 "id": "synth/5a559093",
