@@ -2581,15 +2581,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/b72e10c5",
-"name": "Radio Caprice - Atmospheric/Ambient Black Metal",
-"group": "Darkwave / Goth / Industrial",
-"url": "http://79.120.39.202:8002/aabmds",
-"type": "audio/aac",
-"insecure": true,
-"realm": "synth"
-},
-{
 "id": "synth/30c336a2",
 "name": "Radio Caprice - Dark Cabaret",
 "group": "Darkwave / Goth / Industrial",
@@ -7521,6 +7512,15 @@
 "type": "audio/mpeg",
 "kbps": 192,
 "id": "kvlt/83a8ad80",
+"realm": "kvlt"
+},
+{
+"id": "kvlt/b72e10c5",
+"name": "Radio Caprice - Atmospheric/Ambient Black Metal",
+"group": "Avant-garde & Ambient Black",
+"url": "http://79.120.39.202:8002/aabmds",
+"type": "audio/aac",
+"insecure": true,
 "realm": "kvlt"
 }
 ]
