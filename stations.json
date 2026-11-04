@@ -492,6 +492,118 @@
 "realm": "halloween"
 },
 {
+"id": "halloween/c7956b79",
+"name": "Drone Radio (MRG.fm)",
+"group": "Spooky Sounds",
+"url": "http://listen.mrg.fm:8070/stream",
+"type": "audio/mpeg",
+"about": "Deep drone ambient around the clock",
+"realm": "halloween"
+},
+{
+"id": "halloween/baedb966",
+"name": "Planet Ambi HD",
+"group": "Spooky Sounds",
+"url": "http://philae.shoutca.st:9019/stream",
+"type": "audio/mpeg",
+"about": "Dark and drone ambient",
+"realm": "halloween"
+},
+{
+"id": "halloween/5b1728b2",
+"name": "Order of Abraxas",
+"group": "Spooky Sounds",
+"url": "https://n11.radiojar.com/5u3kzybc3ucwv",
+"type": "audio/mpeg",
+"about": "Ritual dark ambient",
+"realm": "halloween"
+},
+{
+"id": "halloween/e476f393",
+"name": "Noise Radio",
+"group": "Spooky Sounds",
+"url": "https://a2.asurahosting.com:7890/radio.mp3",
+"type": "audio/mpeg",
+"about": "Field recordings and electroacoustic soundscapes",
+"realm": "halloween"
+},
+{
+"id": "halloween/3fdc202e",
+"name": "Systrum Sistum SSR1",
+"group": "Spooky Sounds",
+"url": "https://systrum.net:8443/SSR1",
+"type": "audio/mpeg",
+"about": "Drone and experimental ambient",
+"realm": "halloween"
+},
+{
+"id": "halloween/aa291d6d",
+"name": "Soundweave Revisited",
+"group": "Spooky Sounds",
+"url": "https://sndwvr.site/love.mp3",
+"type": "audio/mpeg",
+"about": "Drone soundscapes",
+"realm": "halloween"
+},
+{
+"id": "halloween/e508aad4",
+"name": "Radio Atmosphere (Studio Somnia)",
+"group": "Spooky Sounds",
+"url": "https://a13.asurahosting.com/listen/somniamusic/radio.mp3",
+"type": "audio/mpeg",
+"about": "Hidden frequencies, dark dreamy ambient",
+"realm": "halloween"
+},
+{
+"id": "halloween/4b438432",
+"name": "Immersound",
+"group": "Spooky Sounds",
+"url": "http://stream.immersound.net:1460/stream",
+"type": "audio/mpeg",
+"about": "Ambient, experimental and industrial soundscapes",
+"realm": "halloween"
+},
+{
+"id": "halloween/b4eb2325",
+"name": "Scifi Horror Filmmusik",
+"group": "More Halloween",
+"url": "https://scifi-horror-filmmusik.stream.laut.fm/scifi-horror-filmmusik",
+"type": "audio/mpeg",
+"about": "Horror and sci-fi film scores (Carpenter, Tangerine Dream)",
+"meta": {
+"k": "laut",
+"id": "scifi-horror-filmmusik"
+},
+"realm": "halloween"
+},
+{
+"id": "halloween/718755ce",
+"name": "Creepy and Weird Old Time Radio",
+"group": "More Halloween",
+"url": "https://stream.kf7k.com/listen/weird/radio.mp3",
+"type": "audio/mpeg",
+"about": "The Whistler, Inner Sanctum and other creepy old radio",
+"realm": "halloween"
+},
+{
+"id": "halloween/17716360",
+"name": "Horror Theatre (Ghost Stories)",
+"group": "More Halloween",
+"url": "https://ec4.yesstreaming.net:1235/stream",
+"type": "audio/mpeg",
+"about": "Ghost stories, weird stories and murder mysteries",
+"realm": "halloween"
+},
+{
+"id": "halloween/bef52a07",
+"name": "Paranormal UK Radio",
+"group": "More Halloween",
+"url": "http://s6.citrus3.com:8014/stream",
+"type": "audio/aac",
+"about": "Ghost and paranormal talk",
+"realm": "halloween"
+},
+{
 "id": "synth/02c0ce73",
 "name": "Nightride FM Horrorsynth",
 "group": "Synthwave / Retrowave",
@@ -2979,6 +3091,18 @@
 "realm": "synth"
 },
 {
+"id": "halloween/spooky-4cea660d",
+"name": "SomaFM - Drone Zone",
+"group": "Spooky Sounds",
+"url": "https://ice1.somafm.com/dronezone-128-mp3",
+"type": "audio/mpeg",
+"meta": {
+"k": "soma",
+"id": "dronezone"
+},
+"realm": "halloween"
+},
+{
 "id": "synth/2ad067c8",
 "name": "SomaFM - Mission Control",
 "group": "Darkwave / Goth / Industrial",
@@ -4109,6 +4233,19 @@
 "id": "dz2"
 },
 "realm": "synth"
+},
+{
+"id": "halloween/spooky-c2051069",
+"name": "SomaFM - Drone Zone 2",
+"group": "Spooky Sounds",
+"about": "Atmospheric drones and textures, a more eclectic Drone Zone",
+"url": "https://ice2.somafm.com/dz2-128-mp3",
+"type": "audio/mpeg",
+"meta": {
+"k": "soma",
+"id": "dz2"
+},
+"realm": "halloween"
 },
 {
 "id": "synth/a7554a78",
@@ -7649,6 +7786,16 @@
 "kbps": 192,
 "id": "kvlt/83a8ad80",
 "realm": "kvlt"
+},
+{
+"name": "kobold.FM",
+"group": "Spooky Sounds",
+"about": "Dungeon synth and dark ambient",
+"url": "https://kobold.messy.quest/listen/kobold.fm/radio.mp3",
+"type": "audio/mpeg",
+"kbps": 192,
+"id": "halloween/spooky-83a8ad80",
+"realm": "halloween"
 },
 {
 "id": "kvlt/b72e10c5",
