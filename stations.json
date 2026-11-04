@@ -1574,6 +1574,17 @@
 "realm": "synth"
 },
 {
+"id": "synth/49399522",
+"name": "Dark Ambient Radio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Dark ambient around the clock: \"Muzak for the Final Elevation\" (Germany)",
+"url": "http://s3.viastreaming.net:8835/;",
+"type": "audio/mpeg",
+"kbps": 192,
+"insecure": true,
+"realm": "synth"
+},
+{
 "id": "synth/f93fe825",
 "name": "al dente",
 "group": "Darkwave / Goth / Industrial",
