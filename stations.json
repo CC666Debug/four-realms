@@ -217,8 +217,20 @@
 "id": "halloween/24fe07fe",
 "name": "iHeart Halloween Radio",
 "group": "More Halloween",
+"url": "https://stream.revma.ihrhls.com/zc7001",
+"type": "audio/aac",
+"streams": [
+{
+"url": "https://stream.revma.ihrhls.com/zc7001",
+"type": "audio/aac",
+"label": "iHeart · AAC"
+},
+{
 "url": "https://stream.revma.ihrhls.com/zc7001/hls.m3u8?streamid=7001",
 "type": "application/x-mpegURL",
+"label": "iHeart · HLS (backup)"
+}
+],
 "realm": "halloween"
 },
 {
@@ -402,8 +414,20 @@
 "id": "halloween/1a0e40fd",
 "group": "Spooky Sounds",
 "name": "Haunted House Radio",
+"url": "https://stream.revma.ihrhls.com/zc9163",
+"type": "audio/aac",
+"streams": [
+{
+"url": "https://stream.revma.ihrhls.com/zc9163",
+"type": "audio/aac",
+"label": "iHeart · AAC"
+},
+{
 "url": "https://stream.revma.ihrhls.com/zc9163/hls.m3u8?streamid=9163",
 "type": "application/x-mpegURL",
+"label": "iHeart · HLS (backup)"
+}
+],
 "realm": "halloween"
 },
 {
@@ -423,16 +447,40 @@
 "id": "halloween/3ad732ed",
 "group": "More Halloween",
 "name": "Halloween Jazz & Blues",
+"url": "https://stream.revma.ihrhls.com/zc11286",
+"type": "audio/aac",
+"streams": [
+{
+"url": "https://stream.revma.ihrhls.com/zc11286",
+"type": "audio/aac",
+"label": "iHeart · AAC"
+},
+{
 "url": "https://stream.revma.ihrhls.com/zc11286/hls.m3u8?streamid=11286",
 "type": "application/x-mpegURL",
+"label": "iHeart · HLS (backup)"
+}
+],
 "realm": "halloween"
 },
 {
 "id": "halloween/547c7ff7",
 "group": "More Halloween",
 "name": "Halloween Classical",
+"url": "https://stream.revma.ihrhls.com/zc11285",
+"type": "audio/aac",
+"streams": [
+{
+"url": "https://stream.revma.ihrhls.com/zc11285",
+"type": "audio/aac",
+"label": "iHeart · AAC"
+},
+{
 "url": "https://stream.revma.ihrhls.com/zc11285/hls.m3u8?streamid=11285",
 "type": "application/x-mpegURL",
+"label": "iHeart · HLS (backup)"
+}
+],
 "realm": "halloween"
 },
 {
