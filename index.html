@@ -753,7 +753,7 @@ let httpOK = false; try { httpOK = localStorage.getItem('http_ok') === '1'; } ca
 // Brave won't load old http:// streams at a bare number address (Radio Caprice) inside this secure app,
 // but it will by name: sslip.io turns 1.2.3.4 into the name 1-2-3-4.sslip.io (free, same server). Speakers keep the original link.
 const hereSrc = u => location.protocol === 'https:' ? u.replace(/^http:\/\/(\d+)\.(\d+)\.(\d+)\.(\d+)(?=[:/]|$)/, 'http://$1-$2-$3-$4.sslip.io') : u;
-const VERSION = '1.33.0';
+const VERSION = '1.34.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -790,6 +790,7 @@ const REALMS = [
     tag: 'Happy haunting!',
     genres: [
       { id: 'Halloween Radio', label: '🎃 Halloween Radio', icon: '🎃' },
+      { id: 'Spooky Sounds', label: '🕯️ Spooky Sounds', icon: '🕯️' },   // dark ambient and haunted-house ambience
       { id: 'More Halloween', label: '👻 More Halloween', icon: '👻' },
     ] },
   { id: 'synth', name: 'Synth Caster', short: 'Synth', icon: '🌆', badge: '🌆', color: '#0d0a1a',

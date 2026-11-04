@@ -160,7 +160,7 @@
 {
 "id": "halloween/8717733a",
 "name": "Ghost Wire (Haunted Ambient)",
-"group": "More Halloween",
+"group": "Spooky Sounds",
 "url": "https://signalcity.tv/ghost_wire.mp3",
 "type": "audio/mpeg",
 "realm": "halloween"
@@ -300,7 +300,7 @@
 {
 "id": "halloween/4787dc2c",
 "name": "SomaFM Doomed (MP3 256)",
-"group": "More Halloween",
+"group": "Spooky Sounds",
 "url": "https://ice5.somafm.com/doomed-256-mp3",
 "type": "audio/mpeg",
 "meta": {
@@ -382,7 +382,7 @@
 {
 "id": "halloween/9f0eca36",
 "name": "Ghost Service",
-"group": "More Halloween",
+"group": "Spooky Sounds",
 "about": "Haunted sounds and Halloween",
 "url": "https://www.maxxwave.co.uk/ghost32.mp2",
 "type": "audio/mpeg",
@@ -399,6 +399,51 @@
 "realm": "halloween"
 },
 {
+"id": "halloween/1a0e40fd",
+"group": "Spooky Sounds",
+"name": "Haunted House Radio",
+"url": "https://stream.revma.ihrhls.com/zc9163/hls.m3u8?streamid=9163",
+"type": "application/x-mpegURL",
+"realm": "halloween"
+},
+{
+"id": "halloween/36e0b0e4",
+"group": "Spooky Sounds",
+"name": "Halloween Haunt Graveyard",
+"url": "https://puma.streemlion.com:1060/stream",
+"type": "audio/mpeg",
+"meta": {
+"k": "icecast",
+"u": "https://puma.streemlion.com:1060/status-json.xsl",
+"m": "/stream"
+},
+"realm": "halloween"
+},
+{
+"id": "halloween/3ad732ed",
+"group": "More Halloween",
+"name": "Halloween Jazz & Blues",
+"url": "https://stream.revma.ihrhls.com/zc11286/hls.m3u8?streamid=11286",
+"type": "application/x-mpegURL",
+"realm": "halloween"
+},
+{
+"id": "halloween/547c7ff7",
+"group": "More Halloween",
+"name": "Halloween Classical",
+"url": "https://stream.revma.ihrhls.com/zc11285/hls.m3u8?streamid=11285",
+"type": "application/x-mpegURL",
+"realm": "halloween"
+},
+{
+"id": "halloween/b5b2bb91",
+"group": "More Halloween",
+"name": "Creepy Tales Radio (Old Time Radio Horror)",
+"url": "https://mercury.reliastream.com/proxy/jared12?mp=/stream",
+"type": "audio/mpeg",
+"realm": "halloween"
+},
+{
 "id": "synth/02c0ce73",
 "name": "Nightride FM Horrorsynth",
 "group": "Synthwave / Retrowave",
@@ -407,6 +452,18 @@
 "meta": {
 "k": "nightride",
 "id": "horrorsynth"
+},
+"realm": "synth"
+},
+{
+"id": "synth/4787dc2c",
+"name": "SomaFM Doomed (MP3 256)",
+"group": "Darkwave / Goth / Industrial",
+"url": "https://ice5.somafm.com/doomed-256-mp3",
+"type": "audio/mpeg",
+"meta": {
+"k": "soma",
+"id": "doomed"
 },
 "realm": "synth"
 },
@@ -1574,6 +1631,14 @@
 "realm": "synth"
 },
 {
+"id": "halloween/spooky-78616622",
+"name": "[D A R K A M B I E N T]",
+"group": "Spooky Sounds",
+"url": "https://radio.m00.su:8000/darkambient.mp3",
+"type": "audio/mpeg",
+"realm": "halloween"
+},
+{
 "id": "synth/49399522",
 "name": "Dark Ambient Radio",
 "group": "Darkwave / Goth / Industrial",
@@ -1583,6 +1648,17 @@
 "kbps": 192,
 "insecure": true,
 "realm": "synth"
+},
+{
+"id": "halloween/spooky-49399522",
+"name": "Dark Ambient Radio",
+"group": "Spooky Sounds",
+"about": "Dark ambient around the clock: \"Muzak for the Final Elevation\" (Germany)",
+"url": "http://s3.viastreaming.net:8835/;",
+"type": "audio/mpeg",
+"kbps": 192,
+"insecure": true,
+"realm": "halloween"
 },
 {
 "id": "synth/f93fe825",
@@ -2889,6 +2965,18 @@
 "id": "darkzone"
 },
 "realm": "synth"
+},
+{
+"id": "halloween/spooky-e632cd63",
+"name": "SomaFM - The Dark Zone",
+"group": "Spooky Sounds",
+"url": "https://ice1.somafm.com/darkzone-128-mp3",
+"type": "audio/mpeg",
+"meta": {
+"k": "soma",
+"id": "darkzone"
+},
+"realm": "halloween"
 },
 {
 "id": "synth/5430d095",
