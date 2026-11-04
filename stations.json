@@ -1700,18 +1700,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/742c6419",
-"name": "Dark Metal-Radio",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://stream.laut.fm/dark-metal-radio",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "dark-metal-radio"
-},
-"realm": "synth"
-},
-{
 "id": "synth/4eb46126",
 "name": "Dark Star FM",
 "group": "Darkwave / Goth / Industrial",
@@ -1932,14 +1920,6 @@
 "k": "laut",
 "id": "ebm"
 },
-"realm": "synth"
-},
-{
-"id": "synth/eefcb585",
-"name": "EchoBeat FM",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://as100.globalhost1.com/8004/stream",
-"type": "audio/mpeg",
 "realm": "synth"
 },
 {
@@ -2662,18 +2642,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/bfdb2435",
-"name": "Radio Estereo Playa",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://stream.zeno.fm/rrcwp4ehorpvv",
-"type": "audio/mpeg",
-"meta": {
-"k": "zeno",
-"id": "rrcwp4ehorpvv"
-},
-"realm": "synth"
-},
-{
 "id": "synth/d7666592",
 "name": "Radio Fonlord",
 "group": "Darkwave / Goth / Industrial",
@@ -3254,19 +3222,6 @@
 "meta": {
 "k": "laut",
 "id": "anderswelt"
-},
-"realm": "synth"
-},
-{
-"id": "synth/26bc0c02",
-"name": "Numanme",
-"group": "Synth-Pop & New Wave",
-"about": "Synth-pop and new wave: B-Movie, Color Theory, Das Ich",
-"url": "https://numanme.stream.laut.fm/numanme",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "numanme"
 },
 "realm": "synth"
 },
@@ -4546,6 +4501,20 @@
 "realm": "synth"
 },
 {
+"name": "Abyss",
+"group": "Darkwave / Goth / Industrial",
+"about": "Metal, Gothic, EBM, Darkwave, Black Metal",
+"url": "https://abyss.stream.laut.fm/abyss?t302=2026-10-01_01-03-21&uuid=cb0b29de-407f-4665-6512-74667da282d3",
+"type": "audio/mpeg",
+"kbps": 128,
+"meta": {
+"k": "laut",
+"id": "abyss"
+},
+"id": "synth/f658cb76",
+"realm": "synth"
+},
+{
 "id": "synth/801d735d",
 "name": "Radio Caprice - Video Game Music",
 "group": "Chiptune / Game",
@@ -4581,20 +4550,6 @@
 "id": "boon"
 },
 "id": "pagan/8c090d7a",
-"realm": "pagan"
-},
-{
-"name": "Nebenwelten",
-"group": "Wiccan & Witchy",
-"about": "Music with a spiritual, neopagan and shamanic theme",
-"url": "https://stream.laut.fm/nebenwelten",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "nebenwelten"
-},
-"id": "pagan/6454d33b",
 "realm": "pagan"
 },
 {
@@ -4645,16 +4600,6 @@
 "m": "/stream"
 },
 "id": "pagan/e5cdfd3f",
-"realm": "pagan"
-},
-{
-"name": "Radio YouPagan",
-"group": "Pagan & Heathen",
-"about": "Freeform pagan radio (low quality, 32 kbps)",
-"url": "https://ec1.yesstreaming.net:4310/stream",
-"type": "audio/aac",
-"kbps": 32,
-"id": "pagan/00c3385d",
 "realm": "pagan"
 },
 {
@@ -4973,20 +4918,6 @@
 "realm": "pagan"
 },
 {
-"name": "Mittelalterserver",
-"group": "Medieval & Pagan Folk (Mittelalter)",
-"about": "Medieval and folk-rock",
-"url": "https://stream.laut.fm/mittelalterserver",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "mittelalterserver"
-},
-"id": "pagan/3d2f17e8",
-"realm": "pagan"
-},
-{
 "name": "Radio Dudelsack",
 "group": "Medieval & Pagan Folk (Mittelalter)",
 "about": "Bagpipes, hurdy-gurdy and medieval rock",
@@ -5128,20 +5059,6 @@
 "id": "metalmaster-alf"
 },
 "id": "pagan/5a65a4bd",
-"realm": "pagan"
-},
-{
-"name": "Odin's Metal Rock Club",
-"group": "Pagan, Viking & Folk Metal",
-"about": "Heathen metal and medieval rock",
-"url": "https://stream.laut.fm/odinsmetalrockclub",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "odinsmetalrockclub"
-},
-"id": "pagan/3468daea",
 "realm": "pagan"
 },
 {
@@ -5295,19 +5212,6 @@
 "meta": {
 "k": "laut",
 "id": "sinnflut"
-},
-"realm": "pagan"
-},
-{
-"id": "pagan/af981ffd",
-"name": "Schwarzes Nrw",
-"group": "Medieval & Pagan Folk (Mittelalter)",
-"about": "Mittelalter and dark scene: Schandmaul, Schelmish, Unheilig",
-"url": "https://schwarzes-nrw.stream.laut.fm/schwarzes-nrw",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "schwarzes-nrw"
 },
 "realm": "pagan"
 },
@@ -5951,20 +5855,6 @@
 "realm": "kvlt"
 },
 {
-"name": "Deathmetal (Flatlines)",
-"group": "Death Metal Neighbours",
-"about": "Death metal",
-"url": "https://deathmetal.stream.laut.fm/deathmetal?t302=2026-10-01_01-03-24&uuid=4547f08b-d941-9893-6e28-daf0985ac0be",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "deathmetal"
-},
-"id": "kvlt/0c102a40",
-"realm": "kvlt"
-},
-{
 "name": "# 100 GREATEST HEAVY METAL",
 "group": "Metal Mix",
 "about": "60'S, 60S, 70'S, 70Er, 70S",
@@ -5996,20 +5886,6 @@
 "id": "4400-ironcity"
 },
 "id": "kvlt/aea7249f",
-"realm": "kvlt"
-},
-{
-"name": "Abyss",
-"group": "Metal Mix",
-"about": "Metal, Gothic, EBM, Darkwave, Black Metal",
-"url": "https://abyss.stream.laut.fm/abyss?t302=2026-10-01_01-03-21&uuid=cb0b29de-407f-4665-6512-74667da282d3",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "abyss"
-},
-"id": "kvlt/f658cb76",
 "realm": "kvlt"
 },
 {
@@ -6210,20 +6086,6 @@
 "id": "destroyed"
 },
 "id": "kvlt/aefbd059",
-"realm": "kvlt"
-},
-{
-"name": "Diabolicmetalbox",
-"group": "Metal Mix",
-"about": "Rock, Metal, Thrash Metal, Death Metal, Black Metal",
-"url": "https://diabolicmetalbox.stream.laut.fm/diabolicmetalbox?t302=2026-10-01_01-03-22&uuid=45454ebd-3f34-0b10-72e6-3bfea7425b47",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "diabolicmetalbox"
-},
-"id": "kvlt/9df710cd",
 "realm": "kvlt"
 },
 {
@@ -7589,6 +7451,46 @@
 "kbps": 320,
 "insecure": true,
 "id": "kvlt/314c69df",
+"realm": "kvlt"
+},
+{
+"id": "kvlt/742c6419",
+"name": "Dark Metal-Radio",
+"group": "Metal Mix",
+"url": "https://stream.laut.fm/dark-metal-radio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "dark-metal-radio"
+},
+"realm": "kvlt"
+},
+{
+"name": "Mittelalterserver",
+"group": "Metal Mix",
+"about": "Medieval and folk-rock",
+"url": "https://stream.laut.fm/mittelalterserver",
+"type": "audio/mpeg",
+"kbps": 128,
+"meta": {
+"k": "laut",
+"id": "mittelalterserver"
+},
+"id": "kvlt/3d2f17e8",
+"realm": "kvlt"
+},
+{
+"name": "Deathmetal (Flatlines)",
+"group": "Metal Mix",
+"about": "Death metal",
+"url": "https://deathmetal.stream.laut.fm/deathmetal?t302=2026-10-01_01-03-24&uuid=4547f08b-d941-9893-6e28-daf0985ac0be",
+"type": "audio/mpeg",
+"kbps": 128,
+"meta": {
+"k": "laut",
+"id": "deathmetal"
+},
+"id": "kvlt/0c102a40",
 "realm": "kvlt"
 },
 {
