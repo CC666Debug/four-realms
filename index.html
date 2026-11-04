@@ -244,6 +244,9 @@
      Any scroll up (or a tap on the bar) brings the full player back. */
   .topbar { display: flex; flex-direction: column; gap: 8px; }
   .icon-btn.mini-cast { display: none; }
+  /* The save-song heart rides along in the mini bar (the big one is hidden there). */
+  .icon-btn.mini-heart { display: none; }
+  .top.mini .row .icon-btn.mini-heart:not([hidden]) { display: inline-flex; align-items: center; justify-content: center; width: 37px; height: 37px; padding: 0; font-size: 19px; line-height: 1; }
   .pill.heart { font-size: 18px; padding-top: 4px; padding-bottom: 4px; }
   .share-app {
     display: block; width: 100%; margin: 16px 0 4px; font: inherit; font-weight: 650; color: var(--accent);
@@ -607,6 +610,7 @@
       <button class="icon-btn" id="nextBtn" aria-label="Next station" title="Next station">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
       </button>
+      <button class="icon-btn mini-heart" id="miniFav" aria-label="Save song" title="Save song" hidden>🤍</button>
       <button class="icon-btn mini-cast" id="miniCast" aria-label="Casting to a speaker" title="Casting to a speaker">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2a9 9 0 0 1 9 9h2c0-6.08-4.93-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
       </button>
@@ -749,7 +753,7 @@ let httpOK = false; try { httpOK = localStorage.getItem('http_ok') === '1'; } ca
 // Brave won't load old http:// streams at a bare number address (Radio Caprice) inside this secure app,
 // but it will by name: sslip.io turns 1.2.3.4 into the name 1-2-3-4.sslip.io (free, same server). Speakers keep the original link.
 const hereSrc = u => location.protocol === 'https:' ? u.replace(/^http:\/\/(\d+)\.(\d+)\.(\d+)\.(\d+)(?=[:/]|$)/, 'http://$1-$2-$3-$4.sslip.io') : u;
-const VERSION = '1.28.0';
+const VERSION = '1.29.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2034,16 +2038,16 @@ const OMENS = {
   },
   // An 80s cassette: the tape winds from the left reel to the right one.
   synth: {
-    svg: `<svg width="38" height="26" viewBox="0 0 40 27">
+    svg: `<svg width="46" height="31" viewBox="0 0 40 27">
       <defs>
         <linearGradient id="omenLabel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff3fa4"/><stop offset=".5" stop-color="#ff7a5c"/><stop offset="1" stop-color="#ffd23f"/></linearGradient>
       </defs>
       <rect x="1" y="1" width="38" height="25" rx="3" fill="#221a3d" stroke="#ff3fa4" stroke-width="1"/>
       <rect x="4" y="3.5" width="32" height="4" rx="1" fill="url(#omenLabel)"/>
       <rect x="4" y="8.4" width="32" height="1" fill="#33e1ff"/>
-      <rect x="8" y="11" width="24" height="10" rx="5" fill="#0d0a1a" stroke="#342a57" stroke-width=".7"/>
-      <circle class="packL" cx="13" cy="16" r="4.6" fill="#3a2418"/>
-      <circle class="packR" cx="27" cy="16" r="2.2" fill="#3a2418"/>
+      <rect x="8" y="11" width="24" height="10" rx="5" fill="#2d2350" stroke="#ff3fa4" stroke-width=".7"/>
+      <circle class="packL" cx="13" cy="16" r="4.6" fill="#33e1ff" style="filter: drop-shadow(0 0 2px #33e1ff)"/>
+      <circle class="packR" cx="27" cy="16" r="2.2" fill="#33e1ff" style="filter: drop-shadow(0 0 2px #33e1ff)"/>
       <g class="reel spin" style="transform-origin: 13px 16px"><circle cx="13" cy="16" r="2.1" fill="#f1ecff"/><path d="M13 14v4M11 16h4" stroke="#221a3d" stroke-width=".8"/></g>
       <g class="reel spin" style="transform-origin: 27px 16px"><circle cx="27" cy="16" r="2.1" fill="#f1ecff"/><path d="M27 14v4M25 16h4" stroke="#221a3d" stroke-width=".8"/></g>
       <path d="M7 26l2.5-3h21l2.5 3" fill="#2d2350" stroke="#342a57" stroke-width=".6"/>
@@ -2130,6 +2134,7 @@ function toggleSaved(x) {
   renderSongInfo();
 }
 $('favBtn').addEventListener('click', () => { const c = currentSong(); if (c) toggleSaved(c); });
+$('miniFav').addEventListener('click', e => { e.stopPropagation(); $('favBtn').click(); });
 // Share the app: the phone's share sheet, or copy the link where there isn't one.
 $('shareBtn').addEventListener('click', async () => {
   const btn = $('shareBtn');
@@ -2185,6 +2190,8 @@ function renderSongInfo() {
   fav.textContent = on ? '❤️' : '🤍';
   fav.setAttribute('aria-label', on ? 'Saved. Tap to remove' : 'Save song');
   fav.classList.toggle('on', on);
+  const mf = $('miniFav');
+  if (mf) { mf.hidden = fav.hidden; mf.textContent = fav.textContent; mf.setAttribute('aria-label', fav.getAttribute('aria-label')); mf.title = on ? 'Saved' : 'Save song'; }
   $('recentBtn').hidden = !songInfo.history.length;
   $('savedBtn').hidden = false;   // always there, so a backup can be restored into an empty list
   $('savedBtn').textContent = '📜 Saved songs (' + saved.length + ')';
