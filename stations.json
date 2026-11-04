@@ -583,14 +583,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/a7fd0cb7",
-"name": "DnB&EDM",
-"group": "Synthwave / Retrowave",
-"url": "https://edmdnb.com:448/radio/8000/radio.mp3",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
 "id": "synth/c7d439a6",
 "name": "Exclusively Human League",
 "group": "Synthwave / Retrowave",
@@ -621,14 +613,6 @@
 "k": "azura",
 "u": "https://radio.groundzerosum.com/api/nowplaying_static/gzs_radio.json"
 },
-"realm": "synth"
-},
-{
-"id": "synth/69d63153",
-"name": "HighFi Dream",
-"group": "Synthwave / Retrowave",
-"url": "https://cdn06-us-east.radio.cloud/80ba63862a97bd69c593cc7a2ccaab1c_hq",
-"type": "audio/ogg",
 "realm": "synth"
 },
 {
@@ -829,14 +813,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/21414263",
-"name": "nudance",
-"group": "Synthwave / Retrowave",
-"url": "https://radiorecord.hostingradio.ru/nudance96.aacp",
-"type": "audio/aac",
-"realm": "synth"
-},
-{
 "id": "synth/7847d0e2",
 "name": "Palmera Blanca radio - Daystream",
 "group": "Synthwave / Retrowave",
@@ -940,14 +916,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/a039fc47",
-"name": "ROBOTARIIS RADIO",
-"group": "Synthwave / Retrowave",
-"url": "https://subwave.robotariis.com/stream.mp3",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
 "id": "synth/55ed76c8",
 "name": "Sanctuary Radio (Retro 80s Channel)",
 "group": "Synthwave / Retrowave",
@@ -1019,18 +987,6 @@
 "meta": {
 "k": "soma",
 "id": "u80s"
-},
-"realm": "synth"
-},
-{
-"id": "synth/1aab0690",
-"name": "Sound-Check RadioStation",
-"group": "Synthwave / Retrowave",
-"url": "https://stream.laut.fm/sound-check",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "sound-check"
 },
 "realm": "synth"
 },
@@ -1156,14 +1112,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/f4872c02",
-"name": "8‑bit Keygen Music Radio",
-"group": "Chiptune / Game",
-"url": "https://wirelesspt.net:8000/8bit",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
 "id": "synth/5f6be1d7",
 "name": "[CVGM.net] ChipTune - Amiga - Atari - GameBoy - Sega + More - All Request Music",
 "group": "Chiptune / Game",
@@ -1204,14 +1152,6 @@
 "url": "http://www.lmp.d2g.com:8040/;",
 "type": "audio/mpeg",
 "insecure": true,
-"realm": "synth"
-},
-{
-"id": "synth/8f7ed54a",
-"name": "CHIPTUNES.APP",
-"group": "Chiptune / Game",
-"url": "https://radio.chiptunes.app/",
-"type": "audio/mpeg",
 "realm": "synth"
 },
 {
@@ -1325,14 +1265,6 @@
 "group": "Chiptune / Game",
 "url": "https://kohina.duckdns.org/icecast/stream.ogg",
 "type": "audio/ogg",
-"realm": "synth"
-},
-{
-"id": "synth/bb871ad8",
-"name": "KP Radio",
-"group": "Chiptune / Game",
-"url": "https://radio.kingposs.com/radio.mp3",
-"type": "audio/mpeg",
 "realm": "synth"
 },
 {
@@ -1497,14 +1429,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/3014f54a",
-"name": "Random Chiptune Radio",
-"group": "Chiptune / Game",
-"url": "https://grupomundodigital.com:9170/stream",
-"type": "audio/aac",
-"realm": "synth"
-},
-{
 "id": "synth/07af35d2",
 "name": "Retro Lofi Chiptune Radio",
 "group": "Chiptune / Game",
@@ -1523,14 +1447,6 @@
 "group": "Chiptune / Game",
 "url": "https://s85.radiolize.com/radio/8090/radio.mp3",
 "type": "audio/aac",
-"realm": "synth"
-},
-{
-"id": "synth/200141e6",
-"name": "Roger Radio",
-"group": "Chiptune / Game",
-"url": "https://rogerradio.theholyroger.com/live",
-"type": "audio/mpeg",
 "realm": "synth"
 },
 {
@@ -1583,15 +1499,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/f5523208",
-"name": "The MOD Station",
-"group": "Chiptune / Game",
-"url": "http://23.81.35.187:8030/stream",
-"type": "audio/mpeg",
-"insecure": true,
-"realm": "synth"
-},
-{
 "id": "synth/28095fa0",
 "name": "The SID Station",
 "group": "Chiptune / Game",
@@ -1622,15 +1529,6 @@
 "name": "/mdtwebMaster",
 "group": "Darkwave / Goth / Industrial",
 "url": "http://streams1.mdtradio.com:8020/mdtweb",
-"type": "audio/mpeg",
-"insecure": true,
-"realm": "synth"
-},
-{
-"id": "synth/edfe77c8",
-"name": "0R_beethoven",
-"group": "Darkwave / Goth / Industrial",
-"url": "http://mp3.nexus.org:8000/egr.mp3",
 "type": "audio/mpeg",
 "insecure": true,
 "realm": "synth"
@@ -1708,14 +1606,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/3b60a27f",
-"name": "Ambient Abyss Broadcasting",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://broadcast.shoutstream.co.uk:8068/stream",
-"type": "audio/aac",
-"realm": "synth"
-},
-{
 "id": "synth/cbd8ef2e",
 "name": "AmbientRadio (MRG.fm)",
 "group": "Darkwave / Goth / Industrial",
@@ -1778,18 +1668,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/c92a2512",
-"name": "Chat-Fire",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://stream.laut.fm/chat-fire",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "chat-fire"
-},
-"realm": "synth"
-},
-{
 "id": "synth/52acbf9a",
 "name": "CIA Radio",
 "group": "Darkwave / Goth / Industrial",
@@ -1798,19 +1676,6 @@
 "meta": {
 "k": "laut",
 "id": "cia-radio"
-},
-"realm": "synth"
-},
-{
-"id": "synth/114cd06a",
-"name": "Dance FloorG3",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://mnlvmradio1.pro-fhi.net:3440/stream",
-"type": "audio/mpeg",
-"meta": {
-"k": "icecast",
-"u": "https://mnlvmradio1.pro-fhi.net:3440/status-json.xsl",
-"m": "/stream"
 },
 "realm": "synth"
 },
@@ -2042,38 +1907,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/bb7e2ec1",
-"name": "dOs.gr - WebM Video Vp9 Video & Vorbis 1080p - https://rdst.win:59000/dos.webm < Watch Live!",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://manager8.streamradio.fr:2360/stream",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
-"id": "synth/56da4012",
-"name": "DrGnu - 70th Rock",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://fluxfm.streamabc.net/flx-70er-mp3-320-4383769?sABC=6202qr25%230%237osorqnn86p8nnp979o1124290qqo247%23fgernzf.syhksz.qr&amsparams=playerid:streams.fluxfm.de;skey:1644355109",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
-"id": "synth/816e8fe1",
-"name": "DrGnu - 80th Rock II",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://fluxfm.streamabc.net/flx-80er-mp3-320-9596107?sABC=6202qrr6%230%23sorr1p583723p06268o324o2ps5n399q%23fgernzf.syhksz.qr&amsparams=playerid:streams.fluxfm.de;skey:1644355302",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
-"id": "synth/5f64e64e",
-"name": "DrGnu - Death Metal",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://streams.radiobob.de/deathmetal/mp3-192/mediaplayer/",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
 "id": "synth/79d8460d",
 "name": "DrGnu - Gothic",
 "group": "Darkwave / Goth / Industrial",
@@ -2086,22 +1919,6 @@
 "name": "DrGnu - Metal 2",
 "group": "Darkwave / Goth / Industrial",
 "url": "https://fluxfm.streamabc.net/flx-metalfm-mp3-320-9154971?sABC=6202r2p8%230%23sorr1p583723p06268o324o2ps5n399q%23fgernzf.syhksz.qr&amsparams=playerid:streams.fluxfm.de;skey:1644356296",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
-"id": "synth/6935b6d0",
-"name": "DrGnu - Metallica",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://streams.radiobob.de/metallica/mp3-192/mediaplayer/",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
-"id": "synth/046dd036",
-"name": "DrGnu - Rock Party",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://streams.radiobob.de/rockparty/mp3-192/mediaplayer/",
 "type": "audio/mpeg",
 "realm": "synth"
 },
@@ -2210,18 +2027,6 @@
 "url": "http://178.32.107.151:3171/stream",
 "type": "audio/mpeg",
 "insecure": true,
-"realm": "synth"
-},
-{
-"id": "synth/d6cf359f",
-"name": "Frühlingsradio",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://fruehling.stream.laut.fm/fruehling?t302=2026-09-26_03-45-17&uuid=dfff0215-d3a2-abd2-4e6e-e70a57f71072",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "fruehling"
-},
 "realm": "synth"
 },
 {
@@ -2349,18 +2154,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/01b8657d",
-"name": "Hitradio Mathildenhof",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://hitradio-mathildenhof.stream.laut.fm/hitradio-mathildenhof",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "hitradio-mathildenhof"
-},
-"realm": "synth"
-},
-{
 "id": "synth/95f83963",
 "name": "HTD Radio - Hit the Dark",
 "group": "Darkwave / Goth / Industrial",
@@ -2425,18 +2218,6 @@
 "group": "Darkwave / Goth / Industrial",
 "url": "https://jaquearnoux.de/radio",
 "type": "audio/ogg",
-"realm": "synth"
-},
-{
-"id": "synth/2eb85eff",
-"name": "Kaffee Radio",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://stream.laut.fm/kaffee",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "kaffee"
-},
 "realm": "synth"
 },
 {
@@ -2548,18 +2329,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/9b6be2b4",
-"name": "Laut.FM RadioEuro",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://stream.laut.fm/radioeuro",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "radioeuro"
-},
-"realm": "synth"
-},
-{
 "id": "synth/c7acd0ed",
 "name": "laut.fm Schattenreich - The Gothic Radio",
 "group": "Darkwave / Goth / Industrial",
@@ -2584,18 +2353,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/62e4d06a",
-"name": "Laut.FM Shoegaze",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://shoegaze.stream.laut.fm/shoegaze",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "shoegaze"
-},
-"realm": "synth"
-},
-{
 "id": "synth/77d0416a",
 "name": "Live",
 "group": "Darkwave / Goth / Industrial",
@@ -2614,14 +2371,6 @@
 "u": "https://meralunafm.radionetz.de/status-json.xsl",
 "m": "/meralunafm.mp3"
 },
-"realm": "synth"
-},
-{
-"id": "synth/c748a497",
-"name": "MDR THÜRINGEN Mittel- und Westthüringen",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://radio-hls.mdr.de/hls/live/2112898/mdr-284300-0-hls/index.m3u8",
-"type": "application/x-mpegURL",
 "realm": "synth"
 },
 {
@@ -2820,14 +2569,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/3bbec1e0",
-"name": "Radio 94.4 - The Temecula Valley's Only Alternative",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://stream.revma.ihrhls.com/zc333/hls.m3u8",
-"type": "application/x-mpegURL",
-"realm": "synth"
-},
-{
 "id": "synth/de9efad5",
 "name": "Radio Arcane",
 "group": "Darkwave / Goth / Industrial",
@@ -3019,22 +2760,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/f8a0f6fc",
-"name": "RadioWebMaisVida",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://stream01.ouveai.com.br:1068/stream",
-"type": "audio/aac",
-"realm": "synth"
-},
-{
-"id": "synth/5134c054",
-"name": "Realitatea FM",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://shout.realitatea.net:8001/rfmweb",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
 "id": "synth/6585ed27",
 "name": "Rebm Tracks",
 "group": "Darkwave / Goth / Industrial",
@@ -3062,18 +2787,6 @@
 "k": "icecast",
 "u": "http://radio.monsterpants-amalgamated.com:8000/status-json.xsl",
 "m": "/ruinnation.ogg"
-},
-"realm": "synth"
-},
-{
-"id": "synth/b6a738de",
-"name": "Rundfunkautist",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://rundfunkautist.stream.laut.fm/rundfunkautist?t302=2026-09-25_17-40-21&uuid=465d07ba-56cb-8ae6-c230-29b385e62360",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "rundfunkautist"
 },
 "realm": "synth"
 },
@@ -3336,15 +3049,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/68be39a6",
-"name": "Unspecified name",
-"group": "Darkwave / Goth / Industrial",
-"url": "http://listen.radiogora.ru:8800/etc320",
-"type": "audio/mpeg",
-"insecure": true,
-"realm": "synth"
-},
-{
 "id": "synth/1ad0e8a9",
 "name": "Urbania Underground",
 "group": "Darkwave / Goth / Industrial",
@@ -3369,15 +3073,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/10594728",
-"name": "Vintage Gothic Network",
-"group": "Darkwave / Goth / Industrial",
-"url": "http://65.108.98.93:8890/stream",
-"type": "audio/mpeg",
-"insecure": true,
-"realm": "synth"
-},
-{
 "id": "synth/be4c046a",
 "name": "Wavebreaker",
 "group": "Darkwave / Goth / Industrial",
@@ -3387,14 +3082,6 @@
 "k": "laut",
 "id": "wavebreaker"
 },
-"realm": "synth"
-},
-{
-"id": "synth/6d3a5b24",
-"name": "X Transmission FM",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://custom-azura1.my-control-panel.com/listen/x_transmission_fm/radio.mp3",
-"type": "audio/mpeg",
 "realm": "synth"
 },
 {
@@ -3412,22 +3099,6 @@
 "group": "Darkwave / Goth / Industrial",
 "url": "https://stream.aeternare.com/playlist.m3u8",
 "type": "application/x-mpegURL",
-"realm": "synth"
-},
-{
-"id": "synth/4d4f0be8",
-"name": "ГУСЬ.Рок",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://stream3.radiogoose.ru/listen/rock/play",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
-"id": "synth/f3f96864",
-"name": "ГУСЬ.Хардденс",
-"group": "Darkwave / Goth / Industrial",
-"url": "https://stream1.radiogoose.ru/listen/harddance/play",
-"type": "audio/mpeg",
 "realm": "synth"
 },
 {
@@ -3531,19 +3202,6 @@
 "meta": {
 "k": "laut",
 "id": "depeche-mode-universe"
-},
-"realm": "synth"
-},
-{
-"id": "synth/3cfc82ca",
-"name": "Secondfuture",
-"group": "Synth-Pop & New Wave",
-"about": "Synth-pop and new wave: David Carretta, Depeche Mode, Human Body",
-"url": "https://secondfuture.stream.laut.fm/secondfuture",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "secondfuture"
 },
 "realm": "synth"
 },
@@ -4276,32 +3934,6 @@
 "realm": "synth"
 },
 {
-"id": "synth/f10f0c40",
-"name": "Schwarze Rose",
-"group": "Darkwave / Goth / Industrial",
-"about": "Darkwave, goth and EBM: Absurd Minds, Nightwish, Spektralized",
-"url": "https://schwarze-rose.stream.laut.fm/schwarze-rose",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "schwarze-rose"
-},
-"realm": "synth"
-},
-{
-"id": "synth/1efe7182",
-"name": "Altmearker Radio",
-"group": "Darkwave / Goth / Industrial",
-"about": "Darkwave, goth and EBM: ASP, Am Inc, Depeche Mode",
-"url": "https://altmearker-radio.stream.laut.fm/altmearker-radio",
-"type": "audio/mpeg",
-"meta": {
-"k": "laut",
-"id": "altmearker-radio"
-},
-"realm": "synth"
-},
-{
 "id": "synth/9b743e11",
 "name": "Bleak Radio",
 "group": "Darkwave / Goth / Industrial",
@@ -4699,15 +4331,6 @@
 "group": "Darkwave / Goth / Industrial",
 "about": "Rammstein and Neue Deutsche Härte, around the clock",
 "url": "https://bestofrockfm.stream.vip/rammstein/mp3-256/",
-"type": "audio/mpeg",
-"realm": "synth"
-},
-{
-"id": "synth/b08d5688",
-"name": "Radio Schwarze Welle",
-"group": "Darkwave / Goth / Industrial",
-"about": "German gothic: darkwave, EBM and gothic rock",
-"url": "https://schwarze-welle.de:7500/",
 "type": "audio/mpeg",
 "realm": "synth"
 },
@@ -5546,34 +5169,6 @@
 "realm": "pagan"
 },
 {
-"name": "Witchcraft Wizardry FM",
-"group": "Wiccan & Witchy",
-"about": "Witchy radio (German)",
-"url": "https://stream.laut.fm/witchcraft-wizardry-fm",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "witchcraft-wizardry-fm"
-},
-"id": "pagan/024079a0",
-"realm": "pagan"
-},
-{
-"name": "Coddly Witch Radio",
-"group": "Wiccan & Witchy",
-"about": "Witchy radio (German)",
-"url": "https://stream.laut.fm/coddly-witch-radio",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "coddly-witch-radio"
-},
-"id": "pagan/3a84e6be",
-"realm": "pagan"
-},
-{
 "name": "Radio Valhall",
 "group": "Norse, Viking & Nordic",
 "about": "Viking and Nordic radio",
@@ -5639,20 +5234,6 @@
 "realm": "pagan"
 },
 {
-"name": "Epic Pur Radio",
-"group": "Medieval & Pagan Folk (Mittelalter)",
-"about": "Fantasy, medieval, rock and metal",
-"url": "https://stream.laut.fm/epic",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "epic"
-},
-"id": "pagan/7f37785f",
-"realm": "pagan"
-},
-{
 "name": "Radio Kelt Magic",
 "group": "Celtic Pagan",
 "about": "Celtic music \"from the depth of the heart\"",
@@ -5715,16 +5296,6 @@
 "k": "laut",
 "id": "sinnflut"
 },
-"realm": "pagan"
-},
-{
-"id": "pagan/e7772824",
-"name": "RADIO BOB! Mittelalter Rock",
-"group": "Medieval & Pagan Folk (Mittelalter)",
-"about": "Mittelalter rock from Radio BOB",
-"url": "http://streams.radiobob.de/mittelalter/mp3-192/streams.radiobob.de/",
-"type": "audio/mpeg",
-"insecure": true,
 "realm": "pagan"
 },
 {
@@ -6452,20 +6023,6 @@
 "realm": "kvlt"
 },
 {
-"name": "Audimaxx",
-"group": "Metal Mix",
-"about": "Alternative, Black Metal, Death Metal, Easy Listening, Heavy Metal",
-"url": "https://audimaxx.stream.laut.fm/audimaxx?t302=2026-10-01_01-03-22&uuid=7321af88-df34-c0d4-445d-453e15070e53",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "audimaxx"
-},
-"id": "kvlt/6773c846",
-"realm": "kvlt"
-},
-{
 "name": "Badrock Hard & Heavy",
 "group": "Metal Mix",
 "about": "Death Metal, Heavy Metal, Metal, Punk",
@@ -6681,20 +6238,6 @@
 "id": "durchgehoert"
 },
 "id": "kvlt/7910f164",
-"realm": "kvlt"
-},
-{
-"name": "Durst Termine",
-"group": "Metal Mix",
-"about": "Pop-Punk, Punk, Hardcore, Emo, Metal",
-"url": "https://durst-termine.stream.laut.fm/durst-termine?t302=2026-10-01_01-03-25&uuid=fccc25d8-ac7e-d06b-1dc0-93a8dc2f6006",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "durst-termine"
-},
-"id": "kvlt/178fdc02",
 "realm": "kvlt"
 },
 {
@@ -7140,20 +6683,6 @@
 "realm": "kvlt"
 },
 {
-"name": "Radio M",
-"group": "Metal Mix",
-"about": "Metalcore, Metal, Rock'n'Roll, Rock, Black Metal",
-"url": "https://radio-m.stream.laut.fm/radio-m?t302=2026-10-01_01-03-23&uuid=23d36192-ec3b-7660-7b14-029a2a46e2c6",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "radio-m"
-},
-"id": "kvlt/ee964aa1",
-"realm": "kvlt"
-},
-{
 "name": "Radio Metalkultur",
 "group": "Metal Mix",
 "about": "Female Fronted Metal, Female Fronted Rock, Death Metal, Black Metal, Heavy Metal",
@@ -7268,34 +6797,6 @@
 "id": "rockradio"
 },
 "id": "kvlt/384da51c",
-"realm": "kvlt"
-},
-{
-"name": "Rockamringblog-Radio",
-"group": "Metal Mix",
-"about": "Rock, Metal, Metalcore, Punk, Alternative",
-"url": "https://rockamringblogradio.stream.laut.fm/rockamringblogradio?t302=2026-10-01_01-03-24&uuid=c44bd98e-ee29-ab9f-f1cb-c809b3b37abd",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "rockamringblogradio"
-},
-"id": "kvlt/f3285445",
-"realm": "kvlt"
-},
-{
-"name": "Rocknmetal De",
-"group": "Metal Mix",
-"about": "Heavy Metal, Classic Rock, Gothic, Industrial, Folk",
-"url": "https://rocknmetalde.stream.laut.fm/rocknmetal_de?t302=2026-10-01_01-03-20&uuid=c382ce68-fc0e-da85-a848-268ed7f88de9",
-"type": "audio/mpeg",
-"kbps": 128,
-"meta": {
-"k": "laut",
-"id": "rocknmetal_de"
-},
-"id": "kvlt/6e8ee7b5",
 "realm": "kvlt"
 },
 {
@@ -7498,15 +6999,6 @@
 "url": "http://79.111.119.111:8002/dsbm",
 "type": "audio/aac",
 "insecure": true,
-"realm": "kvlt"
-},
-{
-"id": "kvlt/88236a59",
-"name": "Almost Hell Radio",
-"group": "Pure Black Metal",
-"about": "Black metal",
-"url": "https://almosthellradio.duckdns.org/listen/almost_hell_radio/radio.mp3",
-"type": "audio/mpeg",
 "realm": "kvlt"
 },
 {
@@ -8097,16 +7589,6 @@
 "kbps": 320,
 "insecure": true,
 "id": "kvlt/314c69df",
-"realm": "kvlt"
-},
-{
-"name": "Desde Las Tinieblas Radio",
-"group": "Metal Mix",
-"about": "Metal from Spain",
-"url": "https://stream.zeno.fm/fumcys21ag0uv",
-"type": "audio/mpeg",
-"kbps": 128,
-"id": "kvlt/6b8bf83a",
 "realm": "kvlt"
 },
 {
