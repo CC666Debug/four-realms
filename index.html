@@ -312,15 +312,17 @@
   ::view-transition-image-pair(mini-top) { overflow: hidden; }
   ::view-transition-old(mini-top), ::view-transition-new(mini-top) { height: 100%; object-fit: none; object-position: top; }
   ::view-transition-old(mini-name), ::view-transition-new(mini-name), ::view-transition-old(mini-song), ::view-transition-new(mini-song) { height: 100%; object-fit: none; object-position: left center; }
-  /* The speaker icon blares: up to three neon sound waves (more as it gets louder), pulsing while music plays. */
+  /* The speaker icon blares: up to five neon sound waves (more as it gets louder), pulsing while music plays. */
   #muteBtn { color: var(--neon); }
-  #muteBtn svg { width: 26px; height: 24px; }
+  #muteBtn svg { width: 28px; height: 24px; }
   #muteBtn.muted { color: var(--muted); }
-  #volIcon .wave { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; opacity: .16; }
+  #volIcon .wave { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; opacity: .16; }
   #volIcon .wave.on { stroke: var(--neon); opacity: 1; filter: drop-shadow(0 0 2px var(--neon)); }
   #muteBtn.blaring #volIcon .wave.on { animation: blare 1.1s ease-out infinite; }
-  #muteBtn.blaring #volIcon .w2.on { animation-delay: .15s; }
-  #muteBtn.blaring #volIcon .w3.on { animation-delay: .3s; }
+  #muteBtn.blaring #volIcon .w2.on { animation-delay: .12s; }
+  #muteBtn.blaring #volIcon .w3.on { animation-delay: .24s; }
+  #muteBtn.blaring #volIcon .w4.on { animation-delay: .36s; }
+  #muteBtn.blaring #volIcon .w5.on { animation-delay: .48s; }
   @keyframes blare { 0% { opacity: .35; } 30% { opacity: 1; } 100% { opacity: .5; } }
   @media (prefers-reduced-motion: reduce) { #muteBtn.blaring #volIcon .wave.on { animation: none; } }
   @media (max-width: 380px) { .row .icon-btn { padding: 6px; } .volnum { min-width: 30px; margin-left: 0; font-size: 13px; } }
@@ -753,7 +755,7 @@ let httpOK = false; try { httpOK = localStorage.getItem('http_ok') === '1'; } ca
 // Brave won't load old http:// streams at a bare number address (Radio Caprice) inside this secure app,
 // but it will by name: sslip.io turns 1.2.3.4 into the name 1-2-3-4.sslip.io (free, same server). Speakers keep the original link.
 const hereSrc = u => location.protocol === 'https:' ? u.replace(/^http:\/\/(\d+)\.(\d+)\.(\d+)\.(\d+)(?=[:/]|$)/, 'http://$1-$2-$3-$4.sslip.io') : u;
-const VERSION = '1.35.0';
+const VERSION = '1.36.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -2456,15 +2458,16 @@ const ICON_MUTED = '<path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.
 
 let lastActiveId = null, lastPlayingRealm = null;
 let waitText = '', waitSince = 0;
-const WAVES = ['M15.5 8.8a4.5 4.5 0 0 1 0 6.4', 'M18 6.3a8 8 0 0 1 0 11.4', 'M20.5 3.8a11.5 11.5 0 0 1 0 16.4'];
+// Five sound waves, the arcs fanning out from the speaker (same as RadioWizard).
+const WAVES = [3.5, 6, 8.5, 11, 13.5].map(r => { const x = (12 + r * .766).toFixed(2), dy = r * .643; return 'M' + x + ' ' + (12 - dy).toFixed(2) + 'A' + r + ' ' + r + ' 0 0 1 ' + x + ' ' + (12 + dy).toFixed(2); });
 let volIconKey = '';
-function paintVMeter() {   // the speaker icon: 0-3 neon sound waves for the volume, or the crossed-out speaker when muted
+function paintVMeter() {   // the speaker icon: 0-5 neon sound waves for the volume, or the crossed-out speaker when muted
   const muted = castConnected() ? (player && player.isMuted) : audio.muted;
-  const v = +els.vol.value, n = muted ? -1 : v <= 0 ? 0 : v < 34 ? 1 : v < 67 ? 2 : 3;
+  const v = +els.vol.value, n = muted ? -1 : v <= 0 ? 0 : Math.min(5, Math.ceil(v / 20));
   els.muteBtn.classList.toggle('muted', !!muted);
   if (String(n) === volIconKey) return;   // leave the icon alone so the pulsing doesn't restart
   volIconKey = String(n);
-  els.volIcon.setAttribute('viewBox', muted ? '0 0 24 24' : '0 0 26 24');
+  els.volIcon.setAttribute('viewBox', muted ? '0 0 24 24' : '0 0 28 24');
   els.volIcon.innerHTML = muted ? ICON_MUTED : '<path d="M3 9v6h4l5 5V4L7 9H3z"/>' +
     WAVES.map((d, i) => `<path class="wave w${i + 1}${i < n ? ' on' : ''}" d="${d}"/>`).join('');
 }
