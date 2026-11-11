@@ -4202,8 +4202,8 @@
 "id": "synth/fa0b1998",
 "name": "Radio Caprice WITCH HOUSE",
 "group": "Darkwave / Goth / Industrial",
-"about": "Darkwave, goth and EBM",
-"url": "http://79.120.77.11:8002/witchhouse",
+"about": "Witch house, 320k",
+"url": "http://79.120.77.11:8004/witchhouse",
 "type": "audio/aac",
 "insecure": true,
 "realm": "synth"
@@ -4797,6 +4797,28 @@
 "url": "http://79.120.39.202:9139/",
 "type": "audio/aac",
 "insecure": true,
+"realm": "synth"
+},
+{
+"id": "synth/8f2cc38f",
+"name": "Witch House on WaveRadio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Witch house and experimental",
+"url": "https://station.waveradio.org/witch",
+"type": "audio/aac",
+"realm": "synth"
+},
+{
+"id": "synth/c6ce9903",
+"name": "Crystal Castles Radio",
+"group": "Darkwave / Goth / Industrial",
+"about": "Witch house, electroclash, synth-punk",
+"url": "https://stream.laut.fm/crystal-castles-radio",
+"type": "audio/mpeg",
+"meta": {
+"k": "laut",
+"id": "crystal-castles-radio"
+},
 "realm": "synth"
 },
 {
