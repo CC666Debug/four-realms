@@ -744,6 +744,7 @@
   <div class="dlg-btns">
     <button id="diagClear">Clear</button>
     <button id="diagCopy">Copy log</button>
+    <button id="diagSave">Save log</button>
     <button id="gcSkip"></button>
     <button onclick="this.closest('dialog').close()">Close</button>
   </div>
@@ -755,7 +756,7 @@ let httpOK = false; try { httpOK = localStorage.getItem('http_ok') === '1'; } ca
 // Brave won't load old http:// streams at a bare number address (Radio Caprice) inside this secure app,
 // but it will by name: sslip.io turns 1.2.3.4 into the name 1-2-3-4.sslip.io (free, same server). Speakers keep the original link.
 const hereSrc = u => location.protocol === 'https:' ? u.replace(/^http:\/\/(\d+)\.(\d+)\.(\d+)\.(\d+)(?=[:/]|$)/, 'http://$1-$2-$3-$4.sslip.io') : u;
-const VERSION = '1.37.0';
+const VERSION = '1.38.0';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1419,25 +1420,20 @@ function loadStation(s, stream = speakerStreamFor(s)) {
   render();
 }
 
-// The speaker's standard player often plays for half a second, then sits "buffering" for a
-// long time before the sound starts. A quick pause and play gets it going, so while a station
-// is starting the app watches for that stall and nudges the speaker, up to 4 times.
-const NUDGE_AFTER = 500, NUDGE_WINDOW = 60000;
+// No more pause + play while the speaker buffers (same fix as RadioWizard 1.37.0): Nest Audios and speaker groups
+// now take a few seconds to start, and the old 0.5 s nudge hit them mid-start and left them "playing" with no sound.
+// Now a long wait is only noted in the log.
+const NUDGE_AFTER = 15000, NUDGE_WINDOW = 60000;
 let nudgeUntil = 0, nudges = 0, nudgeTimer = null, kicking = false;
 function kickStart() { nudgeUntil = Date.now() + NUDGE_WINDOW; nudges = 0; watchStall(); }
 function watchStall() {
   clearTimeout(nudgeTimer);
   const PS = chrome.cast.media.PlayerState;
-  if (Date.now() > nudgeUntil || nudges >= 4 || player.playerState !== PS.BUFFERING) return;
+  if (Date.now() > nudgeUntil || nudges >= 1 || player.playerState !== PS.BUFFERING) return;
   nudgeTimer = setTimeout(() => {
-    const session = ctx.getCurrentSession();
-    const media = session && session.getMediaSession();
-    if (!media || player.playerState !== PS.BUFFERING) return;
+    if (player.playerState !== PS.BUFFERING) return;
     nudges++;
-    kicking = true;
-    diag('nudge ' + nudges + ': speaker stalled buffering, pause + play');
-    const done = () => { kicking = false; render(); };
-    media.pause(new chrome.cast.media.PauseRequest(), () => media.play(new chrome.cast.media.PlayRequest(), done, done), done);
+    diag('speaker still buffering after ' + NUDGE_AFTER / 1000 + ' s (left alone)');
   }, NUDGE_AFTER);
 }
 
@@ -2557,6 +2553,32 @@ function render() {
     try { await navigator.clipboard.writeText(diagLines.join('\n')); $('diagCopy').textContent = 'Copied ✓'; }
     catch (e) { getSelection().selectAllChildren(text); $('diagCopy').textContent = 'Selected: copy it'; }
     setTimeout(() => { $('diagCopy').textContent = 'Copy log'; }, 2500);
+  });
+  // Save log: a Markdown file wherever you pick (the phone's clipboard cuts long logs short).
+  const diagMd = () => {
+    const nl = String.fromCharCode(10), fence = '`'.repeat(3);
+    const dev = window.AndroidCast ? 'Android app' : 'website';
+    return '# Four Realms log' + nl + nl + '- Version: ' + VERSION + nl + '- Device: ' + dev + nl + '- Saved: ' + new Date().toString() + nl + '- Lines: ' + diagLines.length + nl + nl + fence + nl + diagLines.join(nl) + nl + fence + nl;
+  };
+  const diagName = () => { const d = new Date(), z = n => String(n).padStart(2, '0'); return 'fourrealms-log-' + d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate()) + '-' + z(d.getHours()) + z(d.getMinutes()) + '.md'; };
+  const diagSaved = (ok, where) => {
+    const b = $('diagSave');
+    b.textContent = ok ? (where && where !== 'Downloads' ? 'Saved ✓' : where ? 'Saved in Downloads ✓' : 'Saved ✓') : (where === 'cancel' ? 'Save log' : 'Couldn’t save');
+    setTimeout(() => { b.textContent = 'Save log'; }, 2500);
+  };
+  window.onAndroidSaveAs = r => diagSaved(!!r.ok, r.where || '');
+  $('diagSave').addEventListener('click', async () => {
+    const A = window.AndroidCast, name = diagName(), text = diagMd();
+    try {
+      if (A && A.saveAs) { A.saveAs(name, text); return; }   // Android app: the phone's Save as screen
+      if (A && A.saveFile) { const ok = A.saveFile(name, text); diagSaved(ok, ok ? 'Downloads' : ''); return; }   // older Android app
+      if (window.showSaveFilePicker) {
+        const h = await window.showSaveFilePicker({ suggestedName: name, types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md'] } }] });
+        const w = await h.createWritable(); await w.write(text); await w.close(); diagSaved(true, ''); return;
+      }
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/markdown' })); a.download = name;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); diagSaved(true, 'Downloads');
+    } catch (e) { diagSaved(false, e && e.name === 'AbortError' ? 'cancel' : ''); }
   });
   // GoatCounter skips counting when localStorage skipgc = 't' (shared by all the apps on this site)
   const gcLabel = () => {
