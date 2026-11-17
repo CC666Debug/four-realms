@@ -756,7 +756,7 @@ let httpOK = false; try { httpOK = localStorage.getItem('http_ok') === '1'; } ca
 // Brave won't load old http:// streams at a bare number address (Radio Caprice) inside this secure app,
 // but it will by name: sslip.io turns 1.2.3.4 into the name 1-2-3-4.sslip.io (free, same server). Speakers keep the original link.
 const hereSrc = u => location.protocol === 'https:' ? u.replace(/^http:\/\/(\d+)\.(\d+)\.(\d+)\.(\d+)(?=[:/]|$)/, 'http://$1-$2-$3-$4.sslip.io') : u;
-const VERSION = '1.38.1';
+const VERSION = '1.38.2';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1381,7 +1381,7 @@ window.__onGCastApiAvailable = function (available) {
     // Same as RadioWizard 1.39.0: only YOUR Stop moves the music to the phone. A dropped connection (phone asleep,
     // Wi-Fi blip: "gave up after 15s", "resume failed", or any code but 0) leaves the speakers alone and the phone
     // silent; before, the phone started playing by itself as soon as it woke up.
-    if (e.sessionState === S.SESSION_ENDED && /gave up|resume failed|code [1-9]/.test(String(e.errorCode || ''))) {
+    if (e.sessionState === S.SESSION_ENDED && (Date.now() - castTapAt > 120000 || /gave up|resume failed|code [1-9]/.test(String(e.errorCode || '')))) {
       diag('connection dropped (' + e.errorCode + ') · nothing moves to the phone'); carryOver = null;
     }
     if (e.sessionState === S.SESSION_ENDED) {
@@ -1494,7 +1494,11 @@ function remoteStation() {
   return STATIONS.find(has) || 'other';
 }
 
+// The cast button is the only way to Stop casting yourself (its list has Stop). An ending within 2 min of a tap counts
+// as yours; any other ending (phone off Wi-Fi, speaker gone) is a drop. Browsers send no reason, so this works everywhere.
+var castTapAt = 0;
 els.castBtn.addEventListener('click', () => {
+  castTapAt = Date.now();
   if (!ctx) { showNotice('Casting to speakers needs Chrome (Android or computer). Listening on this device works everywhere.'); return; }
   const t = performance.now();
   diag('cast button tapped (state ' + ctx.getCastState() + ')');
