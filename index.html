@@ -756,7 +756,7 @@ let httpOK = false; try { httpOK = localStorage.getItem('http_ok') === '1'; } ca
 // Brave won't load old http:// streams at a bare number address (Radio Caprice) inside this secure app,
 // but it will by name: sslip.io turns 1.2.3.4 into the name 1-2-3-4.sslip.io (free, same server). Speakers keep the original link.
 const hereSrc = u => location.protocol === 'https:' ? u.replace(/^http:\/\/(\d+)\.(\d+)\.(\d+)\.(\d+)(?=[:/]|$)/, 'http://$1-$2-$3-$4.sslip.io') : u;
-const VERSION = '1.38.0';
+const VERSION = '1.38.1';
 const $ = id => document.getElementById(id);
 const els = {
   castBtn: $('castBtn'), castLabel: $('castLabel'), notice: $('notice'), where: $('where'),
@@ -1377,6 +1377,12 @@ window.__onGCastApiAvailable = function (available) {
     if (e.sessionState === S.SESSION_ENDING) {
       const r = remoteStation();
       carryOver = r && r !== 'other' && castActive() && !speakerPaused() ? r : null;
+    }
+    // Same as RadioWizard 1.39.0: only YOUR Stop moves the music to the phone. A dropped connection (phone asleep,
+    // Wi-Fi blip: "gave up after 15s", "resume failed", or any code but 0) leaves the speakers alone and the phone
+    // silent; before, the phone started playing by itself as soon as it woke up.
+    if (e.sessionState === S.SESSION_ENDED && /gave up|resume failed|code [1-9]/.test(String(e.errorCode || ''))) {
+      diag('connection dropped (' + e.errorCode + ') · nothing moves to the phone'); carryOver = null;
     }
     if (e.sessionState === S.SESSION_ENDED) {
       speakerLoading = speakerStation = null; speakerReconnecting = false;
